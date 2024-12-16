@@ -43,18 +43,20 @@ export const Navbar: React.FC = () => {
   return (
     <nav className="bg-white">
       <div className="mx-4 lg:mx-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Image
-              onClick={() => router.push("/")}
-              className="cursor-pointer"
-              src="/logo.svg"
-              height="45"
-              width="210"
-              alt="Logo"
-              priority
-            />
+            <div className="relative after:absolute after:inset-0 after:bg-[#8C44FF] after:mix-blend-soft-light after:rounded-lg">
+              <Image
+                onClick={() => router.push("/")}
+                className="cursor-pointer grayscale"
+                src="/logo.png"
+                height="100"
+                width="100"
+                alt="Logo"
+                priority
+              />
+            </div>
           </div>
 
           {/* Navigation Items */}
