@@ -25,7 +25,7 @@ export default function RootLayout({
         <body className={inter.className}>
           <Announcements />
           <div className="flex flex-col min-h-screen">
-            <div className="flex-grow pt-10">
+            <div className="flex-grow pt-2">
               {" "}
               {/* Adjusted to account for the fixed Announcements bar */}
               <ConfettiProvider />
