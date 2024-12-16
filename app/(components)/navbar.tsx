@@ -46,10 +46,10 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <div className="relative after:absolute after:inset-0 after:bg-[#8C44FF] after:mix-blend-soft-light after:rounded-lg">
+            <div className="cursor-pointer relative after:absolute after:inset-0 after:bg-[#8C44FF] after:mix-blend-soft-light after:rounded-lg">
               <Image
                 onClick={() => router.push("/")}
-                className="cursor-pointer grayscale"
+                className="grayscale"
                 src="/logo.png"
                 height="100"
                 width="100"
