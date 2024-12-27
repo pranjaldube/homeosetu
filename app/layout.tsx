@@ -5,6 +5,7 @@ import { ToastProvider } from "@/components/providers/toaster-provider"
 import { ConfettiProvider } from "@/components/providers/confetti-provider"
 import { Announcements } from "@/components/announcements" // Adjust this path if necessary
 import { CSPostHogProvider } from "@/components/providers/posthog-provider"
+import { ClerkProvider } from "@clerk/nextjs"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,20 +22,22 @@ export default function RootLayout({
 }) {
   return (
     <CSPostHogProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <Announcements />
-          <div className="flex flex-col min-h-screen">
-            <div className="flex-grow pt-2">
-              {" "}
-              {/* Adjusted to account for the fixed Announcements bar */}
-              <ConfettiProvider />
-              <ToastProvider />
-              {children}
+      <ClerkProvider>
+        <html lang="en">
+          <body className={inter.className}>
+            <Announcements />
+            <div className="flex flex-col min-h-screen">
+              <div className="flex-grow pt-2">
+                {" "}
+                {/* Adjusted to account for the fixed Announcements bar */}
+                <ConfettiProvider />
+                <ToastProvider />
+                {children}
+              </div>
             </div>
-          </div>
-        </body>
-      </html>
+          </body>
+        </html>
+      </ClerkProvider>
     </CSPostHogProvider>
   )
 }

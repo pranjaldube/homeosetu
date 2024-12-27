@@ -19,7 +19,7 @@ To read more about using these font, please visit the Next.js documentation:
 **/
 export function Announcements() {
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full bg-primary text-primary-foreground py-2">
+    <div className="fixed top-0 left-0 z-50 w-full bg-primary text-primary-foreground py-2">
       <div className="container mx-auto flex justify-center px-4">
         <p className="text-xs font-medium">
           Announcement - New courses releasing soon 🎉

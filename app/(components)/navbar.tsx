@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { useUser } from "@clerk/nextjs"
 
 const SPEAKERS = [
   {
@@ -39,10 +40,11 @@ const CATEGORIES = [
 
 export const Navbar: React.FC = () => {
   const router = useRouter()
+  const { user } = useUser()
 
   return (
     <nav className="bg-white">
-      <div className="mx-4 lg:mx-8">
+      <div className="mx-4 lg:mx-8 mt-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -135,9 +137,11 @@ export const Navbar: React.FC = () => {
 
             <button
               className="bg-blue-500 text-white px-6 py-2 rounded-full text-sm hover:bg-blue-600 transition-colors"
-              onClick={() => router.push("/sign-in")}
+              onClick={() =>
+                user ? router.push("/dashboard") : router.push("/sign-in")
+              }
             >
-              Login
+              {user ? "Dashboard" : "Login"}
             </button>
           </div>
         </div>

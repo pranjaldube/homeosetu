@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { Navbar } from "./(components)/navbar"
+import { Footer } from "./(components)/footer"
 
 export default function Hero() {
   return (
@@ -45,6 +46,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
