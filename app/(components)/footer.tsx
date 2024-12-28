@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Button asChild variant="link" className="h-auto p-0 text-sm">
-                    <Link href="/disclaimer">Disclaimer</Link>
+                    <Link href="/tnc">Terms and Conditions</Link>
                   </Button>
                 </li>
               </ul>
@@ -40,12 +40,12 @@ export const Footer: React.FC = () => {
               <ul className="space-y-1">
                 <li>
                   <Button asChild variant="link" className="h-auto p-0 text-sm">
-                    <Link href="/careers">Careers</Link>
+                    <Link href="/#">Careers</Link>
                   </Button>
                 </li>
                 <li>
                   <Button asChild variant="link" className="h-auto p-0 text-sm">
-                    <Link href="/faq">FAQ</Link>
+                    <Link href="/#">FAQ</Link>
                   </Button>
                 </li>
                 <li>

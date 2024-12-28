@@ -1,14 +1,11 @@
 "use client"
 
 import Image from "next/image"
-import { Navbar } from "./(components)/navbar"
-import { Footer } from "./(components)/footer"
 
 export default function Hero() {
   return (
-    <div className="relative bg-gray-100">
-      <Navbar />
-      <div className="mx-4 lg:mx-8 pb-16">
+    <div className="bg-gray-100">
+      <div className="mx-4 lg:mx-8 pb-16 ">
         <div className="relative pl-16">
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
@@ -46,7 +43,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

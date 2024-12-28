@@ -1,6 +1,6 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -9,15 +9,15 @@ generator client {
 }
 
 model Course {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId      String
   title       String
   description String?
   imageUrl    String?
   price       Float?
-  isPublished Boolean  @default(false)
+  isPublished Boolean @default(false)
 
-  categoryId String?  @db.Uuid
+  categoryId String?   @db.Uuid
   category   Category? @relation(fields: [categoryId], references: [id])
 
   chapters    Chapter[]
@@ -51,13 +51,13 @@ model Attachment {
 }
 
 model Chapter {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
   description String?
   videoUrl    String?
   position    Int
-  isPublished Boolean  @default(false)
-  isFree      Boolean  @default(false)
+  isPublished Boolean @default(false)
+  isFree      Boolean @default(false)
 
   muxData MuxData?
 
@@ -82,7 +82,7 @@ model MuxData {
 }
 
 model UserProgress {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId String
 
   chapterId String  @db.Uuid
@@ -93,8 +93,8 @@ model UserProgress {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([chapterId])
   @@unique([userId, chapterId])
+  @@index([chapterId])
 }
 
 model Purchase {

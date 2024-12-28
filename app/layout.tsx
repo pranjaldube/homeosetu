@@ -6,11 +6,15 @@ import { ConfettiProvider } from "@/components/providers/confetti-provider"
 import { Announcements } from "@/components/announcements" // Adjust this path if necessary
 import { CSPostHogProvider } from "@/components/providers/posthog-provider"
 import { ClerkProvider } from "@clerk/nextjs"
+import { Navbar } from "./(components)/navbar"
+import { Footer } from "./(components)/footer"
+import { Separator } from "@/components/ui/separator"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Homeosetu",
+
   description:
     "Empowering you with knowledge on effective and safe homeopathy usage.",
 }
@@ -26,13 +30,18 @@ export default function RootLayout({
         <html lang="en">
           <body className={inter.className}>
             <Announcements />
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col min-h-screen mt-6">
               <div className="flex-grow pt-2">
                 {" "}
                 {/* Adjusted to account for the fixed Announcements bar */}
                 <ConfettiProvider />
                 <ToastProvider />
-                {children}
+                <div className="relative">
+                  <Navbar />
+                  <Separator />
+                  {children}
+                  <Footer />
+                </div>
               </div>
             </div>
           </body>
