@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Mail, Phone, MapPin } from "lucide-react"
-import { useForm } from "@formspree/react"
+import { useForm, ValidationError } from "@formspree/react"
 
 export default function Page() {
   const [state, handleSubmit] = useForm(
@@ -24,16 +24,14 @@ export default function Page() {
   const [message, setMessage] = useState("")
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    // e.preventDefault()
     handleSubmit(e)
     // Here you would typically send the form data to your backend
     // For this example, we'll just show a success message
-    if (state.succeeded) {
-      toast.success("Message Sent! We'll get back to you as soon as possible.")
-      setName("")
-      setEmail("")
-      setMessage("")
-    }
+    toast.success("Message Sent! We'll get back to you as soon as possible.")
+    setName("")
+    setEmail("")
+    setMessage("")
   }
 
   return (
@@ -53,31 +51,51 @@ export default function Page() {
                 <label htmlFor="name">Name</label>
                 <Input
                   id="name"
+                  name="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                />
+                <ValidationError
+                  prefix="Name"
+                  field="name"
+                  errors={state.errors}
                 />
               </div>
               <div className="grid gap-2">
                 <label htmlFor="email">Email</label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                />
+                <ValidationError
+                  prefix="Email"
+                  field="email"
+                  errors={state.errors}
                 />
               </div>
               <div className="grid gap-2">
                 <label htmlFor="message">Message</label>
                 <Textarea
                   id="message"
+                  name="message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
                 />
+                <ValidationError
+                  prefix="Message"
+                  field="message"
+                  errors={state.errors}
+                />
               </div>
-              <Button type="submit">Send Message</Button>
+              <Button type="submit" disabled={state.submitting}>
+                Send Message
+              </Button>
             </form>
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">
