@@ -1,6 +1,5 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import {
@@ -14,20 +13,27 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Mail, Phone, MapPin } from "lucide-react"
+import { useForm } from "@formspree/react"
 
 export default function Page() {
+  const [state, handleSubmit] = useForm(
+    process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID ?? ""
+  )
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [message, setMessage] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    handleSubmit(e)
     // Here you would typically send the form data to your backend
     // For this example, we'll just show a success message
-    toast.success("Message Sent! We'll get back to you as soon as possible.")
-    setName("")
-    setEmail("")
-    setMessage("")
+    if (state.succeeded) {
+      toast.success("Message Sent! We'll get back to you as soon as possible.")
+      setName("")
+      setEmail("")
+      setMessage("")
+    }
   }
 
   return (
@@ -42,7 +48,7 @@ export default function Page() {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={onSubmit} className="space-y-4">
               <div className="grid gap-2">
                 <label htmlFor="name">Name</label>
                 <Input
