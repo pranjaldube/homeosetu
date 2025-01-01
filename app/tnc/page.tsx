@@ -2,347 +2,368 @@ import { cn } from "@/lib/utils"
 
 export default function Page() {
   return (
-    <div className="container min-h-screen p-4 flex flex-col items-center">
+    <div className="container min-h-screen p-4 flex flex-col space-y-6 items-center">
       <h1
         className={cn(
           "animate-in fade-in duration-700 font-bold",
           "text-4xl sm:text-5xl"
         )}
       >
-        Privacy Policy
+        Terms and Conditions
       </h1>
+      <h2 className="text-slate-600">Last Updated : December 15, 2024</h2>
       <p className="animate-in fade-in duration-1200 text-base sm:text-lg mt-4">
-        Homeosetu (“our,” “us” or “we”) is committed to protecting your privacy.
-        This Privacy Policy applies to all websites owned or operated by
-        Homeosetu software LLP (“website Owner”). This Privacy Policy governs
-        our data collection, processing and usage practices. It also describes
-        your choices regarding use of, access to, erasure of and correction of
-        your personal information. This Privacy Policy does not apply to the
-        products or websites of our business partners, affiliates or to any
-        other third parties, even if their products or websites are linked to or
-        from our websites. You can find more information about how we work with
-        our business partners and affiliates below. If you have any questions
-        about this Privacy Policy or how we collect, use or process your
-        personal information or how you may access, erase and correct your
-        personal information, please contact us using the contact details
-        described in – Contact us. 1. Definitions We use some terms in this
-        Privacy Policy, that we want to highlight for you. “business partner(s)”
-        means any subcontractor, vendor or other entity with whom we have a
-        business relationship to provide products, services, payment processing
-        services, or information. “financial information” means debit card,
-        credit card or other payment card information, personal financial
-        account information, and other financial information you provide when
-        you purchase our products and/or services. “personal information” means
-        information which identifies you or which combined may identify you,
-        such as your name, telephone number, home address, email address,
-        Internet Protocol (IP) address, Media Access Control (MAC) address,
-        location data and any other information that would permit us to identify
-        you either online or physically. It also may include information about
-        free trial downloads of our products or purchases of our products or
-        services. Personal information also includes financial information. 2.
-        Information We Collect and How We Collect It ● We may ask you to provide
-        personal information when you: ● Visit our websites; ● Create a
-        homeosetu account; ● Use our products; ● Request services, support, or
-        information; ● Purchase our products or services; ● Input activation
-        keys/coupon codes; ● Purchase support services or other services; ●
-        Participate in sweepstakes, surveys or other advertising activities; ●
-        Subscribe to newsletters and, promotional emails; ● Interact with social
-        media; ● Contact us or provide feedback or comments; or 2.1 Visit our
-        Websites We will collect information when you visit our websites,
-        including the pages you view, the links you click, and other actions you
-        take in connection with the homeosetu websites and services. We also
-        collect information from the browser you used to come to our websites,
-        such as your IP address, MAC address, browser type and language,
-        operating system version, search terms you enter, the date and time when
-        you accessed our websites or services, how long you stay on our websites
-        or use our services, one or more cookies that uniquely identify your
-        browser, the Uniform Resource Locator (“URL”) of the website that
-        referred you to our website and if you click on a link on our website,
-        which URL that link takes you to away from our website. 2.2 Create a
-        Homeosetu Account You can browse the homeosetu website without creating
-        an account, but an account will be created when you purchase our
-        products or services. Information in your account will include your
-        customer ID, contact and financial information such as name, email,
-        billing and shipping address, telephone number, payment information, VAT
-        ID and your purchase history. We will be using Google API for creating
-        your account. The Service use and transfer of information received from
-        Google APIs to any other app will adhere to Google API Services User
-        Data Policy, including the Limited Use requirements. 2.3 Request
-        Services, Support or Information If you contact us to request support or
-        services, we may request your name, email address, home address and
-        telephone number. If you are contacting us on behalf of your employer,
-        we also may collect your business or company information or other
-        information. In addition to contact information, we may ask you for
-        information about which product you are using, which version of Windows
-        or other computer programs you are using, the nature of your issue, and
-        any other information pertinent to the support request (“technical
-        information”). If you permit us or our business partner to remotely
-        access your device to perform support services, website owner and its
-        business partner also will receive technical non-personal information
-        regarding your computer specifications directly from your device. 2.4
-        Download A Trial Product or Purchase our Products or Services If you
-        request a free trial version of our products, whether through our
-        website, you will be asked to provide your email address so that we can
-        send you the activation key/coupon code. If you purchase one of our
-        products or services, through our website, you will be asked for
-        personal information, including, your name, telephone number, email,
-        mailing, billing and shipping addresses.Your personal information will
-        be available in “My Account” for any future transactions. 2.5
-        Participate in Sweepstakes, Surveys or Other Advertising Activities If
-        you enter a sweepstake offered by the Website Owner, we will collect the
-        personal information described in the rules of that sweepstake. If you
-        participate in a survey, we will collect the information you chose to
-        provide in the survey. We collect personal information when you view or
-        click on an advertisement we display on our affiliates’ websites (for
-        more information about how this works, see section 8 – Information
-        collected through cookies and similar tracking technology.) 2.6
-        Subscribe to Newsletters and Promotional Emails When you receive
-        newsletters or promotional emails from the website owner, we may use
-        cookies and web beacons (described below), customized links or other
-        technologies to recognize you, to determine whether the email has been
-        opened, which links you click, and whether you purchased our products or
-        services. The data is used to help us determine the effectiveness of our
-        communications with you, gather demographic information about our user
-        base, provide you with communications and product and service offerings
-        more tailored to your personal interests, to serve targeted advertising
-        on other websites around the Internet and to provide security. Some
-        Homeosetu products or services may be co-branded and offered in
-        conjunction with another company. If you register for or use such
-        products or services, both the website owner and the other company may
-        receive and use information collected in conjunction with the co-branded
-        products or services. 2.7 Interact with Social Media The website owner’s
-        website allows users to interface with social media websites such as
-        Facebook,Instagram,X and others. If you choose to “like” our websites or
-        products or share information from the homeosetu websites to social
-        media websites, those social media websites may collect personal
-        information about you. If you have an account with a social media site,
-        the social media site may connect personal information that you may have
-        provided to that social media site with information regarding your
-        homeosetu website visit. Social media websites also may allow
-        third-parties to provide us personal information about you, including
-        your name, email address, and other personal information. The data we
-        receive is dependent upon your privacy settings with the social media
-        website. Social media features (such as the Like button) are either
-        hosted by a third-party or hosted directly on our website. Your
-        interactions with these features are governed by the privacy statement
-        of the company providing it. You should review, and if necessary, adjust
-        your privacy settings on third-party websites and services before
-        linking or connecting them to our website. If you have an account with a
-        social media website, the interfaces on the Homeosetu website may allow
-        you to log into “My Account” through the social media website such as
-        Google, Yahoo or AOL. 2.8 Contact Us or Provide Comments or Feedback
-        When you contact us by telephone, we collect the information you chose
-        to provide us. If you contact us by email, we will collect the same
-        information we collect when you visit our websites and any other
-        information you chose to provide us in the email. If you choose to
-        provide us feedback or comments, Homeosetu will collect the same
-        information it collects when you use our website. In addition, the
-        website owner will collect any personal information you chose to provide
-        along with your feedback or comments. Homeosetu owns that feedback and
-        those comments and may retain that information indefinitely, however the
-        website owner will delete any personal information provided with that
-        feedback or comment, unless the website owner requires the personal
-        information for another purpose and will then maintain such information
-        for as long as needed for that other purpose. 3. How We Use Your
-        Personal Information and Technical Information The Website Owner uses
-        your personal information and technical information to: ● Complete your
-        transaction for products and/or services that you ordered, to process
-        any refunds or chargebacks ( if any, refer our Returns and Refund policy
-        for the same), manage disputes or related issues, provide receipts,
-        recover debt and collections, and fulfilling other technical,
-        logistical, financial, tax, legal, compliance, administrative, or back
-        office functions. In support of these uses, the website owner and our
-        business partners may share your financial information with banks and
-        other entities that process payment transactions or other financial
-        services; ● Deliver products, services and support to you; ● Send
-        communications to you, such as your transaction status (for example,
-        order confirmations or remaining time on products or services),
-        newsletters and other product information; ● Provide you information
-        about promotional offers, sweepstakes, and surveys offered by or on
-        behalf of website owner; ● Maintain, protect, and improve our products,
-        services, websites, technologies, communications with you and our
-        relationship with you; ● Enforce our conditions of sale, website terms
-        and any separate contracts with you; ● Detect and prevent fraud; ●
-        Detect and prevent violations of law or legal agreements; and ● Protect
-        the company and its employees and business partners. In order to offer
-        you a more consistent and personalized experience in your interactions
-        with Homeosetu, personal information collected through one source may be
-        combined with personal information obtained through other sources,
-        including social media sources. We will ask for your consent before
-        using your information for any purpose not set out in this Privacy
-        Policy. 4. Disclosing Personal Information We may disclose your personal
-        information in connection with a financial audit, law enforcement,
-        national security, fraud prevention, or other legal action (such as a
-        subpoena or court order); as required by law or regulation; or if the
-        website owner reasonably believes it is necessary to protect itself, its
-        customers or the public. In addition, we may share your personal
-        information with business partners that help the website owner to carry
-        out transactions you request or that help the website owner to
-        customize, analyze and improve our communications or relationship with
-        you, and then only with business partners who share the website owner’s
-        commitment to protecting your personal information. We also may share
-        your personal information with our business partners to help make our
-        business or that of our business partners’ more responsive to your
-        needs. Except as described in this Privacy Policy, we will not disclose
-        your personal information to third parties for their marketing purposes
-        unless you have provided consent. As we continue to develop our
-        business, we might sell or buy products, subsidiaries, or business
-        units. In such transactions, personal information may be reviewed as
-        part of the business due diligence and generally is one of the
-        transferred business assets but remains subject to the promises made in
-        any pre-existing privacy policy (unless, of course, you consent
-        otherwise). Also, in the event that Homeosetu, or some or all of its
-        assets are acquired, customer information will of course be one of the
-        transferred assets. Some Homeosetu services are provided by business
-        partners that may be located in different countries than Homeosetu or
-        than where you are calling from. When you purchase support services from
-        the website owner, we may provide your personal information along with
-        technical information to our business partners in order to provide the
-        support services you request. 5. Your Choices 5.1 Updating your
-        Information Homeosetu wants to help you keep your personal information
-        accurate. If any of your information changes, you can update it by
-        accessing “My Account” from the homeosetu.com website. 5.2 Selecting
-        Your Communication Preferences At any point, you may unsubscribe from
-        newsletters or marketing materials by clicking on the unsubscribe link
-        that appears at the very bottom of each message you receive from the
-        website owner. This link will take you to a web page containing
-        information specific to your email account where you can unsubscribe.
-        Please note that you cannot opt-out of receiving non-promotional
-        messages regarding your account, such as technical notices, purchase
-        confirmations, renewal reminders, or service-related emails. 5.3
-        Accessing your information Subject to applicable laws, you may have the
-        right to ask the website owner to: ● provide a copy of the personal
-        information that we have collected about you; ● explain why we are
-        holding this information; ● explain how we use this information; ●
-        correct or update your personal information; ● delete or erase your
-        personal information; ● restrict or object to the way in which we
-        process your personal information; and ● withdraw any consent that you
-        may have given to us. In order to comply with the above requests, we may
-        ask you to provide us with the necessary information to verify your
-        identity. We will respond to legitimate requests within thirty days of
-        the request. In certain instances and subject to applicable laws
-        (including, for example, tax, audit and reporting obligations), we may
-        need to extend our response time or we may not be able fulfill your
-        requests. If we cannot fulfill your requests, we will explain why we
-        cannot do so. To make these requests or for more information about your
-        rights, please contact our Data Protection Officer at:
-        homeosetu@gmail.com 6. How We Secure Your Information The Website Owner
-        is committed to protecting the security of your information. We use a
-        variety of security technologies and procedures to help protect your
-        information from unauthorized access, use, or disclosure taking into
-        account the level of risk, the nature of the information and how it is
-        going to be used, such as encryption using Secure Socket Layer (SSL)
-        technology, passwords, physical security, etc. While we strive to
-        protect your personal information, The website owner cannot and does not
-        ensure or warrant that the personal information or private
-        communications you transmit to us will always remain private, and you do
-        so at your own risk. For your security, you will be required to enter
-        the website using your social media sites as described above. You should
-        maintain the confidentiality and other account credentials. Do not share
-        this information with anyone. If you are sharing a computer with anyone
-        you should always log out before leaving a website or service to protect
-        access to your information from subsequent users. 7. Collection and Use
-        of Children’s Personal Information The Website Owner takes children’s
-        privacy seriously. We do not knowingly collect personal information from
-        children under the age of 16 through our websites. If you are under 18
-        years of age, please do not submit any personal information through our
-        websites without the express consent and participation of a parent or
-        guardian. 8. Information Collected through Cookies and Similar Tracking
-        Technology The Homeosetu website and our business partners’ websites use
-        “cookies” and similar tracking technologies (such as web beacons, tags,
-        scripts and device identifiers). We may receive reports from business
-        partners based on use of these technologies. These reports may provide
-        this information on an individual as well as on an aggregated basis.
-        Aggregate information is anonymous and may include demographic, usage,
-        and sales information. 8.1 Cookies A cookie is a text file that is
-        either stored in your computer’s memory temporarily and automatically
-        deleted when you close your browser (a session cookie) or placed on your
-        hard drive (a persistent cookie) by a web page server. A persistent
-        cookie is not deleted when the browser is closed. The Website Owner uses
-        both session cookies and persistent cookies. While The Website owner’s
-        cookies do not save any personal information, they do save the serial
-        number of any product licenses, which can be connected to your personal
-        information such as email address, billing address and IP address. You
-        have the ability to accept or decline cookies. Most web browsers
-        automatically accept cookies, but you can usually modify your browser
-        setting to decline cookies if you prefer. Please refer to your web
-        browser for more information. If you choose to decline cookies, you may
-        not be able to sign in or use other interactive features of homeosetu
-        website and services that depend on cookies. We use cookies to: ● save
-        your preferences and other information on your computer in order to save
-        you time by eliminating the need to repeatedly enter the same
-        information; ● improve our websites; ● display personalized (targeted)
-        content and appropriate Homeosetu software LLP’s product offerings on
-        your later visits to our websites and to our partners’ and affiliates’
-        websites; ● allow you to sign in to our services and to help personalize
-        and customize your online experience; ● gather demographic information
-        about our users; ● offer our products and services to you; ● tailor
-        product discounts and purchase links; ● monitor the success of marketing
-        programs; ● provide analytics regarding the use of our website, products
-        and services; and ● provide security to attempt to identify and prevent
-        fraud. Because the website owner relies on third-party advertising
-        networks who may track you across websites over time for advertising
-        purposes, we are not able to respond to your selection of the “Do Not
-        Track”” option provided by your browser. We cannot advise on whether
-        your selection of “Do Not Track” option will have any effect on the
-        collection of cookie information by the third-parties who collect such
-        cookie information on our websites. 8.2 Web Beacons A “web beacon” is an
-        electronic image that can be used to recognize a cookie on your computer
-        when you view a web page or email. Our business partners use web beacons
-        on our websites, in our emails, in our advertisements on other websites
-        (including social media), and in our advertisements contained in third
-        party emails sent to you. Web beacons help us measure the effectiveness
-        of our websites and our advertising in various ways for example, by
-        counting the number of individuals who visit our websites from a
-        particular advertisement or who make a purchase from our websites after
-        viewing a particular advertisement as well as by telling us when a web
-        page is viewed and providing a description of the page where the web
-        beacon is placed. Web beacons also help us measure the effectiveness of
-        our email campaigns, for example, by counting the number of individuals
-        who open or act upon an email message, determining when an email message
-        is opened and determining how many times an email message is forwarded.
-        This helps us send more relevant advertisements to our users and on the
-        websites most visited by you. Unlike cookies, you cannot decline web
-        beacons. However, setting your browser to decline cookies may help
-        prevent web beacons tracking your activity. 8.3 Analytic Tools We may
-        use tools such as Google Analytics to better understand who is using our
-        websites and how they are using them. These tools may use cookies and
-        web beacons to save and collect information such as time of visit, pages
-        visited, time spent on each page of the website, IP address, and type of
-        operating system used. We may use this information to manage and improve
-        our websites and to improve your experience with our websites. You can
-        learn how to opt-out of Google Analytics tracking software at this
-        website: http://tools.google.com/dlpage/gaoptout 9. Third-Party Websites
-        and Services Please be aware that other websites that you may access
-        through our websites or from which you access our websites may collect
-        personal information about you. The information practices of those
-        third-party websites linked to or from homeosetu.com are not covered by
-        this Privacy Policy. Please be aware that, in providing services on the
-        website owner’s behalf, our business partners may collect personal
-        information about you. 10. Retention, Storing and Transfer of Personal
-        Information We will maintain your personal information for a period of
-        two years from your last contact with us, unless we need to maintain it
-        longer to comply with legal, tax, audit or other reporting requirements,
-        and for the detection and prevention of fraud or other unlawful
-        behavior. Personal information collected may be stored and processed in
-        the India or any other country in which Homeosetu or its business
-        partners maintain facilities, and these countries may have laws that are
-        different from those of your country of residence. By using
-        Homeosetu.com ‘s products and services, you consent to any such transfer
-        of information outside of your country. 11. Changes to Our Privacy
-        Policy Regarding Customer and Online User Information We will
-        occasionally update this Privacy Policy. When we post changes to this
-        Privacy Policy, we will revise the Effective Date at the beginning of
-        this policy. If there are material changes to this Privacy Policy or in
-        how the website owner will use your personal information, we will notify
-        you by prominently posting a notice of such changes prior to
-        implementing the change. We encourage you to periodically review this
-        Policy to be informed of how the website owner is protecting your
-        personal information. 12. Contacting Us If you would like to contact us
-        for any reason regarding our privacy practices, please write us at the
-        following address: Privacy Administrator, Homeosetu software LLP, B/701,
-        Gold Crest 369 CHS LTD. Opp New Viva College, Virar West. Maharashtra
-        401303 India. Email us at = homeosetu@gmail.com
+        These Terms of Use set out the terms and conditions for use of this
+        Homeosetu Website (“Website”) and any content, Public Forums, or
+        services offered on or through the Website. These Terms of Use apply to
+        end users of the Website (referred to as “Learners”, “You”, “Your”).
+        These Terms of Use, including the Privacy Policy and any other terms and
+        conditions published on the Platform or communicated to you from time to
+        time (collectively referred to as the “Agreement”), define the
+        relationship and responsibilities between You and Creator (as defined
+        herein) in using the Platform. Your access to the Platform is subject to
+        Your acceptance of this Agreement. Hence, please take Your time to read
+        this Agreement. When we speak of “Creator”, ‘we’, ‘us’, and ‘our’, we
+        collectively mean The Homeosetu Team being the creator of this Platform
+        and the content/materials/services contained therein. By accessing this
+        Platform, You are agreeing to be bound by the terms of this Agreement,
+        all applicable laws and regulations. From time-to-time, versions of the
+        above-mentioned policies and terms are made available on the Platform
+        for Your reference and to understand how we handle Your personal
+        information. By using or visiting the Platform and services provided to
+        You on, from, or through the Platform, You are expressly agreeing to the
+        terms of the Agreement and any other terms that are updated from time to
+        time. If You disagree with any part of this Agreement or do not wish to
+        be bound by the same, then please do not use the Platform in any manner.
+        SECTION 1 - ACCESS AND REGISTRATION If You’re an individual You must be
+        at least 18 (eighteen) years of age, or, if You are between the ages of
+        13 and 18, You must have Your parent or legal guardian{"'"}s permission
+        to use the Platform. By using the Platform, You are, through Your
+        actions, representing and warranting to us that You have obtained the
+        appropriate consents/permissions to use the Platform. If You are under
+        the age of 13 years or 16 years (depending on your country of
+        residence), You may neither use our Platform in any manner nor may You
+        register for any content or services offered therein.To access any
+        Content (as defined below) offered on the Platform, we require You to
+        register for the same by providing Your email address. Please read our
+        Privacy Policy to understand how we handle Your information. Further,
+        You may also be required to make payment of a fee to access the Content,
+        if applicable. For more information, please read our ‘Payments &
+        Refunds’ section below. You represent that the information indicated by
+        You during Your enrolment or registration for any Content on the
+        Platform, is true and complete, that You meet the eligibility
+        requirements for use of the Platform and the Content offered therein,
+        and You agree to update us upon any changes to the information by
+        writing to us at the contact information provided in the ‘Contact Us’
+        section below. For the purpose of this Agreement, “Content” shall mean
+        and include any course or session (whether pre-recorded or live)
+        published by the Creator on the Platform, including, but not limited to
+        any reference materials and text files (if any) offered to You as part
+        of the Content. When You register or enrol for any Content on the
+        Platform, You may also have access to discussion forums that enables You
+        to exchange Your thoughts, knowledge in relation to the Content or its
+        subject-matter, with us and other registrants to the Content (“Public
+        Forum”). Participating in the Public Forum is completely Your choice and
+        by registering or enrolling to a Content on the Platform, You are not
+        obligated to participate in such Public Forum. We maintain and reserve
+        the right to refuse access to the Platform or remove content posted by
+        You in the Public Forums, at any time without notice to You, if, in our
+        opinion, You have violated any provision of this Agreement. Further, to
+        access the Platform and/or view the content on the Platform, You will
+        need to use a “Supported/Compatible Device” which means a personal
+        computer, mobile phone, portable media player, or other electronic
+        device that meets the system and compatibility requirements and on which
+        You are authorized to operate the Platform. The Supported/Compatible
+        Devices to access the Platform may change from time to time and, in some
+        cases, whether a device is (or remains) a Supported/Compatible Device
+        may depend on software or systems provided or maintained by the device
+        manufacturer or other third parties. Accordingly, devices that are
+        Supported/Compatible Devices at one time may cease to be
+        Supported/Compatible Devices in the future. Thus, kindly make sure that
+        the device that You use is compatible with any of the systems/software
+        used on the Platform to access the content/material offered therein.
+        Section 2 - LICENSE TO USE : You are granted one limited, non-exclusive
+        license to access and view the Content on the Platform for Your own
+        personal, non-commercial use only. Further, You cannot download a copy
+        of any downloadable Content [including Creator Content (defined below)]
+        on the Platform.1. This license does not grant You the right to assign
+        or sublicense the license granted under this Agreement to anyone else.
+        Further, You may not- modify, edit or copy the Content, Creator Content
+        or any material made available on the Platform; create derivative works
+        or exploit any material made available on the Platform (including the
+        Content and Creator Content) or any portion thereof (including, but not
+        limited to any copyrighted material, trademarks, or other proprietary
+        information contained therein) in manner that is not permitted under
+        this license granted to You; publicly display (commercially or
+        non-commercially) the Content, Creator Content or any material made
+        available on the Platform or otherwise use the same for any commercial
+        purpose; attempt to decompile or reverse engineer any software or video
+        contained in the Platform; remove any copyright or other proprietary
+        notations from the Content, Creator Content or any material made
+        available on the Platform; or transfer any material made available on
+        the Platform to another person or {"'"}mirror{"'"} the same on any other
+        server. For the purpose of this Agreement, “Creator Content” shall mean
+        and include any audio files, video files, audio-visual files, images,
+        text materials (including .doc, .docx, .pdfs, .ppts.) (other than the
+        Content) uploaded or otherwise published on the Platform by the Creator
+        to be accessed by You, including, but not limited to any such
+        content/material posted by the Creator in any Public Forum (defined
+        below). This license shall automatically terminate if You violate any of
+        these restrictions and may be terminated by us at any time. Upon
+        termination of this license granted to You or Your viewing of any
+        material on the Platform (including Content and Creator Content), You
+        must destroy any downloaded materials in Your possession (whether in
+        electronic or printed format). Communications: The Platform includes
+        provision and facilitation of Public Forums designed to enable You to
+        communicate with us and other registrants to the Content You have
+        registered for. As stated above, use of these Public Forums are
+        completely your choice and by registering for a Content, you are not
+        obligated to participate in the Public Forum. However, if You choose to
+        participate, You agree to adhere to the terms specified in the ‘Code of
+        Conduct’ section hereinbelow and such other terms as may be published on
+        our Platform. If it comes to our notice that Your conduct is in
+        violation of the terms of this Agreement, then we may terminate or
+        suspend Your access to any Public Forums at any time, without notice,
+        for any reason. You represent and warrant that You own and control all
+        rights in and to any content (including without limitation chats,
+        postings, or materials) uploaded or posted by You on the Public Forums
+        or anywhere on the Platform (“Learner Content”), or that You are
+        licensed to use and reproduce such Learner Content. We are not
+        responsible for the information that You choose to share on the Public
+        Forums, or for the actions of other users therein. You further
+        understand and agree that You, shall be solely responsible for the
+        Learner Content including its legality, reliability, accuracy, and
+        appropriateness, and the consequences of its publication. Further, if
+        you do post content or submit any Learner Content on the Platform, and
+        unless otherwise indicated by You in writing (emails included) to us,
+        You hereby grant us a non-exclusive, royalty-free, irrevocable,
+        perpetual and fully sublicensable rights to use, reproduce, modify,
+        adapt, publish, translate, create derivative works from, distribute, and
+        display such Learner Content throughout the world in any media. Code of
+        Conduct: You agree to the following: Legitimate usage of the Platform:
+        You agree to use the Platform only for lawful purposes and You are not
+        allowed to use our Platform to engage in any kind of activity that
+        violates any applicable central, state, local, federal or international
+        law or regulation (including, without limitation, any laws regarding the
+        export of data or software to and from INDIA or other countries). Also,
+        You agree that You will not use the Platform in any manner that would
+        disrupt, damage or impair the Platform or access to it, in any manner,
+        including promoting or encouraging illegal activity such as hacking,
+        cracking or distribution of counterfeit software, compromised accounts,
+        or cheats or hacks for the Platform and conduct of any form of
+        fraudulent activity. No harmful or dangerous content: Any content which
+        incites or promotes violence, that may cause physical or emotional harm
+        or that may endanger the safety of any individual or is otherwise
+        objectionable is expressly prohibited on the Platform. The Platform is
+        to be used only for the permitted uses as detailed under this Agreement.
+        No hateful or defamatory content: We realise that there may be instances
+        when there are exchange of ideas and opinions which is essential in the
+        learning process, while we agree that individuals have the right to
+        voice their opinion, we do not encourage or tolerate any form of hate
+        speech or statements that are libelous, slanderous, threatening,
+        violent, predatory, defamatory, or any statement that incites hatred
+        against specific individuals or groups with respect to but not limited
+        to race or ethnic origin, country caste, religion, disability, gender,
+        age, sexual orientation/gender identity etc. Violent and graphic
+        content: Any content, the sole objective of which is to sensationalise,
+        shock or disturb individuals is not allowed. We do not allow any content
+        that promotes terrorist acts or incites violence, to be uploaded on the
+        Platform in any manner. Harassment and bullying: We do not tolerate any
+        form of harassment or bullying on the Platform and strive to keep the
+        Platform a safe space to foster learning. Harassment in this case would
+        include, without limitation, to abusive videos, comments, messages,
+        revealing someone’s personal information, including sensitive personally
+        identifiable information of individuals, content or comments uploaded in
+        order to humiliate someone, sexual harassment or sexual bullying in any
+        form. Spam: Posting untargeted, unwanted and repetitive content,
+        comments or messages with an intention to spam a Public Forum or
+        otherwise the Platform and to drive traffic from the Platform to other
+        third-party sites is in direct violation of this Agreement. Posting
+        links to external websites with malware and other prohibited sites is
+        not allowed. Scams: Any content uploaded or posted in order to trick
+        others for their own financial gain is not allowed and we do not
+        tolerate any practices of extortion or blackmail, either. Privacy
+        violation: Kindly refer to our Privacy Policy to know how to protect
+        Your privacy and respect the privacy of other Users. Impersonation:
+        Impersonating another person, including but not limited to, another
+        learner, is not permitted while using our Platform. In this case
+        impersonation would mean the intention to cause confusion regarding who
+        the real person is by pretending to be them (such as using names, image,
+        documents, certificates etc. not belonging to You or not used to
+        identify You, or pretending to be a company, institute, group etc., by
+        using their logo, brand name or any distinguishing mark). If it comes to
+        our notice that Your conduct is in violation of the terms of this
+        Agreement, then we may terminate or suspend Your access to our website
+        at any time, without notice, for any reason. Unauthorized Access or
+        Disabling of Platform: You agree not to (i) use the Platform in any
+        manner that could disable, overburden, damage, or impair the Platform or
+        interfere with any other user’s use of the Platform; (ii) not to use any
+        manual process to monitor or copy any of the material on the Platform or
+        for any unauthorized purpose; (iii) use any device, software, or routine
+        that interferes with the proper working of the Platform; (iv) attack the
+        Platform via a denial-of-service attack; (v) attempt to gain
+        unauthorized access to, interfere with, or disrupt any parts of the
+        Platform, the server on which the Platform is stored, or any server,
+        computer, or database connected to or associated with the Platform; and
+        (vi) introduce any viruses, trojan horses, worms, keystroke loggers,
+        malware, or other material which is malicious or technologically harmful
+        to the Platform. If any violation of the above rules of conduct comes to
+        our notice, then, we reserve the right to refuse Your access to the
+        Platform, terminate accounts or remove such violating content at any
+        time without notice to You. Section 3. Intellectual Property: We own all
+        information and materials, including Content and Creator Content (in
+        whatever form or media) provided or communicated to You by or on behalf
+        of us including but not limited to, the Platform, trademarks, trade
+        dress, logos, wordmarks, illustrations, letters, images, ideas,
+        concepts, the layout, design, flow, look and feel of the Platform,
+        logos, marks, graphics, audio files, video files, any software which is
+        owned by or licensed to us, instructions embedded in any form of digital
+        documents and other data, information, or material made available to You
+        by us (“Creator’s Intellectual Property”). Creator’s Intellectual
+        Property, including the copyrights and trademarks contained therein, may
+        not be modified by You in any way. You acknowledge and agree that You do
+        not acquire any ownership rights to Creator’s Intellectual Property by
+        use of the Platform or any part thereof. You acknowledge and agree that
+        the Creator’s Intellectual Property is protected by the applicable
+        intellectual property laws, including international copyright,
+        trademark, patent, trade secret and other intellectual property or
+        proprietary rights laws and any unauthorized use, reproduction,
+        modification, distribution, transmission, republication, display or
+        performance of the Creator’s Intellectual Property or any component
+        thereof is strictly prohibited. Feedback: If You submit suggestions,
+        ideas, comments, or questions containing product feedback about any
+        Content, the Platform or any part thereof, either through the Public
+        Forum or otherwise (“Feedback”), then You grant to us a worldwide,
+        non-exclusive, royalty-free, perpetual, and irrevocable right to use
+        (and full right to sublicense), reproduce, modify, adapt, publish,
+        translate, create derivative works from, distribute, transmit, and
+        display such Feedback in any form. You shall have no intellectual
+        property right in any Content, Platform or any part thereof, as a result
+        of our incorporation of Feedback into any Content or the Platform.
+        Disclaimer: the platform is provided to you {'"'}as is{'"'} and {'"'}as
+        available{'"'}
+        and with all faults and defects without warranty of any kind. to the
+        maximum extent permitted under applicable law, the creator, on its own
+        behalf and on behalf of its affiliates and its and their respective
+        licensors and service providers, expressly disclaims all warranties,
+        whether express, implied, statutory or otherwise, with respect to the
+        platform, including all implied warranties of merchantability, fitness
+        for a particular purpose, title and non-infringement, and warranties
+        that may arise out of course of dealing, course of performance, usage or
+        trade practice. without limitation to the foregoing, the creator
+        provides no warranty or undertaking, and makes no representation of any
+        kind that the platform or the services or products offered therein will
+        meet your requirements, achieve any intended results, be compatible or
+        work with any other software, applications, systems or services, operate
+        without interruption, meet any performance or reliability standards or
+        be error free or that any errors or defects can or will be corrected.
+        without limiting the foregoing, the creator makes no representation or
+        warranty of any kind, express or implied: (i) as to the operation or
+        availability of the platform, or the information, content, and materials
+        or products included thereon; (ii) that the platform will be
+        uninterrupted or error-free; (iii) as to the accuracy, reliability, or
+        currency of any information or content provided through the platform; or
+        (iv) that the platform, its servers, the content, or e-mails sent from
+        or on behalf of the creator are free of viruses, scripts, trojan horses,
+        worms, malware, timebombs or other harmful components. some
+        jurisdictions do not allow the exclusion of certain types of warranties
+        or limitations on applicable statutory rights of a consumer, so some or
+        all of the above exclusions and limitations may not apply to you. but in
+        such a case the exclusions and limitations set forth in this section
+        shall be applied to the greatest extent enforceable under applicable
+        law. Limitation of Liability: In no event shall the Creator be liable
+        for any damages (including, without limitation, damages for loss of data
+        or profit, or due to business interruption) arising out of the use or
+        inability to use the Content or any other materials on the Platform,
+        even if the Creator or any authorized personnel of the Creator has been
+        notified orally or in writing of the possibility of such damage. Some
+        jurisdictions do not allow limitations on implied warranties, or
+        limitations of liability for consequential or incidental damages, so,
+        some or all of these limitations may not apply to You. Indemnity and
+        Release: You shall indemnify and hold harmless the Creator and where
+        applicable, its officers, directors, agents and employees, from any
+        claim or demand, or actions including reasonable attorney{"'"}s fees,
+        made by any third party or penalty imposed due to or arising out of Your
+        breach of this Agreement or any document incorporated by reference, or
+        Your violation of any law, rules, regulations or the rights of a third
+        party. Governing Law and Jurisdiction: Any claim relating to the
+        Platform shall be governed by the laws of the Creator’s home
+        jurisdiction (as provided on the Platform) without regard to its
+        conflict of law provisions. You agree, as we do, to submit to the
+        exclusive jurisdiction of the courts at Creator’s home jurisdiction.
+        Miscellaneous: Alteration of Platform or Amendments to the Conditions:
+        We reserve the right to make changes to our Platform, policies, and this
+        Agreement at any time. We will post the new terms with a revision date
+        indicated at the top or if deemed practicable. You should check our
+        Platform frequently to see recent changes. You will be subject to the
+        Agreement and the policies in force at the time that You use the
+        Platform or any part thereof, unless any change to those policies or
+        these conditions is required to be made by law or government authority
+        (in which case it will apply to orders previously placed by You). If any
+        of these conditions is deemed invalid, void, or for any reason
+        unenforceable, that condition will be deemed severable and will not
+        affect the validity and enforceability of any remaining condition.
+        Waiver: If You breach these conditions and we take no action, we will
+        still be entitled to use our rights and remedies in any other situation
+        where You breach these conditions. Assignment: You may not assign or
+        transfer this Agreement, by operation or law or otherwise. Any attempt
+        by You to assign or transfer this Agreement will be null and void.
+        Severability: If any provision of this Agreement will be adjudged by any
+        court of competent jurisdiction to be unenforceable or invalid, that
+        provision will be limited to the minimum extent necessary so that this
+        Agreement will otherwise remain in effect. Events beyond our reasonable
+        control: We will not be held responsible for any delay or failure to
+        comply with our obligations under these conditions if the delay or
+        failure arises from any cause which is beyond our reasonable control.
+        This condition does not affect Your statutory rights. SECTION 4 –
+        PAYMENT We use Razorpay for processing payments. We or Razorpay do not
+        store your card data on their servers. The data is encrypted through the
+        Payment Card Industry Data Security Standard (PCI-DSS) when processing
+        payment. Your purchase transaction data is only used as long as is
+        necessary to complete your purchase transaction. After that is complete,
+        your purchase transaction information is not saved. Our payment gateway
+        adheres to the standards set by PCI-DSS as managed by the PCI Security
+        Standards Council, which is a joint effort of brands like Visa,
+        MasterCard, American Express, and Discover. PCI-DSS requirements help
+        ensure the secure handling of credit card information by our store and
+        its service providers. For more insight, you may also want to read the
+        terms and conditions of Razorpay on https://razorpay.com SECTION 5 –
+        THIRD-PARTY SERVICES In general, the third-party providers used by us
+        will only collect, use and disclose your information to the extent
+        necessary to allow them to perform the services they provide to us.
+        However, certain third-party service providers, such as payment gateways
+        and other payment transaction processors, have their own privacy
+        policies in respect to the information we are required to provide to
+        them for your purchase-related transactions. For these providers, we
+        recommend that you read their privacy policies so you can understand the
+        manner in which your personal information will be handled by these
+        providers. In particular, remember that certain providers may be located
+        in or have facilities that are located in a different jurisdiction than
+        either you or us. So if you elect to proceed with a transaction that
+        involves the services of a third-party service provider, then your
+        information may become subject to the laws of the jurisdiction(s) in
+        which that service provider or its facilities are located. Once you
+        leave our store’s website or are redirected to a third-party website or
+        application, you are no longer governed by this Privacy Policy or our
+        website’s Terms of Service. LinksWhen you click on links on our store,
+        they may direct you away from our site. We are not responsible for the
+        privacy practices of other sites and encourage you to read their privacy
+        statements SECTION 6 – GOVERNING LAW These Terms of Service and any
+        separate agreements whereby we provide you Services shall be governed by
+        and construed in accordance with the laws of India and jurisdiction of
+        Virar,Taluka Vasai,Maharashtra SECTION 7 – CHANGES TO TERMS OF SERVICE
+        You can review the most current version of the Terms of Service at any
+        time on this page.We reserve the right, at our sole discretion, to
+        update, change or replace any part of these Terms of Service by posting
+        updates and changes to our website. It is your responsibility to check
+        our website periodically for changes. Your continued use of or access to
+        our website or the Service following the posting of any changes to these
+        Terms of Service constitutes acceptance of those changes. SECTION 8 - NO
+        SUBSTITUTE to MEDICAL ADVICE. Any views or advice on this website should
+        not be taken as a substitute for medical advice or consulting a
+        Homeopath, especially if you have a specific health complaint. Contact
+        Us: If You’ve have concerns or queries regarding this Agreement, You may
+        write to us by email at homeosetu@gmail.com
       </p>
     </div>
   )

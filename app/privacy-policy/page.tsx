@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 
 export default function Page() {
   return (
-    <div className="container min-h-screen p-4 flex flex-col items-center">
+    <div className="container min-h-screen p-4 flex space-y-6 flex-col items-center">
       <h1
         className={cn(
           "animate-in fade-in duration-700 font-bold",
@@ -11,6 +11,7 @@ export default function Page() {
       >
         Privacy Policy
       </h1>
+      <h2 className="text-slate-600">Last Updated : December 15, 2024</h2>
       <p className="animate-in fade-in duration-1200 text-base sm:text-lg mt-4">
         Homeosetu (“our,” “us” or “we”) is committed to protecting your privacy.
         This Privacy Policy applies to all websites owned or operated by
