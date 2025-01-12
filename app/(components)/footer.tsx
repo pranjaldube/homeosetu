@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
             <div className="space-y-2">
               <h3 className="text-sm font-semibold">Resources</h3>
               <ul className="space-y-1">
-                <li>
+                {/* <li>
                   <Button asChild variant="link" className="h-auto p-0 text-sm">
                     <Link href="/#">Careers</Link>
                   </Button>
@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
                   <Button asChild variant="link" className="h-auto p-0 text-sm">
                     <Link href="/#">FAQ</Link>
                   </Button>
-                </li>
+                </li> */}
                 <li>
                   <Button asChild variant="link" className="h-auto p-0 text-sm">
                     <Link href="/contact-us">Contact Us</Link>

@@ -16,8 +16,9 @@ export default function Page() {
       <p className="animate-in fade-in duration-1200 mt-4 text-center flex flex-col space-y-4">
         <span className="block">Thank you for shopping with Homeosetu. </span>
         <span className="block">
-          If, for any reason, You are not completely satisfied with purchased
-          Goods, please contact Us at homeosetu [at] gmail [dot] com
+          We do not offer any refund or cancellations on the the purchased
+          Goods. If, for any reason, You are not completely satisfied with
+          purchased Goods, please contact Us at homeosetu [at] gmail [dot] com
         </span>
         <Separator />
         <span className="max-w-max text-slate-600">
