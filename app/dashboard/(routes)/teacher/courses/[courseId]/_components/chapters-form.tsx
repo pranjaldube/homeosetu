@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import * as z from "zod";
-import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Loader2, PlusCircle } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { Chapter, Course } from "@prisma/client";
+import * as z from "zod"
+import axios from "axios"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Loader2, PlusCircle } from "lucide-react"
+import { useState } from "react"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
+import { Chapter, Course } from "@prisma/client"
 
 import {
   Form,
@@ -16,73 +16,70 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
 
-import { ChaptersList } from "./chapters-list";
+import { ChaptersList } from "./chapters-list"
 
 interface ChaptersFormProps {
-  initialData: Course & { chapters: Chapter[] };
-  courseId: string;
-};
+  initialData: Course & { chapters: Chapter[] }
+  courseId: string
+}
 
 const formSchema = z.object({
   title: z.string().min(1),
-});
+})
 
-export const ChaptersForm = ({
-  initialData,
-  courseId
-}: ChaptersFormProps) => {
-  const [isCreating, setIsCreating] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
+export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
+  const [isCreating, setIsCreating] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   const toggleCreating = () => {
-    setIsCreating((current) => !current);
+    setIsCreating((current) => !current)
   }
 
-  const router = useRouter();
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
     },
-  });
+  })
 
-  const { isSubmitting, isValid } = form.formState;
+  const { isSubmitting, isValid } = form.formState
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/courses/${courseId}/chapters`, values);
-      toast.success("Chapter created");
-      toggleCreating();
-      router.refresh();
+      await axios.post(`/api/courses/${courseId}/chapters`, values)
+      toast.success("Chapter created")
+      toggleCreating()
+      router.refresh()
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong")
     }
   }
 
   const onReorder = async (updateData: { id: string; position: number }[]) => {
     try {
-      setIsUpdating(true);
+      setIsUpdating(true)
 
       await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
-        list: updateData
-      });
-      toast.success("Chapters reordered");
-      router.refresh();
+        list: updateData,
+      })
+      toast.success("Chapters reordered")
+      router.refresh()
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong")
     } finally {
-      setIsUpdating(false);
+      setIsUpdating(false)
     }
   }
 
   const onEdit = (id: string) => {
-    router.push(`/teacher/courses/${courseId}/chapters/${id}`);
+    router.push(`/dashboard/teacher/courses/${courseId}/chapters/${id}`)
   }
 
   return (
@@ -127,20 +124,19 @@ export const ChaptersForm = ({
                 </FormItem>
               )}
             />
-            <Button
-              disabled={!isValid || isSubmitting}
-              type="submit"
-            >
+            <Button disabled={!isValid || isSubmitting} type="submit">
               Create
             </Button>
           </form>
         </Form>
       )}
       {!isCreating && (
-        <div className={cn(
-          "text-sm mt-2",
-          !initialData.chapters.length && "text-slate-500 italic"
-        )}>
+        <div
+          className={cn(
+            "text-sm mt-2",
+            !initialData.chapters.length && "text-slate-500 italic"
+          )}
+        >
           {!initialData.chapters.length && "No chapters"}
           <ChaptersList
             onEdit={onEdit}

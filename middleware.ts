@@ -12,7 +12,6 @@ export default authMiddleware({
     "/privacy-policy",
     "/return-and-refund-policy",
     "/tnc",
-    "/dashboard",
   ],
 })
 
