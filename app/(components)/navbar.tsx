@@ -16,25 +16,27 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { useUser } from "@clerk/nextjs"
 
-const SPEAKERS = [
+// Define main navigation links
+const MAIN_LINKS = [
   {
-    title: "Pranjal",
-    link: "/#",
+    title: "Home",
+    href: "/",
   },
   {
-    title: "Ojha",
-    link: "/#",
-  },
-]
-
-const CATEGORIES = [
-  {
-    title: "Disease",
-    link: "/#",
+    title: "About Us",
+    href: "/about-us",
   },
   {
-    title: "Cure",
-    link: "/#",
+    title: "Software",
+    href: "/software",
+  },
+  {
+    title: "Blog",
+    href: "/blog",
+  },
+  {
+    title: "Contact Us",
+    href: "/contact-us",
   },
 ]
 
@@ -65,60 +67,20 @@ export const Navbar: React.FC = () => {
 
           {/* Navigation Items */}
           <div className="flex items-center gap-6">
-            {/* <NavigationMenu>
+            <NavigationMenu>
               <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Speakers</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                      {SPEAKERS.map((item, index) => (
-                        <ListItem
-                          key={index}
-                          href={item.link}
-                          title={item.title}
-                        >
-                          {item.title}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/about-us" legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      About Us
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                      {CATEGORIES.map((item, index) => (
-                        <ListItem
-                          key={index}
-                          href={item.link}
-                          title={item.title}
-                        >
-                          {item.title}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/blog" legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Blog
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
+                {/* Main navigation links */}
+                {MAIN_LINKS.map((link) => (
+                  <NavigationMenuItem key={link.title}>
+                    <Link href={link.href} legacyBehavior passHref>
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                        {link.title}
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                ))}
               </NavigationMenuList>
-            </NavigationMenu> */}
+            </NavigationMenu>
 
             <button
               className="bg-blue-500 text-white px-6 py-2 rounded-full text-sm hover:bg-blue-600 transition-colors"

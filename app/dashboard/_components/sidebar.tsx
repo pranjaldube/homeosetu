@@ -1,22 +1,22 @@
 import Image from "next/image"
+import Link from "next/link"
 import { SidebarRoutes } from "./sidebar-routes"
 
 export const Sidebar = () => {
   return (
-    <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-sm">
-      <div className="p-6">
-        <div className="relative after:absolute after:inset-0 after:bg-[#8C44FF] after:mix-blend-soft-light after:rounded-lg">
+    <div className="h-full border-r flex flex-col overflow-y-auto bg-white shadow-md">
+      <Link href="/" className="p-4 flex justify-center border-b">
+        <div className="relative w-40 h-12">
           <Image
-            className="grayscale"
             src="/logo.png"
-            height="100"
-            width="100"
-            alt="Logo"
+            fill
+            alt="Homeosetu"
+            className="object-contain"
             priority
           />
         </div>
-      </div>
-      <div className="flex flex-col w-full">
+      </Link>
+      <div className="flex flex-col w-full py-4">
         <SidebarRoutes />
       </div>
     </div>

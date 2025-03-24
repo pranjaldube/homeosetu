@@ -1,5 +1,5 @@
 import Mux from "@mux/mux-node";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
@@ -14,7 +14,7 @@ export async function DELETE(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -30,7 +30,9 @@ export async function DELETE(
           include: {
             muxData: true,
           }
-        }
+        },
+        attachments: true,
+        purchases: true,
       }
     });
 
@@ -38,16 +40,27 @@ export async function DELETE(
       return new NextResponse("Not found", { status: 404 });
     }
 
+    // Delete Mux assets
     for (const chapter of course.chapters) {
       if (chapter.muxData?.assetId) {
-        await Video.Assets.del(chapter.muxData.assetId);
+        try {
+          await Video.Assets.del(chapter.muxData.assetId);
+        } catch (error) {
+          console.log("[MUX_ASSET_DELETE_ERROR]", error);
+          // Continue with deletion even if Mux deletion fails
+        }
       }
     }
 
+    // Delete the course with cascading deletes for related records
     const deletedCourse = await db.course.delete({
       where: {
         id: params.courseId,
       },
+      include: {
+        chapters: true,
+        attachments: true,
+      }
     });
 
     return NextResponse.json(deletedCourse);
@@ -62,7 +75,7 @@ export async function PATCH(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const { courseId } = params;
     const values = await req.json();
 

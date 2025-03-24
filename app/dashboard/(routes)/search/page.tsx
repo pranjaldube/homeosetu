@@ -1,10 +1,11 @@
-import { auth } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { SearchInput } from "@/components/search-input";
 import { getCourses } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
+import { BackButton } from "@/app/dashboard/_components/back-button";
 
 import { Categories } from "./_components/categories";
 
@@ -18,7 +19,8 @@ interface SearchPageProps {
 const SearchPage = async ({
   searchParams
 }: SearchPageProps) => {
-  const { userId } = auth();
+  const user = await currentUser();
+  const userId = user?.id;
 
   if (!userId) {
     return redirect("/");
@@ -37,17 +39,23 @@ const SearchPage = async ({
 
   return (
     <>
-      <div className="px-6 pt-6 md:hidden md:mb-0 block">
-        <SearchInput />
-      </div>
-      <div className="p-6 space-y-4">
+      <BackButton href="/dashboard" label="Back to dashboard" />
+      
+      <div className="flex flex-col space-y-4">
+        <h1 className="text-2xl font-bold">Browse Courses</h1>
+        
+        <div className="md:hidden">
+          <SearchInput />
+        </div>
+        
         <Categories
           items={categories}
         />
+        
         <CoursesList items={courses} />
       </div>
     </>
-   );
+  );
 }
  
 export default SearchPage;

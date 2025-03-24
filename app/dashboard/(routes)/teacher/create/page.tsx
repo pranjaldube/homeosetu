@@ -5,7 +5,6 @@ import axios from "axios"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import toast from "react-hot-toast"
 
 import {
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { BackButton } from "@/app/dashboard/_components/back-button"
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -48,17 +48,19 @@ const CreatePage = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
-      <div>
-        <h1 className="text-2xl">Name your course</h1>
-        <p className="text-sm text-slate-600">
+    <div>
+      <BackButton href="/dashboard/teacher/courses" label="Back to courses" />
+      
+      <div className="max-w-3xl mt-6">
+        <h1 className="text-2xl font-bold mb-2">Create a new course</h1>
+        <p className="text-sm text-slate-600 mb-6">
           What would you like to name your course? Don&apos;t worry, you can
           change this later.
         </p>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 mt-8"
+            className="space-y-8"
           >
             <FormField
               control={form.control}
@@ -81,11 +83,13 @@ const CreatePage = () => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Link href="/">
-                <Button type="button" variant="ghost">
-                  Cancel
-                </Button>
-              </Link>
+              <Button 
+                type="button" 
+                variant="ghost" 
+                onClick={() => router.push("/dashboard/teacher/courses")}
+              >
+                Cancel
+              </Button>
               <Button type="submit" disabled={!isValid || isSubmitting}>
                 Continue
               </Button>

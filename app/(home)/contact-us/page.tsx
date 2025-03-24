@@ -107,7 +107,7 @@ export default function Page() {
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-5 w-5" />
-                <span>+91 87076 69778</span>
+                <span>+91 99754 61833</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-5 w-5" />
