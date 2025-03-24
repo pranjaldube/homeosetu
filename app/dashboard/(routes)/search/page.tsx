@@ -46,7 +46,9 @@ const SearchPage = async ({
         <h1 className="text-2xl font-bold">Browse Courses</h1>
         
         <div className="md:hidden">
-          <SearchInput />
+          <Suspense fallback={<div>Loading search...</div>}>
+            <SearchInput />
+          </Suspense>
         </div>
         
         <Suspense fallback={<div>Loading categories...</div>}>
