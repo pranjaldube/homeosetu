@@ -68,7 +68,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
         {/* Tags */}
         <div className="max-w-4xl mx-auto mb-16">
           <div className="flex gap-2 flex-wrap">
-            {post.tags.map((tag) => (
+            {post.tags?.map((tag) => (
               <span
                 key={tag}
                 className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm"
@@ -85,7 +85,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="flex items-center gap-4 mb-4">
               <div className="relative h-16 w-16 rounded-full overflow-hidden">
                 <Image
-                  src={post.author.avatar}
+                  src={post.author.avatar || ""}
                   alt={post.author.name}
                   fill
                   className="object-cover"
@@ -93,7 +93,6 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
               </div>
               <div>
                 <h3 className="font-bold text-lg">{post.author.name}</h3>
-                <p className="text-gray-600">{post.author.role}</p>
               </div>
             </div>
             <p className="text-gray-600">{post.author.bio}</p>
