@@ -20,7 +20,7 @@ export default function SoftwarePage() {
           </h1>
           
           <p className="text-xl text-gray-600 mb-12">
-            We're working on something exciting! Our new software will revolutionize 
+            We&apos;re working on something exciting! Our new software will revolutionize 
             the way homeopaths practice and learn. Stay tuned for updates.
           </p>
 

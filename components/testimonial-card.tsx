@@ -29,7 +29,7 @@ export const TestimonialCard = ({
     >
       {/* Decorative quotation mark */}
       <div className="absolute top-6 right-6 text-8xl font-serif text-purple-200 opacity-60 group-hover:opacity-80 transition-opacity duration-300">
-        "
+        &quot;
       </div>
       
       <CardContent className="p-8 relative z-10">
@@ -50,7 +50,7 @@ export const TestimonialCard = ({
         
         {/* Content */}
         <p className="mb-8 text-gray-600 italic text-lg leading-relaxed relative">
-          "{content}"
+          &quot;{content}&quot;
         </p>
         
         {/* Divider */}

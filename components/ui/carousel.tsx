@@ -41,7 +41,7 @@ export function Carousel({
     if (!autoSlide) return
     const slideInterval = setInterval(next, autoSlideInterval)
     return () => clearInterval(slideInterval)
-  }, [autoSlideInterval, autoSlide])
+  }, [autoSlideInterval, autoSlide, next])
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
