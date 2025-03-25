@@ -11,6 +11,7 @@ import {
   FcSportsMode
 } from "react-icons/fc";
 import { IconType } from "react-icons";
+import { Suspense } from "react";
 
 import { CategoryItem } from "./category-item";
 
@@ -34,12 +35,13 @@ export const Categories = ({
   return (
     <div className="flex items-center gap-x-2 overflow-x-auto pb-2">
       {items.map((item) => (
-        <CategoryItem
-          key={item.id}
-          label={item.name}
-          icon={iconMap[item.name]}
-          value={item.id}
-        />
+        <Suspense key={item.id} fallback={<div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse" />}>
+          <CategoryItem
+            label={item.name}
+            icon={iconMap[item.name]}
+            value={item.id}
+          />
+        </Suspense>
       ))}
     </div>
   )

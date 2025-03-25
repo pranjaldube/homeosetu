@@ -46,12 +46,16 @@ const SearchPage = async ({
         <h1 className="text-2xl font-bold">Browse Courses</h1>
         
         <div className="md:hidden">
-          <Suspense fallback={<div>Loading search...</div>}>
+          <Suspense fallback={<div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />}>
             <SearchInput />
           </Suspense>
         </div>
         
-        <Suspense fallback={<div>Loading categories...</div>}>
+        <Suspense fallback={<div className="flex gap-2 overflow-x-auto pb-2">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-10 w-24 bg-gray-200 rounded-full animate-pulse" />
+          ))}
+        </div>}>
           <Categories items={categories} />
         </Suspense>
         
