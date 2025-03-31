@@ -3,12 +3,9 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { db } from "@/lib/db";
-import { SearchInput } from "@/components/search-input";
 import { getCourses } from "@/actions/get-courses";
-import { CoursesList } from "@/components/courses-list";
 import { BackButton } from "@/app/dashboard/_components/back-button";
-
-import { Categories } from "./_components/categories";
+import { SearchContent } from "./_components/search-content";
 
 interface SearchPageProps {
   searchParams: {
@@ -42,25 +39,26 @@ const SearchPage = async ({
     <>
       <BackButton href="/dashboard" label="Back to dashboard" />
       
-      <div className="flex flex-col space-y-4">
-        <h1 className="text-2xl font-bold">Browse Courses</h1>
-        
-        <div className="md:hidden">
-          <Suspense fallback={<div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />}>
-            <SearchInput />
-          </Suspense>
+      <Suspense fallback={
+        <div className="flex flex-col space-y-4">
+          <h1 className="text-2xl font-bold">Browse Courses</h1>
+          <div className="md:hidden">
+            <div className="h-10 w-full bg-gray-200 rounded-full animate-pulse" />
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-10 w-24 bg-gray-200 rounded-full animate-pulse" />
+            ))}
+          </div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-48 bg-gray-200 rounded-lg animate-pulse" />
+            ))}
+          </div>
         </div>
-        
-        <Suspense fallback={<div className="flex gap-2 overflow-x-auto pb-2">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-10 w-24 bg-gray-200 rounded-full animate-pulse" />
-          ))}
-        </div>}>
-          <Categories items={categories} />
-        </Suspense>
-        
-        <CoursesList items={courses} />
-      </div>
+      }>
+        <SearchContent categories={categories} courses={courses} />
+      </Suspense>
     </>
   );
 }

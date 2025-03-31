@@ -8,6 +8,15 @@ const nextConfig = {
         pathname: '**',
       }
     ]
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  experimental: {
+    serverActions: true,
   }
 }
 
