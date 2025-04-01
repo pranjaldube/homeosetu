@@ -5,7 +5,8 @@ import { IconType } from "react-icons";
 import { 
   usePathname, 
   useRouter, 
-  useSearchParams
+  useSearchParams,
+  Suspense
 } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -16,7 +17,7 @@ interface CategoryItemProps {
   icon?: IconType;
 };
 
-export const CategoryItem = ({
+const CategoryItemContent = ({
   label,
   value,
   icon: Icon,
@@ -25,7 +26,8 @@ export const CategoryItem = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const currentCategoryId = searchParams.get("categoryId");const currentTitle = searchParams.get("title");
+  const currentCategoryId = searchParams.get("categoryId");
+  const currentTitle = searchParams.get("title");
 
   const isSelected = currentCategoryId === value;
 
@@ -56,4 +58,14 @@ export const CategoryItem = ({
       </div>
     </button>
   )
+}
+
+export const CategoryItem = (props: CategoryItemProps) => {
+  return (
+    <Suspense fallback={
+      <div className="h-10 w-24 bg-gray-200 rounded-full animate-pulse" />
+    }>
+      <CategoryItemContent {...props} />
+    </Suspense>
+  );
 }
