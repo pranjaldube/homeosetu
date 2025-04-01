@@ -2,7 +2,8 @@
 
 import qs from "query-string";
 import { Search } from "lucide-react";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 import { Input } from "@/components/ui/input";

@@ -2,11 +2,11 @@
 
 import qs from "query-string";
 import { IconType } from "react-icons";
+import { Suspense } from "react";
 import { 
   usePathname, 
   useRouter, 
   useSearchParams,
-  Suspense
 } from "next/navigation";
 
 import { cn } from "@/lib/utils";
