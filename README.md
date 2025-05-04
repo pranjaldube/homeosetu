@@ -1,6 +1,6 @@
 # HOMEOSETU LMS PLATFORM
 
-Key Features:
+Key Features - 
 
 - Browse & Filter Courses
 - Purchase Courses using Stripe
