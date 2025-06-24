@@ -63,7 +63,7 @@ NEXT_PUBLIC_TEACHER_ID=
 
 ### Setup Prisma
 
-Add MySQL Database (I used PlanetScale)
+Supabase
 
 ```shell
 npx prisma generate
