@@ -17,17 +17,11 @@ Key Features -
 - Rich text editor for chapter description
 - Authentication using Clerk
 - ORM using Prisma
-- MySQL database using Planetscale
 
 ### Prerequisites
 
 **Node version 18.x.x**
 
-### Cloning the repository
-
-```shell
-git clone https://github.com/AntonioErdeljac/next13-lms-platform.git
-```
 
 ### Install packages
 
