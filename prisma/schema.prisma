@@ -103,6 +103,7 @@ model Purchase {
 
   courseId String @db.Uuid
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  swipeHashId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
