@@ -85,7 +85,7 @@ const ChapterIdPage = async ({
             ) : (
               <CourseEnrollButton
                 courseId={params.courseId}
-                price={course.price!}
+                price={Math.round(course.price! + ((course.price! / 100) * 18))}
               />
             )}
           </div>
