@@ -50,12 +50,13 @@ export async function POST(
     const now = new Date()
     const date = formatDate(now);
     const course_price = course.price
-    const course_price_with_tax = course.price! + Math.round((course.price! / 100) * 18)
+    const course_price_with_tax = course.price! + ((course.price! / 100) * 18)
     
     const invoicePayload = {
       document_type: "invoice",
       document_date: date,
       due_date: date,
+      round_off: true,
       party:{
         id: user.id,
         type: "customer",
