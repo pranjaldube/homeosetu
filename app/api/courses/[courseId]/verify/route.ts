@@ -50,17 +50,27 @@ export async function POST(
     const now = new Date()
     const date = formatDate(now);
     const course_price = course.price
-    const course_price_with_tax = course_price + Math.round((course_price/100) * 18)
+    const course_price_with_tax = course.price! + ((course.price! / 100) * 18)
     
     const invoicePayload = {
       document_type: "invoice",
       document_date: date,
       due_date: date,
+      round_off: true,
       party:{
         id: user.id,
         type: "customer",
         name: `${user?.firstName} ${user?.lastName}`,
-        email: user.emailAddresses?.[0]?.emailAddress
+        email: user.emailAddresses?.[0]?.emailAddress,
+        billing_address:{
+          addr_id_v2:"addr1",
+          address_line1:"123 street",
+          address_line2:"apt 48",
+          city:"Hyderabad City",
+          state:"TELANGANA",
+          country:"India",
+          pincode:"500032"
+        }
       },
       items:[
         {
