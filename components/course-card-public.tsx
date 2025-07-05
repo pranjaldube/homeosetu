@@ -47,7 +47,7 @@ export const CourseCardPublic = ({
             src={imageUrl || "/placeholder-course.jpg"}
           />
           <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            {formatPrice(price)}
+            {formatPrice(price)} + GST
           </div>
         </div>
         <div className="flex flex-col pt-3">

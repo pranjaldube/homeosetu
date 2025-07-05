@@ -100,7 +100,7 @@ export const CourseEnrollButton = ({
       size="sm"
       className="w-full md:w-auto"
     >
-      Enroll for {formatPrice(price)}
+      Enroll for {formatPrice(price)} + GST
     </Button>
   )
 }
