@@ -27,21 +27,21 @@ import { StatsSection } from "@/components/stats-section"
 const TESTIMONIALS = [
   {
     content:
-      "This platform has transformed my approach to homeopathy. The courses are comprehensive and the instructors are exceptional.",
-    author: "Dr. Sarah Johnson",
-    role: "Homeopathic Practitioner",
+      "I have understood the importance of a physical copy of repertory, i was very used to software but never used physical copies, this has made me more curious and i come across many new rubrics and try to understand them with meaning",
+    author: "Dr. Asmath Naheeda",
+    role: "The Rubric Workshop Attendee",
   },
   {
     content:
-      "As a medical student, I found these courses to be an excellent complement to my traditional education. Highly recommended!",
-    author: "Michael Chen",
-    role: "Medical Student",
+      "Dr Alpesh and Dr Anshu are Mentors with punctuality and kindness in sharing their knowledge is remarkable .Explained doubts beautifully and in very understandable language",
+    author: "Dr. Amita Saini",
+    role: "The Kingdom Workshop Attendee",
   },
   {
     content:
-      "The knowledge I gained has been invaluable for my practice. The clinical insights were particularly helpful.",
-    author: "Dr. Emily Williams",
-    role: "Clinical Homeopath",
+      "8. For the first I have watched your video giving information about capsicum.4 of my cases have solved after that..I have verified them.Thank you Sir",
+    author: "Dr. Radheshyam",
+    role: "Hyderabad, Youtube Subscriber and Senior Homeopath",
   },
 ]
 
@@ -168,7 +168,7 @@ const carouselSlides = [
               <div className="absolute h-64 w-64 bg-blue-500 rounded-full opacity-20 animate-pulse"></div>
               <div className="relative h-56 w-56 rounded-full overflow-hidden border-4 border-white">
                 <Image
-                  src="/images/slide2.jpg"
+                  src="/school.png"
                   alt="Doctor with patient"
                   fill
                   className="object-cover"
@@ -211,7 +211,7 @@ const carouselSlides = [
               <div className="grid grid-cols-2 gap-4">
                 <div className="h-32 w-32 bg-white/20 rounded-lg overflow-hidden">
                   <Image
-                    src="/images/slide3.jpg"
+                    src="/images/slide1.png"
                     alt="Community member 1"
                     width={128}
                     height={128}
@@ -220,7 +220,7 @@ const carouselSlides = [
                 </div>
                 <div className="h-32 w-32 bg-white/20 rounded-lg overflow-hidden mt-8">
                   <Image
-                    src="/images/slide1.jpg"
+                    src="/images/slide2.png"
                     alt="Community member 2"
                     width={128}
                     height={128}
@@ -229,7 +229,7 @@ const carouselSlides = [
                 </div>
                 <div className="h-32 w-32 bg-white/20 rounded-lg overflow-hidden">
                   <Image
-                    src="/images/slide2.jpg"
+                    src="/images/slide3.png"
                     alt="Community member 3"
                     width={128}
                     height={128}
@@ -238,7 +238,7 @@ const carouselSlides = [
                 </div>
                 <div className="h-32 w-32 bg-white/20 rounded-lg overflow-hidden mt-8">
                   <Image
-                    src="/images/slide3.jpg"
+                    src="/images/slide4.png"
                     alt="Community member 4"
                     width={128}
                     height={128}

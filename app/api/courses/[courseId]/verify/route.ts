@@ -47,6 +47,12 @@ export async function POST(
       return new NextResponse("Invalid signature", { status: 400 })
     }
 
+    const userAddress = await db.userAddress.findUnique({
+      where: {
+        userId: user.id
+      },
+    })
+
     const now = new Date()
     const date = formatDate(now);
     const course_price = course.price
@@ -64,12 +70,12 @@ export async function POST(
         email: user.emailAddresses?.[0]?.emailAddress,
         billing_address:{
           addr_id_v2:"addr1",
-          address_line1:"123 street",
-          address_line2:"apt 48",
-          city:"Hyderabad City",
-          state:"TELANGANA",
-          country:"India",
-          pincode:"500032"
+          address_line1: userAddress?.address1 || "123 street",
+          address_line2: userAddress?.country,
+          city: userAddress?.city,
+          state: userAddress?.state,
+          country: userAddress?.country,
+          pincode:"401105"
         }
       },
       items:[
