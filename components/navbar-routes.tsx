@@ -3,6 +3,7 @@
 import { UserButton, useUser } from "@clerk/nextjs"
 import { usePathname, useRouter } from "next/navigation"
 import { LogOut, GraduationCap } from "lucide-react"
+import { BackButton } from "@/app/dashboard/_components/back-button"
 import Link from "next/link"
 import React from "react"
 
@@ -21,7 +22,9 @@ export const NavbarRoutes = () => {
   const isDashboard = pathname?.includes("/dashboard")
 
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center justify-between w-full">
+      <BackButton label="Back" />
+
       {isSearchPage && (
         <div className="hidden md:block flex-1 mr-auto">
           <SearchInput />

@@ -20,8 +20,7 @@ export default function SoftwarePage() {
           </h1>
           
           <p className="text-xl text-gray-600 mb-12">
-            We&apos;re working on something exciting! Our new software will revolutionize 
-            the way homeopaths practice and learn. Stay tuned for updates.
+            Exciting things are on the horizon! We’re building a next-generation software platform and mobile app designed to transform how homeopaths learn, connect, and practice. With innovation at the core, our tools aim to empower practitioners like never before. Stay tuned—change is coming.
           </p>
 
           {/* <div className="max-w-md mx-auto bg-white rounded-lg shadow-xl p-8 mb-12">

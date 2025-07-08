@@ -53,7 +53,7 @@ export async function POST(
       .slice(0, 40)
 
     const options = {
-      amount: Math.round(course.price! * 100), // amount in smallest currency unit
+      amount: (course.price! + Math.round((course.price! / 100) * 18)) * 100, // amount in smallest currency unit
       currency: "INR",
       receipt,
       notes: {

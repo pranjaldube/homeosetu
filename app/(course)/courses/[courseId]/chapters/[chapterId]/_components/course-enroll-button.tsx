@@ -4,8 +4,13 @@ import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
 
+import { useUser } from "@clerk/nextjs"
+import { NextResponse } from "next/server"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/format"
+import { Input } from "@/components/ui/input"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { ComboBox } from "./comboBox"
 
 interface CourseEnrollButtonProps {
   price: number
@@ -23,6 +28,322 @@ export const CourseEnrollButton = ({
   courseId,
 }: CourseEnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+
+  const { user } = useUser()
+
+  const [form, setForm] = useState({
+    address1: "",
+    city: "",
+    state: "",
+    country: "",
+    pinCode: ""
+  })
+
+  const countries =
+    [
+      "Afghanistan",
+      "Albania",
+      "Algeria",
+      "Andorra",
+      "Angola",
+      "Antigua and Barbuda",
+      "Argentina",
+      "Armenia",
+      "Australia",
+      "Austria",
+      "Azerbaijan",
+      "Bahamas",
+      "Bahrain",
+      "Bangladesh",
+      "Barbados",
+      "Belarus",
+      "Belgium",
+      "Belize",
+      "Benin",
+      "Bhutan",
+      "Bolivia",
+      "Bosnia and Herzegovina",
+      "Botswana",
+      "Brazil",
+      "Brunei",
+      "Bulgaria",
+      "Burkina Faso",
+      "Burundi",
+      "Cabo Verde",
+      "Cambodia",
+      "Cameroon",
+      "Canada",
+      "Central African Republic",
+      "Chad",
+      "Chile",
+      "China",
+      "Colombia",
+      "Comoros",
+      "Congo, Democratic Republic of the",
+      "Congo, Republic of the",
+      "Costa Rica",
+      "Croatia",
+      "Cuba",
+      "Cyprus",
+      "Czechia",
+      "Denmark",
+      "Djibouti",
+      "Dominica",
+      "Dominican Republic",
+      "Ecuador",
+      "Egypt",
+      "El Salvador",
+      "Equatorial Guinea",
+      "Eritrea",
+      "Estonia",
+      "Eswatini",
+      "Ethiopia",
+      "Fiji",
+      "Finland",
+      "France",
+      "Gabon",
+      "Gambia",
+      "Georgia",
+      "Germany",
+      "Ghana",
+      "Greece",
+      "Grenada",
+      "Guatemala",
+      "Guinea",
+      "Guinea-Bissau",
+      "Guyana",
+      "Haiti",
+      "Honduras",
+      "Hungary",
+      "Iceland",
+      "India",
+      "Indonesia",
+      "Iran",
+      "Iraq",
+      "Ireland",
+      "Israel",
+      "Italy",
+      "Jamaica",
+      "Japan",
+      "Jordan",
+      "Kazakhstan",
+      "Kenya",
+      "Kiribati",
+      "Korea, North",
+      "Korea, South",
+      "Kosovo",
+      "Kuwait",
+      "Kyrgyzstan",
+      "Laos",
+      "Latvia",
+      "Lebanon",
+      "Lesotho",
+      "Liberia",
+      "Libya",
+      "Liechtenstein",
+      "Lithuania",
+      "Luxembourg",
+      "Madagascar",
+      "Malawi",
+      "Malaysia",
+      "Maldives",
+      "Mali",
+      "Malta",
+      "Marshall Islands",
+      "Mauritania",
+      "Mauritius",
+      "Mexico",
+      "Micronesia",
+      "Moldova",
+      "Monaco",
+      "Mongolia",
+      "Montenegro",
+      "Morocco",
+      "Mozambique",
+      "Myanmar",
+      "Namibia",
+      "Nauru",
+      "Nepal",
+      "Netherlands",
+      "New Zealand",
+      "Nicaragua",
+      "Niger",
+      "Nigeria",
+      "North Macedonia",
+      "Norway",
+      "Oman",
+      "Pakistan",
+      "Palau",
+      "Palestine",
+      "Panama",
+      "Papua New Guinea",
+      "Paraguay",
+      "Peru",
+      "Philippines",
+      "Poland",
+      "Portugal",
+      "Qatar",
+      "Romania",
+      "Russia",
+      "Rwanda",
+      "Saint Kitts and Nevis",
+      "Saint Lucia",
+      "Saint Vincent and the Grenadines",
+      "Samoa",
+      "San Marino",
+      "Sao Tome and Principe",
+      "Saudi Arabia",
+      "Senegal",
+      "Serbia",
+      "Seychelles",
+      "Sierra Leone",
+      "Singapore",
+      "Slovakia",
+      "Slovenia",
+      "Solomon Islands",
+      "Somalia",
+      "South Africa",
+      "South Sudan",
+      "Spain",
+      "Sri Lanka",
+      "Sudan",
+      "Suriname",
+      "Sweden",
+      "Switzerland",
+      "Syria",
+      "Taiwan",
+      "Tajikistan",
+      "Tanzania",
+      "Thailand",
+      "Timor-Leste",
+      "Togo",
+      "Tonga",
+      "Trinidad and Tobago",
+      "Tunisia",
+      "Turkey",
+      "Turkmenistan",
+      "Tuvalu",
+      "Uganda",
+      "Ukraine",
+      "United Arab Emirates",
+      "United Kingdom",
+      "United States",
+      "Uruguay",
+      "Uzbekistan",
+      "Vanuatu",
+      "Vatican City",
+      "Venezuela",
+      "Vietnam",
+      "Yemen",
+      "Zambia",
+      "Zimbabwe"
+    ]
+
+  const states = [
+    "JAMMU AND KASHMIR",
+    "HIMACHAL PRADESH",
+    "PUNJAB",
+    "CHANDIGARH",
+    "UTTARAKHAND",
+    "HARYANA",
+    "DELHI",
+    "RAJASTHAN",
+    "UTTAR PRADESH",
+    "BIHAR",
+    "SIKKIM",
+    "ARUNACHAL PRADESH",
+    "NAGALAND",
+    "MANIPUR",
+    "MIZORAM",
+    "TRIPURA",
+    "MEGHALAYA",
+    "ASSAM",
+    "WEST BENGAL",
+    "JHARKHAND",
+    "ODISHA",
+    "CHHATTISGARH",
+    "MADHYA PRADESH",
+    "GUJARAT",
+    "DADRA & NAGAR HAVELI & DAMAN & DIU",
+    "MAHARASHTRA",
+    "ANDHRAPRADESH(BEFOREADDED)",
+    "KARNATAKA",
+    "GOA",
+    "LAKSHWADEEP",
+    "KERALA",
+    "TAMIL NADU",
+    "PUDUCHERRY",
+    "ANDAMAN & NICOBAR",
+    "TELANGANA",
+    "ANDHRA PRADESH",
+    "LADAKH(NEWLYADDED)",
+    "OTHER TERRITORY"
+  ]
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const checkUserAddress = async () => {
+    if (!user?.id) {
+      toast.error("User not found")
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const res = await axios.get("/api/address/check", {
+        params: { userId: user.id },
+      })
+
+      const exists = res.data.exists
+
+      if (exists) {
+        onClick();
+      } else {
+        setIsOpen(true)
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("Error checking address")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+
+  const sendAddress = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!user || !user?.id || !user.emailAddresses?.[0]?.emailAddress) {
+      return new NextResponse("Unauthorized", { status: 401 })
+    }
+
+    if(!form.address1 || !form.city || !form.country || !form.pinCode || !form.state){
+      toast.error("All Fields are required")
+    }
+
+    try {
+      const res = await axios.post("/api/address", {
+        userId: user.id,
+        ...form
+      })
+
+      toast.success("Address saved successfully")
+      setIsOpen(false)
+      setForm({
+        address1: "",
+        city: "",
+        state: "",
+        country: "",
+        pinCode: ""
+      })
+      onClick();
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to save address")
+    }
+  }
 
   const onClick = async () => {
     try {
@@ -93,14 +414,99 @@ export const CourseEnrollButton = ({
     })
   }
 
+
   return (
-    <Button
-      onClick={onClick}
-      disabled={isLoading}
-      size="sm"
-      className="w-full md:w-auto"
-    >
-      Enroll for {formatPrice(price)}
-    </Button>
+    <>
+      {/* Enroll button to open the modal */}
+      <Button
+        onClick={checkUserAddress}
+        disabled={isLoading}
+        size="sm"
+        className="w-full md:w-auto"
+      >
+        Enroll for {formatPrice(price)} + GST
+      </Button>
+
+      {/* Modal/Dialog for Address Form */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enter your address</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={sendAddress} className="space-y-4">
+            {/* Address Line 1 */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="address1" className="text-sm font-medium text-gray-700">
+                Address
+              </label>
+              <Input
+                id="address1"
+                name="address1"
+                placeholder="Address Line 1"
+                value={form.address1}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Pincode */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="address2" className="text-sm font-medium text-gray-700">
+                Pincode
+              </label>
+              <Input
+                id="pinCode"
+                name="pinCode"
+                placeholder="Pincode"
+                value={form.pinCode}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* City */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="city" className="text-sm font-medium text-gray-700">
+                City
+              </label>
+              <Input
+                id="city"
+                name="city"
+                placeholder="City"
+                value={form.city}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* State Combobox */}
+            <ComboBox
+              label="State"
+              options={states}
+              value={form.state}
+              onChange={(value) => setForm({ ...form, state: value })}
+            />
+
+            {/* Country Combobox */}
+            <ComboBox
+              label="Country"
+              options={countries}
+              value={form.country}
+              onChange={(value) => setForm({ ...form, country: value })}
+            />
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-4 pt-2">
+              <Button type="button" variant="ghost" onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Saving..." : "Submit"}
+              </Button>
+            </div>
+          </form>
+
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
