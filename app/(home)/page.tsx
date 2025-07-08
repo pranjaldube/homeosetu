@@ -106,11 +106,10 @@ const carouselSlides = [
       <div className="flex h-full items-center justify-between">
         <div className="max-w-xl z-20">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Bridge Academic & Clinical Homeopathic Knowledge
+            The Bridge between Academic and Clinical Homeopathic Knowledge
           </h1>
           <p className="text-white/90 text-lg mb-8">
-            Learn from experienced homeopaths through courses and webinars from
-            the comfort of your home.
+            Get to learn from experienced and rising homeopaths by enrolling for courses from the comfort of your home.
           </p>
           <div className="flex gap-4">
             <Link href="/explore">
