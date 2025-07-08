@@ -27,6 +27,10 @@ const MAIN_LINKS = [
     href: "/about-us",
   },
   {
+    title: "Study Courses",
+    href: "/explore"
+  },
+  {
     title: "Software",
     href: "/software",
   },
