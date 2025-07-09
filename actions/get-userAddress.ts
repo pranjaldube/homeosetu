@@ -2,8 +2,8 @@ import { db } from "@/lib/db";
 import { UserAddress, Course } from "@prisma/client";
 
 interface GetUserProps {
-  userId: string;
-  courseId: string;
+  userId: string | undefined;
+  courseId: string | undefined;
 }
 
 export const getUserAddressAndCourse = async ({
