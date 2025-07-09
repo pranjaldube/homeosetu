@@ -26,7 +26,7 @@ export const DataCard = ({
     </CardHeader>
     <CardContent>
       <div className="text-2xl font-bold">
-        {shouldFormat ? formatPrice(value, "India") : value}
+        {shouldFormat ? formatPrice(value) : value}
       </div>
     </CardContent>
    </Card>
