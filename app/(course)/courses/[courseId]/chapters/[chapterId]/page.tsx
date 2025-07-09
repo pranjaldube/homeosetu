@@ -91,7 +91,7 @@ const ChapterIdPage = async ({
             ) : (
               <CourseEnrollButton
                 courseId={params.courseId}
-                price={(!userAddress || userAddress?.country == "India" ? course.price! : selectedCourse.usdPrice!)}
+                price={(!userAddress || userAddress?.country == "India" ? course.price! : selectedCourse?.usdPrice ?? course.price!)}
                 country={userAddress?.country}
               />
             )}
