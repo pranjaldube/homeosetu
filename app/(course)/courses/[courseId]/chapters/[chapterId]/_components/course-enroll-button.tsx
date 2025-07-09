@@ -281,6 +281,30 @@ export const CourseEnrollButton = ({
     "OTHER TERRITORY"
   ]
 
+  function extractCityOnly(rawInput: string | undefined | null): string {
+  if (!rawInput) return "";
+
+  // Normalize input
+  const input = rawInput.toLowerCase().replace(/\s+/g, " ").trim();
+
+  // Split by common separators: comma, dash, " in "
+  const parts = input.split(/[,|-]| in /i).map((p) => p.trim());
+
+  for (const part of parts) {
+    if (!part || states.includes(part)) continue;
+
+    const cleaned = part.replace(/[^a-zA-Z\s]/g, "").trim();
+
+    if (cleaned.length < 3 || /\d/.test(cleaned)) continue;
+
+    return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+  }
+
+  // Fallback: get the first cleaned word
+  const fallback = input.split(" ")[0].replace(/[^a-zA-Z]/g, "");
+  return fallback.charAt(0).toUpperCase() + fallback.slice(1);
+}
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -323,10 +347,15 @@ export const CourseEnrollButton = ({
       toast.error("All Fields are required")
     }
 
+    const city = extractCityOnly(form.city)
     try {
       const res = await axios.post("/api/address", {
         userId: user.id,
-        ...form
+        city,
+        address1: form.address1,
+        state: form.state,
+        country: form.country,
+        pinCode: form.pinCode
       })
 
       toast.success("Address saved successfully")
