@@ -347,14 +347,11 @@ export const CourseEnrollButton = ({
       toast.error("All Fields are required")
     }
 
-    // const city = extractCityOnly(form.city)
-    // console.log(city)
-    // setForm({...form, city})
-    // console.log(form)
+    const city = extractCityOnly(form.city)
     try {
       const res = await axios.post("/api/address", {
         userId: user.id,
-        city: form.city,
+        city,
         address1: form.address1,
         state: form.state,
         country: form.country,
