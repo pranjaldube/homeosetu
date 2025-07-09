@@ -29,7 +29,6 @@ export const CourseCardPublic = async ({
 
   const { userAddress } = await getUserAddressAndCourse({ userId, courseId: id})
 
-  console.log(userAddress)
   const finalPrice = formatPrice(price, userAddress?.country ?? "India");
 
   const href = user
