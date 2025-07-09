@@ -32,7 +32,7 @@ export const CourseCard = ({
 
   const {user} = useUser();
   const [country, setCountry] = useState<string>("India");
-  const fetchUserAddress = async (userId: string) => {
+  const fetchUserAddress = async (userId: string | undefined) => {
     const userAddress= await axios.get("/api/address",{
       params: { userId }
     })
