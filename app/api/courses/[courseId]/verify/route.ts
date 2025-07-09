@@ -110,6 +110,7 @@ export async function POST(
         courseId: params.courseId,
         userId: user.id,
         swipeHashId,
+        userEmail: user.emailAddresses?.[0]?.emailAddress
       },
     })  
 

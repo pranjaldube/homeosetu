@@ -45,6 +45,10 @@ export async function POST(
       return new NextResponse("Not found", { status: 404 })
     }
 
+    const userAddress = await db.userAddress.findUnique({
+      where: { userId: user.id },
+    })
+
     const receiptRaw = `${course.id}_${user.id}`
     const receipt = crypto
       .createHash("sha1")
@@ -52,9 +56,21 @@ export async function POST(
       .digest("hex")
       .slice(0, 40)
 
+    const currency = (!userAddress || userAddress.country === "India") ? "INR" : "USD";
+
+    let final_price: number;
+
+    if (currency === "INR") {
+      const tax = Math.round((course.price! * 18) / 100); // 18% GST
+      final_price = course.price! + tax;
+    } else {
+      final_price = course.usdPrice!;
+    }
+
+
     const options = {
-      amount: (course.price! + Math.round((course.price! / 100) * 18)) * 100, // amount in smallest currency unit
-      currency: "INR",
+      amount: final_price * 100, // amount in smallest currency unit
+      currency,
       receipt,
       notes: {
         courseId: course.id,

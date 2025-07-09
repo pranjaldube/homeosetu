@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 
 import { getChapter } from "@/actions/get-chapter";
+import { getUserAddressAndCourse } from "@/actions/get-userAddress";
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
@@ -17,10 +18,10 @@ const ChapterIdPage = async ({
   params: { courseId: string; chapterId: string }
 }) => {
   const { userId } = await auth();
-  
+
   if (!userId) {
     return redirect("/");
-  } 
+  }
 
   const {
     chapter,
@@ -36,6 +37,11 @@ const ChapterIdPage = async ({
     courseId: params.courseId,
   });
 
+  const { userAddress, selectedCourse } = await getUserAddressAndCourse({
+    userId,
+    courseId: params.courseId,
+  });
+
   if (!chapter || !course) {
     return redirect("/")
   }
@@ -44,7 +50,7 @@ const ChapterIdPage = async ({
   const isLocked = !chapter.isFree && !purchase;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
-  return ( 
+  return (
     <div>
       {userProgress?.isCompleted && (
         <Banner
@@ -85,7 +91,8 @@ const ChapterIdPage = async ({
             ) : (
               <CourseEnrollButton
                 courseId={params.courseId}
-                price={course.price!}
+                price={(!userAddress || userAddress?.country == "India" ? course.price! : selectedCourse.usdPrice!)}
+                country={userAddress?.country}
               />
             )}
           </div>
@@ -98,7 +105,7 @@ const ChapterIdPage = async ({
               <Separator />
               <div className="p-4">
                 {attachments.map((attachment) => (
-                  <a 
+                  <a
                     href={attachment.url}
                     target="_blank"
                     key={attachment.id}
@@ -116,7 +123,7 @@ const ChapterIdPage = async ({
         </div>
       </div>
     </div>
-   );
+  );
 }
- 
+
 export default ChapterIdPage;

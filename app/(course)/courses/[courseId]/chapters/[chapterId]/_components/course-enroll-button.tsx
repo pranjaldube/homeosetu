@@ -15,6 +15,7 @@ import { ComboBox } from "./comboBox"
 interface CourseEnrollButtonProps {
   price: number
   courseId: string
+  country: string
 }
 
 declare global {
@@ -26,6 +27,7 @@ declare global {
 export const CourseEnrollButton = ({
   price,
   courseId,
+  country,
 }: CourseEnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -456,7 +458,7 @@ export const CourseEnrollButton = ({
         size="sm"
         className="w-full md:w-auto"
       >
-        Enroll for {formatPrice(price)} + GST
+        Enroll for {formatPrice(price, country)} + GST
       </Button>
 
       {/* Modal/Dialog for Address Form */}
