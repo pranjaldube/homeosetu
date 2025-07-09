@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
@@ -7,6 +8,7 @@ import { formatPrice } from "@/lib/format";
 import { CourseProgress } from "@/components/course-progress";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 
 interface CourseCardProps {
   id: string;
@@ -18,7 +20,7 @@ interface CourseCardProps {
   category: string;
 };
 
-export const CourseCard = async ({
+export const CourseCard = ({
   id,
   title,
   imageUrl,
@@ -28,11 +30,18 @@ export const CourseCard = async ({
   category
 }: CourseCardProps) => {
 
-  const user = useUser();
+  const {user} = useUser();
+  const [country, setCountry] = useState<string>("India");
+  const fetchUserAddress = async (userId: string) => {
+    const userAddress= await axios.get("/api/address",{
+      params: { userId }
+    })
+    setCountry(userAddress.data.country)
+  }
 
-  const userAddress = await axios.get("/api/address", {
-    params: { userId: user?.user?.id },
-  })
+  useEffect(()=>{
+    fetchUserAddress(user?.id)
+  },[user?.id])
 
   return (
     <Link href={`/courses/${id}`}>
@@ -68,7 +77,7 @@ export const CourseCard = async ({
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {formatPrice(price, userAddress?.data?.country)} + GST
+              {formatPrice(price, country)} + GST
             </p>
           )}
         </div>
