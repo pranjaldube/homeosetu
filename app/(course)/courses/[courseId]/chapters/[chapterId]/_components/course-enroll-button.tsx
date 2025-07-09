@@ -15,7 +15,7 @@ import { ComboBox } from "./comboBox"
 interface CourseEnrollButtonProps {
   price: number
   courseId: string
-  country: string
+  country: string | undefined
 }
 
 declare global {
