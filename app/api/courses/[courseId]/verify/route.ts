@@ -82,7 +82,7 @@ export async function POST(
           item_type: "Product"
         }
       ]
-    }
+    } as any
 
     if (userAddress?.country === "India") {
       invoicePayload.party.shipping_address = {
