@@ -1,12 +1,11 @@
-"use client";
-
 import Image from "next/image";
+import Link from "next/link";
 import { BookOpen } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
+import { getUserAddressAndCourse } from "@/actions/get-userAddress";
 
 interface CourseCardPublicProps {
   id: string;
@@ -15,29 +14,30 @@ interface CourseCardPublicProps {
   chaptersLength: number;
   price: number;
   category: string;
-};
+}
 
-export const CourseCardPublic = ({
+export const CourseCardPublic = async ({
   id,
   title,
   imageUrl,
   chaptersLength,
   price,
-  category
+  category,
 }: CourseCardPublicProps) => {
-  const router = useRouter();
-  const { user } = useUser();
+  const user = await currentUser();
+  const userId = user?.id;
 
-  const handleClick = () => {
-    if (user) {
-      router.push(`/courses/${id}`);
-    } else {
-      router.push(`/sign-in?redirectUrl=/courses/${id}`);
-    }
-  };
+  const { userAddress } = await getUserAddressAndCourse({ userId, courseId: id})
+
+  console.log(userAddress)
+  const finalPrice = formatPrice(price, userAddress?.country ?? "India");
+
+  const href = user
+    ? `/courses/${id}`
+    : `/sign-in?redirectUrl=/courses/${id}`;
 
   return (
-    <div onClick={handleClick} className="cursor-pointer">
+    <Link href={href}>
       <div className="group hover:shadow-md transition-all duration-300 overflow-hidden border rounded-xl p-3 h-full bg-white hover:scale-[1.01]">
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
           <Image
@@ -47,7 +47,7 @@ export const CourseCardPublic = ({
             src={imageUrl || "/placeholder-course.jpg"}
           />
           <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            {formatPrice(price)} + GST
+            {finalPrice} + GST
           </div>
         </div>
         <div className="flex flex-col pt-3">
@@ -67,6 +67,6 @@ export const CourseCardPublic = ({
           </div>
         </div>
       </div>
-    </div>
-  )
-} 
+    </Link>
+  );
+};

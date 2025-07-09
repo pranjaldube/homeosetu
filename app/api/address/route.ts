@@ -34,3 +34,27 @@ export async function POST(req: Request) {
     return new NextResponse("Internal Server Error", { status: 500 })
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("userId");
+
+    if (!userId) {
+      return new NextResponse("Missing userId", { status: 400 });
+    }
+
+    const userAddress = await db.userAddress.findUnique({
+      where: { userId },
+    });
+
+    if (!userAddress) {
+      return new NextResponse("User address not found", { status: 404 });
+    }
+
+    return NextResponse.json(userAddress);
+  } catch (error) {
+    console.error("[USER_ADDRESS_GET]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}

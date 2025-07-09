@@ -5,6 +5,8 @@ import { BookOpen } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
 import { CourseProgress } from "@/components/course-progress";
+import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 
 interface CourseCardProps {
   id: string;
@@ -16,7 +18,7 @@ interface CourseCardProps {
   category: string;
 };
 
-export const CourseCard = ({
+export const CourseCard = async ({
   id,
   title,
   imageUrl,
@@ -25,6 +27,13 @@ export const CourseCard = ({
   progress,
   category
 }: CourseCardProps) => {
+
+  const user = useUser();
+
+  const userAddress = await axios.get("/api/address", {
+    params: { userId: user?.user?.id },
+  })
+
   return (
     <Link href={`/courses/${id}`}>
       <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
@@ -59,7 +68,7 @@ export const CourseCard = ({
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {formatPrice(price)} + GST
+              {formatPrice(price, userAddress?.data?.country)} + GST
             </p>
           )}
         </div>
