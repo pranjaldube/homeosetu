@@ -125,11 +125,11 @@ const carouselSlides = [
         <div className="hidden md:block relative h-[400px] w-[450px]">
           <div className="absolute top-0 right-0 w-[450px] h-[400px] bg-white/10 backdrop-blur-sm rounded-l-full overflow-hidden">
             <Image
-              src="/hero-courses.svg"
+              src="/images/slide2.png"
               alt="Homeopathy education"
               fill
-              className="object-contain p-4"
-              priority
+              style={{borderRadius:"50% 0px 0px 50%", padding:"30px"}}
+              className="object-cover"
             />
           </div>
         </div>
