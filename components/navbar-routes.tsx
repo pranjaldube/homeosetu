@@ -23,7 +23,7 @@ export const NavbarRoutes = () => {
 
   return (
     <div className="flex items-center justify-between w-full">
-      <BackButton label="Back" />
+      <BackButton href="/dashboard" label="Back to Dashboard" />
 
       {isSearchPage && (
         <div className="hidden md:block flex-1 mr-auto">
