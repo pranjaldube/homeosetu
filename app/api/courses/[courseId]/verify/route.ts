@@ -85,8 +85,8 @@ export async function POST(
     } as any
 
     if (userAddress?.country === "India") {
-      invoicePayload.party.shipping_address = {
-        addr_id_v2: user.id,
+      invoicePayload.party.billing_address = {
+        addr_id_v2: "addr1",
         address_line1: userAddress?.address1 || "123 street",
         address_line2: userAddress?.country,
         city: userAddress?.city,

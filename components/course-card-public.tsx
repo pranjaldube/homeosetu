@@ -1,11 +1,14 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
-import { currentUser } from "@clerk/nextjs/server";
 
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
-import { getUserAddressAndCourse } from "@/actions/get-userAddress";
+import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface CourseCardPublicProps {
   id: string;
@@ -16,7 +19,7 @@ interface CourseCardPublicProps {
   category: string;
 }
 
-export const CourseCardPublic = async ({
+export const CourseCardPublic = ({
   id,
   title,
   imageUrl,
@@ -24,12 +27,19 @@ export const CourseCardPublic = async ({
   price,
   category,
 }: CourseCardPublicProps) => {
-  const user = await currentUser();
-  const userId = user?.id;
 
-  const { userAddress } = await getUserAddressAndCourse({ userId, courseId: id})
+  const {user} = useUser();
+  const [country, setCountry] = useState<string>("India");
+  const fetchUserAddress = async (userId: string | undefined) => {
+    const userAddress= await axios.get("/api/address",{
+      params: { userId }
+    })
+    setCountry(userAddress.data.country)
+  }
 
-  const finalPrice = formatPrice(price, userAddress?.country ?? "India");
+  useEffect(()=>{
+    fetchUserAddress(user?.id)
+  },[user?.id])
 
   const href = user
     ? `/courses/${id}`
@@ -46,7 +56,7 @@ export const CourseCardPublic = async ({
             src={imageUrl || "/placeholder-course.jpg"}
           />
           <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            {finalPrice} + GST
+            {formatPrice(price, country)} + GST
           </div>
         </div>
         <div className="flex flex-col pt-3">
