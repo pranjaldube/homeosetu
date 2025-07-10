@@ -15,6 +15,7 @@ model Course {
   description String?
   imageUrl    String?
   price       Float?
+  usdPrice    Float?
   isPublished Boolean @default(false)
 
   categoryId String?   @db.Uuid
@@ -104,6 +105,7 @@ model Purchase {
   courseId String @db.Uuid
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   swipeHashId String?
+  userEmail String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

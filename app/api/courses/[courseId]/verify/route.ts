@@ -57,28 +57,19 @@ export async function POST(
     const date = formatDate(now);
     const course_price = course.price
     const course_price_with_tax = course.price! + ((course.price! / 100) * 18)
-    
+
     const invoicePayload = {
       document_type: "invoice",
       document_date: date,
       due_date: date,
       round_off: true,
-      party:{
+      party: {
         id: user.id,
         type: "customer",
         name: `${user?.firstName} ${user?.lastName}`,
-        email: user.emailAddresses?.[0]?.emailAddress,
-        billing_address:{
-          addr_id_v2:"addr1",
-          address_line1: userAddress?.address1 || "123 street",
-          address_line2: userAddress?.country,
-          city: userAddress?.city,
-          state: userAddress?.state,
-          country: userAddress?.country,
-          pincode:"401105"
-        }
+        email: user.emailAddresses?.[0]?.emailAddress
       },
-      items:[
+      items: [
         {
           id: params.courseId,
           name: course.title,
@@ -91,12 +82,34 @@ export async function POST(
           item_type: "Product"
         }
       ]
+    } as any
+
+    if (userAddress?.country === "India") {
+      invoicePayload.party.shipping_address = {
+        addr_id_v2: user.id,
+        address_line1: userAddress?.address1 || "123 street",
+        address_line2: userAddress?.country,
+        city: userAddress?.city,
+        state: userAddress?.state,
+        country: userAddress?.country,
+        pincode: "401105"
+      }
+    }
+
+    if (userAddress?.country !== 'India') {
+      invoicePayload.is_multi_currency = true;
+      invoicePayload.export_invoice_details = {
+        export_type: "Multi Currency",
+        conversion_factor: 84,
+        country_id: "United States",
+        currency_id: "USD"
+      };
     }
 
     const invoiceResponse = await axios.post("https://app.getswipe.in/api/partner/v2/doc",
       invoicePayload,
       {
-        headers:{
+        headers: {
           Authorization: `Bearer ${process.env.SWIPE_INVOICE_KEY}`,
           "Content-Type": "application/json"
         }
@@ -110,8 +123,9 @@ export async function POST(
         courseId: params.courseId,
         userId: user.id,
         swipeHashId,
+        userEmail: user.emailAddresses?.[0]?.emailAddress
       },
-    })  
+    })
 
     return new NextResponse("Payment verified", { status: 200 })
   } catch (error) {
