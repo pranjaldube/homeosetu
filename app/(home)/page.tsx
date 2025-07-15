@@ -402,7 +402,7 @@ export default function Hero() {
             <div className="relative w-full md:w-[400px] h-[300px]">
               <div className="absolute inset-0 bg-white/10 rounded-2xl backdrop-blur-sm"></div>
               <Image
-                src="/hero-courses.svg"
+                src="/images/slide2.png"
                 alt="Enhance your practice"
                 fill
                 className="object-contain p-4"
