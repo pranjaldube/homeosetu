@@ -6,9 +6,7 @@ import { BookOpen } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
 import { CourseProgress } from "@/components/course-progress";
-import axios from "axios";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+
 
 interface CourseCardProps {
   id: string;
@@ -18,6 +16,7 @@ interface CourseCardProps {
   price: number;
   progress: number | null;
   category: string;
+  dollar: number;
 };
 
 export const CourseCard = ({
@@ -27,21 +26,28 @@ export const CourseCard = ({
   chaptersLength,
   price,
   progress,
-  category
+  category,
+  dollar
 }: CourseCardProps) => {
+  const currency = document.cookie
+    .split("; ")
+    .find((c) => c.startsWith("preferred_currency="))
+    ?.split("=")[1] || "INR";
 
-  const {user} = useUser();
-  const [country, setCountry] = useState<string>("India");
-  const fetchUserAddress = async (userId: string | undefined) => {
-    const userAddress= await axios.get("/api/address",{
-      params: { userId }
-    })
-    setCountry(userAddress.data.country)
-  }
+  const actualPrice = !currency || currency === "INR" ? price : dollar
 
-  useEffect(()=>{
-    fetchUserAddress(user?.id)
-  },[user?.id])
+  // const {user} = useUser();
+  // const [country, setCountry] = useState<string>("India");
+  // const fetchUserAddress = async (userId: string | undefined) => {
+  //   const userAddress= await axios.get("/api/address",{
+  //     params: { userId }
+  //   })
+  //   setCountry(userAddress.data.country)
+  // }
+
+  // useEffect(()=>{
+  //   fetchUserAddress(user?.id)
+  // },[user?.id])
 
   return (
     <Link href={`/courses/${id}`}>
@@ -77,7 +83,7 @@ export const CourseCard = ({
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {formatPrice(price, country)} + GST
+              {currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
             </p>
           )}
         </div>
