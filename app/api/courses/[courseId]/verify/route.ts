@@ -47,22 +47,40 @@ export async function POST(
       return new NextResponse("Invalid signature", { status: 400 })
     }
 
+    const purchase = await db.purchase.create({
+      data: {
+        courseId: params.courseId,
+        userId: user.id,
+        swipeHashId: null,
+        userEmail: user.emailAddresses?.[0]?.emailAddress
+      },
+    })
+
     const userAddress = await db.userAddress.findUnique({
       where: {
         userId: user.id
       },
     })
 
-    const now = new Date()
+    const now = new Date();
     const date = formatDate(now);
-    const course_price = course.price
-    const course_price_with_tax = course.price! + ((course.price! / 100) * 18)
 
-    const invoicePayload = {
+    const isIndia = !userAddress || userAddress?.country === "India";
+    const round_off_value = isIndia; 
+    const course_price = isIndia ? course?.price : course?.usdPrice;
+    let tax_rate_value = 0;
+    let course_price_with_tax = course_price;
+
+    if (isIndia) {
+      tax_rate_value = 18;
+      course_price_with_tax = course.price! + ((course.price! / 100) * tax_rate_value);
+    }
+
+    const invoicePayload: any = {
       document_type: "invoice",
       document_date: date,
       due_date: date,
-      round_off: true,
+      round_off: round_off_value,
       party: {
         id: user.id,
         type: "customer",
@@ -75,16 +93,16 @@ export async function POST(
           name: course.title,
           quantity: 1,
           unit_price: course_price,
-          tax_rate: 18,
+          tax_rate: tax_rate_value,
           price_with_tax: course_price_with_tax,
           net_amount: course_price,
           total_amount: course_price_with_tax,
           item_type: "Product"
         }
       ]
-    } as any
+    };
 
-    if (userAddress?.country === "India") {
+    if (isIndia) {
       invoicePayload.party.billing_address = {
         addr_id_v2: "addr1",
         address_line1: userAddress?.address1 || "123 street",
@@ -93,10 +111,10 @@ export async function POST(
         state: userAddress?.state,
         country: userAddress?.country,
         pincode: "401105"
-      }
+      };
     }
 
-    if (userAddress?.country !== 'India') {
+    if (!isIndia) {
       invoicePayload.is_multi_currency = true;
       invoicePayload.export_invoice_details = {
         export_type: "Multi Currency",
@@ -105,6 +123,7 @@ export async function POST(
         currency_id: "USD"
       };
     }
+
 
     const invoiceResponse = await axios.post("https://app.getswipe.in/api/partner/v2/doc",
       invoicePayload,
@@ -118,14 +137,14 @@ export async function POST(
 
     const swipeHashId = invoiceResponse.data.data.hash_id
     // Create the purchase record
-    await db.purchase.create({
-      data: {
-        courseId: params.courseId,
-        userId: user.id,
-        swipeHashId,
-        userEmail: user.emailAddresses?.[0]?.emailAddress
+    await db.purchase.update({
+      where: {
+        id: purchase.id,
       },
-    })
+      data: {
+        swipeHashId: swipeHashId,
+      },
+    });
 
     return new NextResponse("Payment verified", { status: 200 })
   } catch (error) {
