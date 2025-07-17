@@ -18,14 +18,14 @@ export default function Page() {
                     <div className="space-y-6 text-lg px-8">
                         <h1 className="text-1xl font-semibold mt-8 mb-0">1. How do I create an account?</h1>
                         <div className="px-8">
-                            <p>a. Visit www.homeosetu.com</p>
-                            <p>b. Click Explore courses or login (top right option in the main page), enter your email address ( Use Google Account) Or Enter your email id and password</p>
+                            <p>a. Visit <a href="https://www.homeosetu.com" target="_blank" className="text-blue-500 underline">www.homeosetu.com</a></p>
+                            <p>b. Click <span className="text-1xl font-semibold">Explore courses or login (top right option in the main page)</span>, enter your email address (Use Google Account) Or Enter your email id and password</p>
                             <p>c. It will open up the dashboard</p>
                         </div>
                         <h1 className="text-1xl font-bold mb-2">2. I forgot my password. What should I do?</h1>
                         <div className="px-8">
                             <p>a. If you have logged in through google , then choose the correct email id and it will allow access.</p>
-                            <p>b .If you have manually submitted password at the time of sign up on the login page, click Forgot Password, enter your email, and follow the reset link sent to you.</p>
+                            <p>b .If you have manually submitted password at the time of sign up on the login page, click <span className="text-1xl font-semibold">Forgot Password</span>, enter your email, and follow the reset link sent to you.</p>
                             <p>c .An OTP will be generated and sent to your email address, please enter those in the box seen</p>
                             <p>d. Reset your password.</p>
                         </div>
@@ -63,13 +63,13 @@ export default function Page() {
                         <h1 className="text-1xl font-bold mb-2">6. My payment was deducted but I did not get invoice?
                         </h1>
                         <div className="px-8">
-                            <p>a. Please send a screenshot of your date of payment and transaction details to <a href="mailto:homeosetu@gmail.com" className="text-blue-500 underline">homeosetu@gmail.com</a> and we will respond soon.</p>
+                            <p>a. Please send a screenshot of your date of payment and transaction details to <a href="https://mailto:homeosetu@gmail.com" target="_blank" className="text-blue-500 underline">homeosetu@gmail.com</a> and we will respond soon.</p>
                         </div>
 
                         <h1 className="text-1xl font-bold mb-2">7. My payment was deducted but I did not get access to video?
                         </h1>
                         <div className="px-8">
-                            <p>a. Please send a screenshot of your date of payment and transaction details to <a href="mailto:homeosetu@gmail.com" className="text-blue-500 underline">homeosetu@gmail.com</a> and we will respond soon.</p>
+                            <p>a. Please send a screenshot of your date of payment and transaction details to <a href="https://mailto:homeosetu@gmail.com" target="_blank" className="text-blue-500 underline">homeosetu@gmail.com</a> and we will respond soon.</p>
                         </div>
 
                         <h1 className="text-1xl font-bold mb-2">8. What is your refund policy?
@@ -93,7 +93,7 @@ export default function Page() {
                         <h1 className="text-1xl font-bold mb-2">10. How can I get help?
                         </h1>
                         <div className="px-8">
-                            <p>a. For Any Payment related issue or technical assistance, email <a href="mailto:homeosetu@gmail.com" className="text-blue-500 underline">homeosetu@gmail.com</a> or kindly send a WhatsApp to <span className="text-blue-500 underline">+91 9975461833</span> with screenshot of details. We will get back to you with solutions as early as possible.</p>
+                            <p>a. For Any Payment related issue or technical assistance, email <a href="https://mailto:homeosetu@gmail.com" target="_blank" className="text-blue-500 underline">homeosetu@gmail.com</a> or kindly send a WhatsApp to <span className="text-blue-500 underline">+91 9975461833</span> with screenshot of details. We will get back to you with solutions as early as possible.</p>
                         </div>
                     </div>
                 </div>
