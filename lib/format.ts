@@ -1,8 +1,6 @@
 export const formatPrice = (price: number | null) => {
 
-  if(price === null){
-    return ""
-  }
+  const safePrice = price ?? 0
   // Read currency from cookie
   const currency = document.cookie
     .split("; ")
@@ -13,5 +11,5 @@ export const formatPrice = (price: number | null) => {
     style: "currency",
     currency,
     maximumFractionDigits: 0,
-  }).format(price);
+  }).format(safePrice);
 };
