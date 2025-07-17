@@ -12,10 +12,14 @@ import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ComboBox } from "./comboBox"
 
+interface CoursePrice {
+  price: number | null
+  usdPrice: number | null
+}
+
 interface CourseEnrollButtonProps {
-  price: number
+  courseData: CoursePrice
   courseId: string
-  country: string | undefined
 }
 
 declare global {
@@ -25,9 +29,8 @@ declare global {
 }
 
 export const CourseEnrollButton = ({
-  price,
+  courseData,
   courseId,
-  country,
 }: CourseEnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -41,6 +44,13 @@ export const CourseEnrollButton = ({
     country: "",
     pinCode: ""
   })
+
+  const currency = document.cookie
+    .split("; ")
+    .find((c) => c.startsWith("preferred_currency="))
+    ?.split("=")[1] || "INR";
+
+  const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
 
   const countries =
     [
@@ -455,7 +465,7 @@ export const CourseEnrollButton = ({
         size="sm"
         className="w-full md:w-auto"
       >
-        Enroll for {(!country || country === "India") ? `${formatPrice(price)} + GST` : formatPrice(price)}
+        Enroll for {(!currency || currency === "INR") ? `${formatPrice(price)} + GST` : formatPrice(price)}
       </Button>
 
       {/* Modal/Dialog for Address Form */}

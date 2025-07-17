@@ -1,4 +1,4 @@
-export const formatPrice = (price: number) => {
+export const formatPrice = (price: number | null) => {
   // Read currency from cookie
   const currency = document.cookie
     .split("; ")
