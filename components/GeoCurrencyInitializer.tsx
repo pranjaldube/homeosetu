@@ -12,7 +12,7 @@ export default function GeoCurrencyInitializer() {
       .then((res) => res.json())
       .then((data) => {
         const currency = data.country_code === 'IN' ? 'INR' : 'USD';
-        document.cookie = `preferred_currency=${currency}; path=/`; // 7 days
+        document.cookie = `preferred_currency=${currency}; path=/; max-age=43200`; // 7 days
       });
   }, []);
 
