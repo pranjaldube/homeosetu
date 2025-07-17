@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 
 import { getChapter } from "@/actions/get-chapter";
-import { getUserAddressAndCourse } from "@/actions/get-userAddress";
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
@@ -34,11 +33,6 @@ const ChapterIdPage = async ({
   } = await getChapter({
     userId,
     chapterId: params.chapterId,
-    courseId: params.courseId,
-  });
-
-  const { userAddress, selectedCourse } = await getUserAddressAndCourse({
-    userId,
     courseId: params.courseId,
   });
 
@@ -91,8 +85,7 @@ const ChapterIdPage = async ({
             ) : (
               <CourseEnrollButton
                 courseId={params.courseId}
-                price={(!userAddress || userAddress?.country == "India" ? course.price! : selectedCourse?.usdPrice ?? course.price!)}
-                country={userAddress?.country ?? ""}
+                courseData={course}
               />
             )}
           </div>
