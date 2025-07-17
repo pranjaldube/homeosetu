@@ -455,7 +455,7 @@ export const CourseEnrollButton = ({
         size="sm"
         className="w-full md:w-auto"
       >
-        Enroll for {(!country || country === "India") ? `${formatPrice(price)} + GST}` : formatPrice(price)}
+        Enroll for {(!country || country === "India") ? `${formatPrice(price)} + GST` : formatPrice(price)}
       </Button>
 
       {/* Modal/Dialog for Address Form */}
