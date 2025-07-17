@@ -7,8 +7,6 @@ import { BookOpen } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
 import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 interface CourseCardPublicProps {
   id: string;
@@ -17,6 +15,7 @@ interface CourseCardPublicProps {
   chaptersLength: number;
   price: number;
   category: string;
+  dollar: number;
 }
 
 export const CourseCardPublic = ({
@@ -26,20 +25,27 @@ export const CourseCardPublic = ({
   chaptersLength,
   price,
   category,
+  dollar
 }: CourseCardPublicProps) => {
 
   const {user} = useUser();
-  const [country, setCountry] = useState<string>("India");
-  const fetchUserAddress = async (userId: string | undefined) => {
-    const userAddress= await axios.get("/api/address",{
-      params: { userId }
-    })
-    setCountry(userAddress.data.country)
-  }
+  const currency = document.cookie
+    .split("; ")
+    .find((c) => c.startsWith("preferred_currency="))
+    ?.split("=")[1] || "INR";
+  
+  const actualPrice = !currency || currency === "INR" ? price : dollar
+  // const [country, setCountry] = useState<string>("India");
+  // const fetchUserAddress = async (userId: string | undefined) => {
+  //   const userAddress= await axios.get("/api/address",{
+  //     params: { userId }
+  //   })
+  //   setCountry(userAddress.data.country)
+  // }
 
-  useEffect(()=>{
-    fetchUserAddress(user?.id)
-  },[user?.id])
+  // useEffect(()=>{
+  //   fetchUserAddress(user?.id)
+  // },[user?.id])
 
   const href = user
     ? `/courses/${id}`
@@ -56,7 +62,7 @@ export const CourseCardPublic = ({
             src={imageUrl || "/placeholder-course.jpg"}
           />
           <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            {formatPrice(price, country)} + GST
+            {currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
           </div>
         </div>
         <div className="flex flex-col pt-3">

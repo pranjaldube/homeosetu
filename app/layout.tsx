@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs"
 import { ToastProvider } from "@/components/providers/toaster-provider"
 import { ConfettiProvider } from "@/components/providers/confetti-provider"
 import { CSPostHogProvider } from "@/components/providers/posthog-provider"
+import GeoCurrencyInitializer from "@/components/GeoCurrencyInitializer"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,6 +26,7 @@ export default function RootLayout({
       <CSPostHogProvider>
         <html lang="en">
           <body className={inter.className}>
+            <GeoCurrencyInitializer />
             <ConfettiProvider />
             <ToastProvider />
             {children}

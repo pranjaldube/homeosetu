@@ -25,6 +25,7 @@ export const CoursesListPublic = ({
             chaptersLength={item.chapters.length}
             price={item.price!}
             category={item?.category?.name || "General"}
+            dollar={item?.usdPrice!}
           />
         ))}
       </div>
