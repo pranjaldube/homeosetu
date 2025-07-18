@@ -38,6 +38,7 @@ export const CourseEnrollButton = ({
   const { user } = useUser()
 
   const [form, setForm] = useState({
+    fullName: "",
     address1: "",
     city: "",
     state: "",
@@ -45,10 +46,7 @@ export const CourseEnrollButton = ({
     pinCode: ""
   })
 
-  const currency = document.cookie
-    .split("; ")
-    .find((c) => c.startsWith("preferred_currency="))
-    ?.split("=")[1] || "INR";
+  const currency = document.cookie.split("; ").find((c) => c.startsWith("preferred_currency="))?.split("=")[1] || "INR";
 
   const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
 
@@ -355,14 +353,21 @@ export const CourseEnrollButton = ({
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    if(!form.address1 || !form.city || !form.country || !form.pinCode || !form.state){
-      toast.error("All Fields are required")
+    if(!form.country){
+      toast.error("Country field is required")
+      return
+    }
+
+    if(form.country === "India" && !form.state){
+      toast.error("State field is required")
+      return
     }
 
     const city = extractCityOnly(form.city)
     try {
       const res = await axios.post("/api/address", {
         userId: user.id,
+        fullName: form.fullName,
         city,
         address1: form.address1,
         state: form.state,
@@ -373,6 +378,7 @@ export const CourseEnrollButton = ({
       toast.success("Address saved successfully")
       setIsOpen(false)
       setForm({
+        fullName:"",
         address1: "",
         city: "",
         state: "",
@@ -472,11 +478,34 @@ export const CourseEnrollButton = ({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Enter your address</DialogTitle>
+            <DialogTitle>Enter your Address</DialogTitle>
           </DialogHeader>
           <form onSubmit={sendAddress} className="space-y-4">
-            {/* Address Line 1 */}
+            {/* Full Name */}
             <div className="flex flex-col gap-1">
+              <label htmlFor="address1" className="text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <Input
+                id="fullName"
+                name="fullName"
+                placeholder="Full Name"
+                value={form.fullName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Country Combobox */}
+            <ComboBox
+              label="Country"
+              options={countries}
+              value={form.country}
+              onChange={(value) => setForm({ ...form, country: value })}
+            />
+
+            {/* Address Line 1 */}
+            {form.country === "India" && <div className="flex flex-col gap-1">
               <label htmlFor="address1" className="text-sm font-medium text-gray-700">
                 Address
               </label>
@@ -488,10 +517,10 @@ export const CourseEnrollButton = ({
                 onChange={handleChange}
                 required
               />
-            </div>
+            </div>}
 
             {/* Pincode */}
-            <div className="flex flex-col gap-1">
+            {form.country === "India" && <div className="flex flex-col gap-1">
               <label htmlFor="address2" className="text-sm font-medium text-gray-700">
                 Pincode
               </label>
@@ -501,11 +530,12 @@ export const CourseEnrollButton = ({
                 placeholder="Pincode"
                 value={form.pinCode}
                 onChange={handleChange}
+                required
               />
-            </div>
+            </div>}
 
             {/* City */}
-            <div className="flex flex-col gap-1">
+            {form.country === "India" && <div className="flex flex-col gap-1">
               <label htmlFor="city" className="text-sm font-medium text-gray-700">
                 City
               </label>
@@ -517,23 +547,15 @@ export const CourseEnrollButton = ({
                 onChange={handleChange}
                 required
               />
-            </div>
+            </div>}
 
             {/* State Combobox */}
-            <ComboBox
+            {form.country === "India" && <ComboBox
               label="State"
               options={states}
               value={form.state}
               onChange={(value) => setForm({ ...form, state: value })}
-            />
-
-            {/* Country Combobox */}
-            <ComboBox
-              label="Country"
-              options={countries}
-              value={form.country}
-              onChange={(value) => setForm({ ...form, country: value })}
-            />
+            />}
 
             {/* Buttons */}
             <div className="flex justify-end gap-4 pt-2">

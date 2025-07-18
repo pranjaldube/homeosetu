@@ -84,7 +84,7 @@ export async function POST(
       party: {
         id: user.id,
         type: "customer",
-        name: `${user?.firstName} ${user?.lastName}`,
+        name: userAddress?.fullName || `${user?.firstName} ${user?.lastName}`,
         email: user.emailAddresses?.[0]?.emailAddress
       },
       items: [
@@ -110,6 +110,7 @@ export async function POST(
         city: userAddress?.city,
         state: userAddress?.state,
         country: userAddress?.country,
+        pincode: userAddress?.pinCode || "123456"
       };
     }
 
