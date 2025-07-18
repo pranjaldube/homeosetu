@@ -110,7 +110,6 @@ export async function POST(
         city: userAddress?.city,
         state: userAddress?.state,
         country: userAddress?.country,
-        pincode: "401105"
       };
     }
 
@@ -118,7 +117,7 @@ export async function POST(
       invoicePayload.is_multi_currency = true;
       invoicePayload.export_invoice_details = {
         export_type: "Multi Currency",
-        conversion_factor: 84,
+        conversion_factor: 1,
         country_id: "United States",
         currency_id: "USD"
       };

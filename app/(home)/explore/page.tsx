@@ -3,6 +3,7 @@ import { CategoryFilters } from "@/components/category-filters";
 import { SearchInputPublic } from "@/components/search-input-public";
 import { CoursesListPublic } from "@/components/courses-list-public";
 import { getExploreCourses } from "@/actions/get-explore-courses";
+import Link from "next/link";
 
 interface ExplorePageProps {
   searchParams: {
@@ -33,7 +34,8 @@ const ExplorePage = async ({
           <h1 className="text-3xl font-bold text-gray-900">Explore Courses</h1>
           <p className="text-gray-600 mt-1">
             Discover our vast collection of homeopathy courses and expand your knowledge
-          </p>
+          </p> 
+          <Link href="/faq" className="text-1xl font-semibold">FAQ</Link>
         </div>
         <SearchInputPublic />
       </div>
