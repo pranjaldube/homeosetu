@@ -426,10 +426,6 @@ export const CourseEnrollButton = ({
             toast.error("Payment verification failed")
           }
         },
-        prefill: {
-          name: "John Doe",
-          email: "john@doe.com",
-        },
         theme: {
           color: "#2563eb",
         },
