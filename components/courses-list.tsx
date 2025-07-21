@@ -29,6 +29,8 @@ export const CoursesList = ({
             progress={item.progress}
             category={item?.category?.name!}
             dollar={item?.usdPrice!}
+            courseDuration={item?.courseDuration!}
+
           />
         ))}
       </div>
