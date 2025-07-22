@@ -36,6 +36,8 @@ export const CourseEnrollButton = ({
   const [isOpen, setIsOpen] = useState(false)
 
   const { user } = useUser()
+  document.cookie = `enrolledCourse=${courseId}`
+  document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
 
   const [form, setForm] = useState({
     fullName: "",
