@@ -17,6 +17,7 @@ interface CourseCardProps {
   progress: number | null;
   category: string;
   dollar: number;
+  courseDuration: string;
 };
 
 export const CourseCard = ({
@@ -27,7 +28,8 @@ export const CourseCard = ({
   price,
   progress,
   category,
-  dollar
+  dollar,
+  courseDuration
 }: CourseCardProps) => {
   const currency = document.cookie
     .split("; ")
@@ -66,6 +68,9 @@ export const CourseCard = ({
           </div>
           <p className="text-xs text-muted-foreground">
             {category}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {courseDuration ? `Time Duration: ${courseDuration}` : ""}
           </p>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
             <div className="flex items-center gap-x-1 text-slate-500">

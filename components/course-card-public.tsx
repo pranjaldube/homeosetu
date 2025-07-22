@@ -16,6 +16,7 @@ interface CourseCardPublicProps {
   price: number;
   category: string;
   dollar: number;
+  courseDuration: string;
 }
 
 export const CourseCardPublic = ({
@@ -25,7 +26,8 @@ export const CourseCardPublic = ({
   chaptersLength,
   price,
   category,
-  dollar
+  dollar,
+  courseDuration
 }: CourseCardPublicProps) => {
 
   const {user} = useUser();
@@ -72,6 +74,9 @@ export const CourseCardPublic = ({
           <p className="text-xs text-purple-600 bg-purple-100 inline-block px-2 py-1 rounded-full w-fit mt-2">
             {category}
           </p>
+          <div className="text-sm text-gray-500 mt-2 px-2 py-1">
+            {courseDuration ? `Time Duration: ${courseDuration}` : ""}
+          </div>
           <div className="my-3 flex items-center gap-x-2 text-sm">
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
