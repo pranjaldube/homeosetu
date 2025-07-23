@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/format"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ComboBox } from "./comboBox"
 
 interface CoursePrice {
   price: number | null
