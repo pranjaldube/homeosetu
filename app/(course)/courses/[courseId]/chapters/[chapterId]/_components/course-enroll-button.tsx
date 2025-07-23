@@ -3,6 +3,7 @@
 import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 import { useUser } from "@clerk/nextjs"
 import { NextResponse } from "next/server"
@@ -10,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/format"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ComboBox } from "./comboBox"
+import { ComboBox } from "../../../../../../checkout/comboBox"
 
 interface CoursePrice {
   price: number | null
@@ -32,12 +33,16 @@ export const CourseEnrollButton = ({
   courseData,
   courseId,
 }: CourseEnrollButtonProps) => {
+  console.log("hellamdsjdnas",courseData)
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
   const { user } = useUser()
+  const router = useRouter()
   document.cookie = `enrolledCourse=${courseId}`
   document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+  localStorage.setItem('enrolledCourse', courseId)
+  localStorage.setItem('enrolledCourseData', JSON.stringify(courseData))
 
   const [form, setForm] = useState({
     fullName: "",
@@ -329,7 +334,7 @@ export const CourseEnrollButton = ({
 
     setIsLoading(true)
     try {
-      const res = await axios.get("/api/address/check", {
+      const res = await axios.get("/api/address/", {
         params: { userId: user.id },
       })
 
@@ -459,12 +464,18 @@ export const CourseEnrollButton = ({
     })
   }
 
+  const sendToCheckout = () => {
+    document.cookie = `enrolledCourse=${courseId}`
+    document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+    router.push("/checkout")
+  }
+
 
   return (
     <>
       {/* Enroll button to open the modal */}
       <Button
-        onClick={checkUserAddress}
+        onClick={sendToCheckout}
         disabled={isLoading}
         size="sm"
         className="w-full md:w-auto"
