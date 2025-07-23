@@ -30,8 +30,19 @@ export const getChapter = async ({
       select: {
         price: true,
         usdPrice: true,
+        courseTimeLimit: true,
       }
     });
+
+    let isPurchaseExpired = false;
+    const EXPIRY_DAYS = course?.courseTimeLimit || 365;
+    if (purchase && purchase.createdAt) {
+      const now = new Date();
+      const createdAt = new Date(purchase.createdAt);
+      const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      isPurchaseExpired = diffDays > EXPIRY_DAYS;
+    }
 
     const chapter = await db.chapter.findUnique({
       where: {
@@ -94,6 +105,7 @@ export const getChapter = async ({
       nextChapter,
       userProgress,
       purchase,
+      isPurchaseExpired,
     };
   } catch (error) {
     console.log("[GET_CHAPTER]", error);
@@ -105,6 +117,7 @@ export const getChapter = async ({
       nextChapter: null,
       userProgress: null,
       purchase: null,
+      isPurchaseExpired: false,
     }
   }
 }

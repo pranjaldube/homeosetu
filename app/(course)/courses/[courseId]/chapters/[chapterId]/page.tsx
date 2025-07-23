@@ -30,6 +30,7 @@ const ChapterIdPage = async ({
     nextChapter,
     userProgress,
     purchase,
+    isPurchaseExpired,
   } = await getChapter({
     userId,
     chapterId: params.chapterId,
@@ -41,7 +42,7 @@ const ChapterIdPage = async ({
   }
 
 
-  const isLocked = !chapter.isFree && !purchase;
+  const isLocked = (!chapter.isFree && !purchase) || isPurchaseExpired;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
   return (
@@ -75,7 +76,7 @@ const ChapterIdPage = async ({
             <h2 className="text-2xl font-semibold mb-2">
               {chapter.title}
             </h2>
-            {purchase ? (
+            {(purchase && !isPurchaseExpired) ? (
               <CourseProgressButton
                 chapterId={params.chapterId}
                 courseId={params.courseId}
@@ -97,7 +98,7 @@ const ChapterIdPage = async ({
             <>
               <Separator />
               <div className="p-4">
-                {attachments.map((attachment) => (
+                {!isPurchaseExpired && attachments.map((attachment) => (
                   <a
                     href={attachment.url}
                     target="_blank"

@@ -16,6 +16,8 @@ model Course {
   imageUrl    String?
   price       Float?
   usdPrice    Float?
+  courseDuration String?
+  courseTimeLimit Float?
   isPublished Boolean @default(false)
 
   categoryId String?   @db.Uuid
