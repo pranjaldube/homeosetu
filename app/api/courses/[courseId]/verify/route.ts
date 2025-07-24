@@ -119,7 +119,7 @@ export async function POST(
     if (!isIndia) {
       invoicePayload.is_multi_currency = true;
       invoicePayload.export_invoice_details = {
-        export_type: "Multi Currency",
+        export_type: "Export with IGST",
         conversion_factor: 1,
         country_id: "United States",
         currency_id: "USD"

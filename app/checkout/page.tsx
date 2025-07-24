@@ -308,6 +308,7 @@ export default function CheckoutPage() {
   const [originalPrice, setOriginalPrice] = useState(courseData?.price);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [discountedPrice, setDiscountedPrice] = useState(0);
+  const [editing, setEditing] = useState(false);
 
   const currency = document.cookie
     .split("; ")
@@ -371,14 +372,7 @@ export default function CheckoutPage() {
       })
 
       toast.success("Address saved successfully")
-      setForm({
-        fullName: "",
-        address1: "",
-        city: "",
-        state: "",
-        country: "",
-        pinCode: ""
-      })
+      setEditing(false)
     } catch (error) {
       console.error(error)
       toast.error("Failed to save address")
@@ -398,6 +392,7 @@ export default function CheckoutPage() {
 
       const userAddress = res.data.exists
       if (!userAddress) {
+        setEditing(true)
         return
       }
 
@@ -466,9 +461,9 @@ export default function CheckoutPage() {
         return
       }
 
-      const response = await axios.post(`/api/courses/${courseId}/razorpay`,{
-        couponApplied:couponApplied,
-        discountedPrice:discountedPrice,
+      const response = await axios.post(`/api/courses/${courseId}/razorpay`, {
+        couponApplied: couponApplied,
+        discountedPrice: discountedPrice,
       })
       const { id, amount, currency } = response.data
 
@@ -482,8 +477,8 @@ export default function CheckoutPage() {
         handler: async function (response: any) {
           try {
             await axios.post(`/api/courses/${courseId}/verify`, {
-              couponApplied:couponApplied,
-              discountedPrice:discountedPrice,
+              couponApplied: couponApplied,
+              discountedPrice: discountedPrice,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
@@ -546,31 +541,48 @@ export default function CheckoutPage() {
           <form onSubmit={sendAddress} className="space-y-4">
             <div className="flex flex-col gap-1">
               <label htmlFor="fullName" className="text-sm font-medium text-gray-700">Full Name</label>
-              <Input id="fullName" name="fullName" placeholder="Full Name" value={form.fullName} onChange={handleChange} required />
+              <Input id="fullName" name="fullName" placeholder="Full Name" value={form.fullName} onChange={handleChange} required disabled={!editing} />
             </div>
 
-            <ComboBox label="Country" options={countries} value={form.country} onChange={(value: string) => setForm({ ...form, country: value })} />
+            <ComboBox label="Country" options={countries} value={form.country} onChange={(value: string) => setForm({ ...form, country: value })} disabled={!editing} />
 
             {form.country === 'India' && (
               <>
                 <div className="flex flex-col gap-1">
                   <label htmlFor="address1" className="text-sm font-medium text-gray-700">Address</label>
-                  <Input id="address1" name="address1" placeholder="Address Line 1" value={form.address1} onChange={handleChange} required />
+                  <Input id="address1" name="address1" placeholder="Address Line 1" value={form.address1} onChange={handleChange} required disabled={!editing} />
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label htmlFor="pinCode" className="text-sm font-medium text-gray-700">Pincode</label>
-                  <Input id="pinCode" name="pinCode" placeholder="Pincode" value={form.pinCode} onChange={handleChange} required />
+                  <Input id="pinCode" name="pinCode" placeholder="Pincode" value={form.pinCode} onChange={handleChange} required disabled={!editing} />
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label htmlFor="city" className="text-sm font-medium text-gray-700">City</label>
-                  <Input id="city" name="city" placeholder="City" value={form.city} onChange={handleChange} required />
+                  <Input id="city" name="city" placeholder="City" value={form.city} onChange={handleChange} required disabled={!editing} />
                 </div>
 
-                <ComboBox label="State" options={states} value={form.state} onChange={(value: string) => setForm({ ...form, state: value })} />
+                <ComboBox label="State" options={states} value={form.state} onChange={(value: string) => setForm({ ...form, state: value })} disabled={!editing} />
               </>
             )}
+            <div className='flex justify-end'>
+            {!editing && <Button
+              onClick={() => setEditing(!editing)}
+              disabled={isLoading}
+              size="sm"
+              className="w-full md:w-auto "
+            >
+              Edit
+            </Button>}
+            {editing && <Button
+              type='submit'
+              size="sm"
+              className="w-full md:w-auto "
+            >
+                Save Changes
+              </Button>}
+            </div>
           </form>
         </div>
 
