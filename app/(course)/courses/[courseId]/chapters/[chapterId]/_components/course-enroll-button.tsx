@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/format"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { ComboBox } from "@/app/checkout/comboBox"
+import { useRouter } from "next/navigation"
 
 interface CoursePrice {
   price: number | null
@@ -35,6 +37,7 @@ export const CourseEnrollButton = ({
   const [isOpen, setIsOpen] = useState(false)
 
   const { user } = useUser()
+  const router = useRouter()
 
   const [form, setForm] = useState({
     fullName: "",
@@ -44,6 +47,9 @@ export const CourseEnrollButton = ({
     country: "",
     pinCode: ""
   })
+
+  localStorage.setItem('enrolledCourse', courseId)
+  localStorage.setItem('enrolledCourseData', JSON.stringify(courseData))
 
   const currency = document.cookie.split("; ").find((c) => c.startsWith("preferred_currency="))?.split("=")[1] || "INR";
 
@@ -456,12 +462,18 @@ export const CourseEnrollButton = ({
     })
   }
 
+  const sendToCheckout = () => {
+    document.cookie = `enrolledCourse=${courseId}`
+    document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+    router.push("/checkout")
+  }
+
 
   return (
     <>
       {/* Enroll button to open the modal */}
       <Button
-        onClick={checkUserAddress}
+        onClick={sendToCheckout}
         disabled={isLoading}
         size="sm"
         className="w-full md:w-auto"

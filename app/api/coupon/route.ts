@@ -6,8 +6,12 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { courseId, couponCode } = body;
 
-        if (!courseId || !couponCode) {
-            return new NextResponse("Missing courseId or couponCode", { status: 400 });
+        if (!couponCode) {
+            return new NextResponse("Missing couponCode", { status: 200 });
+        }
+
+        if(!courseId){
+            return new NextResponse("Unauthorized", { status: 200 });
         }
 
         const course = await db.course.findUnique({
@@ -16,7 +20,7 @@ export async function POST(req: Request) {
 
         if (!course) {
             // course does not exist, treat as unauthorized
-            return new NextResponse("Unauthorized", { status: 401 });
+            return new NextResponse("Unauthorized", { status: 200 });
         }
 
         const anyCouponForCourse = await db.coupon.findFirst({
@@ -26,7 +30,7 @@ export async function POST(req: Request) {
         });
 
         if (!anyCouponForCourse) {
-            return new NextResponse("No coupons available for this course", { status: 404 });
+            return new NextResponse("No coupons available for this course", { status: 200 });
         }
 
         const coupon = await db.coupon.findFirst({
@@ -39,11 +43,11 @@ export async function POST(req: Request) {
         });
 
         if (!coupon) {
-            return new NextResponse("Invalid Coupon Code", { status: 404 });
+            return new NextResponse("Invalid Coupon Code", { status: 200 });
         }
 
         if (coupon.count === 0) {
-            return new NextResponse("Coupon limit exceeded", { status: 400 });
+            return new NextResponse("Coupon limit exceeded", { status: 200 });
         }
 
         const updatedCoupon = await db.coupon.update({
