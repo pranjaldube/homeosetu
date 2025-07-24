@@ -15,6 +15,7 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
+    const {couponApplied,discountedPrice} = await req.json()
     const user = await currentUser()
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
@@ -60,13 +61,17 @@ export async function POST(
     const currency = (!userAddress || userAddress.country === "India") ? "INR" : "USD";
 
     let final_price: number;
-
+    let coursePrice = course.price!
+    if(couponApplied){
+      coursePrice = discountedPrice
+    }
     if (currency === "INR") {
-      const tax = Math.round((course.price! * 18) / 100); // 18% GST
-      final_price = course.price! + tax;
+      const tax = Math.round((coursePrice * 18) / 100); // 18% GST
+      final_price = coursePrice + tax;
     } else {
       final_price = course.usdPrice!;
     }
+
 
 
     const options = {

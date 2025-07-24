@@ -288,10 +288,10 @@ const StepProgress = ({ currentStep }: { currentStep: number }) => {
 
 export default function CheckoutPage() {
 
-    const {user} = useUser()
-    const router = useRouter()
-    const courseId = localStorage.getItem('enrolledCourse')
-    const courseData = JSON.parse(localStorage.getItem('enrolledCourseData') || '{}')
+  const { user } = useUser()
+  const router = useRouter()
+  const courseId = localStorage.getItem('enrolledCourse')
+  const courseData = JSON.parse(localStorage.getItem('enrolledCourseData') || '{}')
 
   const [form, setForm] = useState({
     fullName: '',
@@ -309,29 +309,34 @@ export default function CheckoutPage() {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [discountedPrice, setDiscountedPrice] = useState(0);
 
+  const currency = document.cookie
+    .split("; ")
+    .find((c) => c.startsWith("preferred_currency="))
+    ?.split("=")[1] || "INR";
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   function extractCityOnly(rawInput: string | undefined | null): string {
     if (!rawInput) return "";
-  
+
     // Normalize input
     const input = rawInput.toLowerCase().replace(/\s+/g, " ").trim();
-  
+
     // Split by common separators: comma, dash, " in "
     const parts = input.split(/[,|-]| in /i).map((p) => p.trim());
-  
+
     for (const part of parts) {
       if (!part || states.includes(part)) continue;
-  
+
       const cleaned = part.replace(/[^a-zA-Z\s]/g, "").trim();
-  
+
       if (cleaned.length < 3 || /\d/.test(cleaned)) continue;
-  
+
       return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
     }
-  
+
     // Fallback: get the first cleaned word
     const fallback = input.split(" ")[0].replace(/[^a-zA-Z]/g, "");
     return fallback.charAt(0).toUpperCase() + fallback.slice(1);
@@ -343,12 +348,12 @@ export default function CheckoutPage() {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    if(!form.country){
+    if (!form.country) {
       toast.error("Country field is required")
       return
     }
 
-    if(form.country === "India" && !form.state){
+    if (form.country === "India" && !form.state) {
       toast.error("State field is required")
       return
     }
@@ -367,7 +372,7 @@ export default function CheckoutPage() {
 
       toast.success("Address saved successfully")
       setForm({
-        fullName:"",
+        fullName: "",
         address1: "",
         city: "",
         state: "",
@@ -392,7 +397,7 @@ export default function CheckoutPage() {
       })
 
       const userAddress = res.data.exists
-      if(!userAddress){
+      if (!userAddress) {
         return
       }
 
@@ -413,26 +418,26 @@ export default function CheckoutPage() {
 
   const checkCouponCode = async () => {
     try {
-      if(counponCode === ""){
+      if (counponCode === "") {
         toast.error("Please enter a coupon code")
         return;
       }
       const res = await axios.post("/api/coupon", {
-        courseId:courseId,
-        couponCode:counponCode,
+        courseId: courseId,
+        couponCode: counponCode,
       })
 
-      if(res.data === "Missing couponCode"){
+      if (res.data === "Missing couponCode") {
         toast.error("Missing CouponCode")
         return;
-      }else if(res.data === "Unauthorized"){
+      } else if (res.data === "Unauthorized") {
         toast.error("Unauthorized")
         router.back()
         return;
-      }else if(res.data === "No coupons available for this course" || res.data === "Invalid Coupon Code"){
+      } else if (res.data === "No coupons available for this course" || res.data === "Invalid Coupon Code") {
         toast.error("Invalid Coupon Code")
         return;
-      }else if(res.data === "Coupon limit exceeded"){
+      } else if (res.data === "Coupon limit exceeded") {
         toast.error("Coupon limit exceeded")
         return;
       }
@@ -443,9 +448,9 @@ export default function CheckoutPage() {
         setDiscountedPrice(originalPrice - couponDiscount)
         setCouponApplied(true);
       }
-      
-    }catch(error){
-      console.log("[CHECK_COUPON_CODE]",error)
+
+    } catch (error) {
+      console.log("[CHECK_COUPON_CODE]", error)
       toast.error("Something went wrong")
     }
   }
@@ -461,7 +466,10 @@ export default function CheckoutPage() {
         return
       }
 
-      const response = await axios.post(`/api/courses/${courseId}/razorpay`)
+      const response = await axios.post(`/api/courses/${courseId}/razorpay`,{
+        couponApplied:couponApplied,
+        discountedPrice:discountedPrice,
+      })
       const { id, amount, currency } = response.data
 
       const options = {
@@ -474,6 +482,8 @@ export default function CheckoutPage() {
         handler: async function (response: any) {
           try {
             await axios.post(`/api/courses/${courseId}/verify`, {
+              couponApplied:couponApplied,
+              discountedPrice:discountedPrice,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
@@ -517,7 +527,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (!courseId || !courseData) {
-      router.back(); 
+      router.back();
       return;
     }
     getUserAddress();
@@ -566,11 +576,12 @@ export default function CheckoutPage() {
 
         {/* Right: Coupon Section */}
         <div className="shadow-lg rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-xl font-semibold mb-4 text-center">Available Coupons</h2>
+          {currency === "INR" && <div>
+            <h2 className="text-xl font-semibold mb-4 text-center">Available Coupons</h2>
 
-          <div className="space-y-4">
-            {/* Example Coupon */}
-            {/* <div className="border border-dashed border-gray-400 p-4 rounded-lg bg-purple-50">
+            <div className="space-y-4">
+              {/* Example Coupon */}
+              {/* <div className="border border-dashed border-gray-400 p-4 rounded-lg bg-purple-50">
               <h3 className="text-lg font-bold text-purple-700">SAVE20</h3>
               <p className="text-sm text-gray-700">Get 20% off on your order. Valid for today only!</p>
               <div className="mt-2">
@@ -586,15 +597,16 @@ export default function CheckoutPage() {
               </div>
             </div> */}
 
-            {/* Coupon Input */}
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2">
-              <label htmlFor="couponCode" className="text-sm font-medium text-gray-700">Have a coupon code?</label>
-              <div className="flex items-center gap-2">
-                <Input id="couponCode" placeholder="Enter code" value={counponCode} onChange={(e) => setCounponCode(e.target.value)} />
-                <Button type="button" variant="outline" onClick={checkCouponCode}>Apply</Button>
+              {/* Coupon Input */}
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2">
+                <label htmlFor="couponCode" className="text-sm font-medium text-gray-700">Have a coupon code?</label>
+                <div className="flex items-center gap-2">
+                  <Input id="couponCode" placeholder="Enter code" value={counponCode} onChange={(e) => setCounponCode(e.target.value)} />
+                  <Button type="button" variant="outline" onClick={checkCouponCode}>Apply</Button>
+                </div>
               </div>
             </div>
-          </div>
+          </div>}
 
           {/* Order Summary Section */}
           <div className="rounded-lg border border-gray-200 bg-white p-6 mt-6">
