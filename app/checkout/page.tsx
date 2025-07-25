@@ -293,7 +293,6 @@ export default function CheckoutPage() {
   let courseId: string | null = null
   let courseData: any = null
 
-  if (typeof document !== "undefined") {
     const cookies = document.cookie.split("; ").reduce((acc: any, c) => {
       const [key, value] = c.split("=")
       acc[key] = decodeURIComponent(value)
@@ -308,7 +307,7 @@ export default function CheckoutPage() {
         courseData = null
       }
     }
-  }
+  
 
   const [form, setForm] = useState({
     fullName: '',
