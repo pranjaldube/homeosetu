@@ -9,7 +9,6 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import { useUser } from '@clerk/nextjs';
-import { set } from 'zod';
 
 const countries =
   [
@@ -287,27 +286,12 @@ const StepProgress = ({ currentStep }: { currentStep: number }) => {
 };
 
 export default function CheckoutPage() {
+  const { user } = useUser();
+  const router = useRouter();
 
-  const { user } = useUser()
-  const router = useRouter()
-  let courseId: string | null = null
-  let courseData: any = null
-
-    const cookies = document.cookie.split("; ").reduce((acc: any, c) => {
-      const [key, value] = c.split("=")
-      acc[key] = decodeURIComponent(value)
-      return acc
-    }, {} as Record<string, string>)
-
-    courseId = cookies["enrolledCourse"] || null
-    if (cookies["enrolledCourseData"]) {
-      try {
-        courseData = JSON.parse(cookies["enrolledCourseData"])
-      } catch {
-        courseData = null
-      }
-    }
-  
+  const [courseId, setCourseId] = useState<string | null>(null);
+  const [courseData, setCourseData] = useState<any>(null);
+  const [currency, setCurrency] = useState("INR");
 
   const [form, setForm] = useState({
     fullName: '',
@@ -327,10 +311,43 @@ export default function CheckoutPage() {
   const [editing, setEditing] = useState(false);
   const [couponId, setCouponId] = useState('');
 
-  const currency = document.cookie
-    .split("; ")
-    .find((c) => c.startsWith("preferred_currency="))
-    ?.split("=")[1] || "INR";
+  useEffect(() => {
+    // Load cookies and set state
+    const cookies = document.cookie.split("; ").reduce((acc: any, c) => {
+      const [key, value] = c.split("=");
+      acc[key] = decodeURIComponent(value);
+      return acc;
+    }, {} as Record<string, string>);
+
+    setCourseId(cookies["enrolledCourse"] || null);
+
+    if (cookies["enrolledCourseData"]) {
+      try {
+        setCourseData(JSON.parse(cookies["enrolledCourseData"]));
+      } catch {
+        setCourseData(null);
+      }
+    }
+
+    setCurrency(
+      cookies["preferred_currency"] ? cookies["preferred_currency"] : "INR"
+    );
+  }, []);
+
+  useEffect(() => {
+    // Only check after courseId and courseData have been set
+    if (courseId === null || courseData === null) return; // Wait for state to be set
+    if (!courseId || !courseData) {
+      router.back();
+      return;
+    }
+    getUserAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId, courseData]);
+
+  useEffect(() => {
+    setOriginalPrice(courseData?.price);
+  }, [courseData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -540,14 +557,6 @@ export default function CheckoutPage() {
     })
   }
 
-  useEffect(() => {
-    if (!courseId || !courseData) {
-      router.back();
-      return;
-    }
-    getUserAddress();
-  }, []);
-
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Step progress bar */}
@@ -650,7 +659,7 @@ export default function CheckoutPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b pb-3">
                 <div>
-                  <p className="font-medium text-gray-800">{courseData.title}</p>
+                  <p className="font-medium text-gray-800">{courseData?.title || "Loading..."}</p>
                   {/* <p className="text-sm text-gray-500">Course Enrollment</p> */}
                 </div>
                 <div className="text-right">
