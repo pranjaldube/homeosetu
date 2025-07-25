@@ -49,10 +49,10 @@ export const CourseEnrollButton = ({
   const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
 
   const sendToCheckout = () => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("enrolledCourse", courseId)
-      localStorage.setItem("enrolledCourseData", JSON.stringify(courseData))
-    }
+    // if (typeof window !== "undefined") {
+    //   localStorage.setItem("enrolledCourse", courseId)
+    //   localStorage.setItem("enrolledCourseData", JSON.stringify(courseData))
+    // }
 
     document.cookie = `enrolledCourse=${courseId}`
     document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
