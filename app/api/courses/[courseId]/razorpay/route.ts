@@ -31,15 +31,26 @@ export async function POST(
 
     const purchase = await db.purchase.findFirst({
       where: {
-        userId:user.id,
-        courseId:params.courseId,
+        userId: user.id,
+        courseId: params.courseId,
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'desc', // sort latest first
       },
-    });
+    })
+    
 
-    if (purchase) {
+    let isPurchaseExpired = false;
+    const EXPIRY_DAYS = course?.courseTimeLimit || 365;
+    if (purchase && purchase.createdAt) {
+      const now = new Date();
+      const createdAt = new Date(purchase.createdAt);
+      const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      isPurchaseExpired = diffDays > EXPIRY_DAYS;
+    }
+
+    if (purchase && !isPurchaseExpired) {
       return new NextResponse("Already purchased", { status: 400 })
     }
 

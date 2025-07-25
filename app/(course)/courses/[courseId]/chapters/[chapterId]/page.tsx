@@ -47,7 +47,7 @@ const ChapterIdPage = async ({
 
   return (
     <div>
-      {userProgress?.isCompleted && (
+      {(userProgress?.isCompleted && !isLocked) && (
         <Banner
           variant="success"
           label="You already completed this chapter."

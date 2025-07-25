@@ -112,7 +112,7 @@ export async function POST(
         city: userAddress?.city,
         state: userAddress?.state,
         country: userAddress?.country,
-        pincode: userAddress?.pinCode || "123456"
+        pincode:(userAddress?.pinCode && userAddress.pinCode.toString().length >= 6) ? userAddress.pinCode.toString().slice(0, 6): "123456"      
       };
     }
 

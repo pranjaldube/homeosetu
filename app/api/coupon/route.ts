@@ -23,15 +23,15 @@ export async function POST(req: Request) {
             return new NextResponse("Unauthorized", { status: 200 });
         }
 
-        const anyCouponForCourse = await db.coupon.findFirst({
-            where: {
-                courseId: courseId,
-            },
-        });
+        // const anyCouponForCourse = await db.coupon.findFirst({
+        //     where: {
+        //         courseId: courseId,
+        //     },
+        // });
 
-        if (!anyCouponForCourse) {
-            return new NextResponse("No coupons available for this course", { status: 200 });
-        }
+        // if (!anyCouponForCourse) {
+        //     return new NextResponse("No coupons available for this course", { status: 200 });
+        // }
 
         const coupon = await db.coupon.findFirst({
             where: {
@@ -50,16 +50,7 @@ export async function POST(req: Request) {
             return new NextResponse("Coupon limit exceeded", { status: 200 });
         }
 
-        const updatedCoupon = await db.coupon.update({
-            where: { id: coupon.id },
-            data: {
-                count: {
-                    decrement: 1, // atomic decrement
-                },
-            },
-        });
-
-        return NextResponse.json({ discount: coupon.discount }, { status: 200 });
+        return NextResponse.json({ discount: coupon.discount, couponId: coupon.id }, { status: 200 });
 
     } catch (error) {
         console.error("[COUPON_POST]", error);
@@ -67,6 +58,38 @@ export async function POST(req: Request) {
     }
 }
 
+export async function PATCH(req: Request) {
+    try {
+        const body = await req.json();
+        const { couponId } = body;
+
+        if (!couponId) {
+            return new NextResponse("Unauthorized", { status: 200 });
+        }
+
+        const coupon = await db.coupon.findUnique({
+            where: { id: couponId },
+        });
+
+        if (!coupon) {
+            return new NextResponse("Coupon not found", { status: 200 });
+        }
+
+        const updatedCoupon = await db.coupon.update({
+            where: { id: couponId },
+            data: {
+                count: {
+                    decrement: 1,
+                },
+            },
+        });
+
+        return NextResponse.json("Coupon count decremented", { status: 200 });
+    } catch (error) {
+        console.error("[COUPON_PATCH]", error);
+        return new NextResponse("Internal Server Error", { status: 500 });
+    }
+}
 
 // export async function GET(req: Request) {
 //   try {

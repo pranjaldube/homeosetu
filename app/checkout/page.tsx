@@ -309,6 +309,7 @@ export default function CheckoutPage() {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [discountedPrice, setDiscountedPrice] = useState(0);
   const [editing, setEditing] = useState(false);
+  const [couponId, setCouponId] = useState('');
 
   const currency = document.cookie
     .split("; ")
@@ -437,6 +438,7 @@ export default function CheckoutPage() {
         return;
       }
 
+      setCouponId(res.data.couponId)
       const couponDiscount = res.data.discount
       if (typeof couponDiscount === 'number') {
         setDiscountAmount(couponDiscount);
@@ -483,7 +485,9 @@ export default function CheckoutPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
             })
-
+            await axios.patch("/api/coupon", {
+              couponId: couponId,
+            })
             window.location.href = `/courses/${courseId}?success=1`
           } catch (error) {
             toast.error("Payment verification failed")
@@ -567,6 +571,9 @@ export default function CheckoutPage() {
               </>
             )}
             <div className='flex justify-end'>
+              <Button variant='outline' onClick={() => router.back()} className='mx-4'>
+                Back
+              </Button>
             {!editing && <Button
               onClick={() => setEditing(!editing)}
               disabled={isLoading}
@@ -636,8 +643,8 @@ export default function CheckoutPage() {
                   </p>
                   <p className="text-xs text-gray-500">+ GST</p>
                 </div>
+                
               </div>
-
               {/* Discount Row (if coupon applied) */}
               {couponApplied && (
                 <div className="flex items-center justify-between text-green-700">
@@ -645,13 +652,15 @@ export default function CheckoutPage() {
                   <p className="text-sm font-semibold">− ₹{discountAmount}</p>
                 </div>
               )}
-
               {/* Total Section */}
               <div className="flex items-center justify-between pt-2">
                 <p className="font-semibold text-lg text-gray-900">Total</p>
                 <p className="text-lg font-bold text-purple-700">
                   ₹{couponApplied ? discountedPrice : originalPrice} + GST
                 </p>
+              </div>
+              <div className='flex items-center justify-between text-green-700'>
+                <p className='text-sm'>- Available for {courseData?.courseTimeLimit ? courseData.courseTimeLimit : 365} days after purchase</p>
               </div>
             </div>
 
