@@ -290,8 +290,25 @@ export default function CheckoutPage() {
 
   const { user } = useUser()
   const router = useRouter()
-  const courseId = localStorage.getItem('enrolledCourse')
-  const courseData = JSON.parse(localStorage.getItem('enrolledCourseData') || '{}')
+  let courseId: string | null = null
+  let courseData: any = null
+
+  if (typeof document !== "undefined") {
+    const cookies = document.cookie.split("; ").reduce((acc: any, c) => {
+      const [key, value] = c.split("=")
+      acc[key] = decodeURIComponent(value)
+      return acc
+    }, {} as Record<string, string>)
+
+    courseId = cookies["enrolledCourse"] || null
+    if (cookies["enrolledCourseData"]) {
+      try {
+        courseData = JSON.parse(cookies["enrolledCourseData"])
+      } catch {
+        courseData = null
+      }
+    }
+  }
 
   const [form, setForm] = useState({
     fullName: '',

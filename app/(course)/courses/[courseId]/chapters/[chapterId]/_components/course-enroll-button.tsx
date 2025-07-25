@@ -44,16 +44,19 @@ export const CourseEnrollButton = ({
     pinCode: ""
   })
 
-  localStorage.setItem('enrolledCourse', courseId)
-  localStorage.setItem('enrolledCourseData', JSON.stringify(courseData))
-
   const currency = document.cookie.split("; ").find((c) => c.startsWith("preferred_currency="))?.split("=")[1] || "INR";
 
   const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
 
   const sendToCheckout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("enrolledCourse", courseId)
+      localStorage.setItem("enrolledCourseData", JSON.stringify(courseData))
+    }
+
     document.cookie = `enrolledCourse=${courseId}`
     document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+
     router.push("/checkout")
   }
 
