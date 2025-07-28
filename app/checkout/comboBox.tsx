@@ -20,9 +20,10 @@ interface ComboBoxProps {
   options: string[]
   value: string
   onChange: (value: string) => void
+  disabled: boolean
 }
 
-export const ComboBox = ({ label, options, value, onChange }: ComboBoxProps) => {
+export const ComboBox = ({ label, options, value, onChange, disabled }: ComboBoxProps) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -30,12 +31,13 @@ export const ComboBox = ({ label, options, value, onChange }: ComboBoxProps) => 
   {/* Label above the combobox trigger */}
   <label className="text-sm font-medium text-gray-700">{label}</label>
 
-  <Popover open={open} onOpenChange={setOpen}>
+  <Popover open={open} onOpenChange={(v) => { if (!disabled) setOpen(v) }}>
     <PopoverTrigger asChild>
       <Button
         variant="outline"
         role="combobox"
-        className="w-full justify-between text-left"
+        className={cn("w-full justify-between text-left", disabled && "opacity-50 cursor-not-allowed")}
+        disabled={disabled}
       >
         {value || `Select ${label}`}
         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

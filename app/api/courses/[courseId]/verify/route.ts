@@ -21,7 +21,7 @@ export async function POST(
     }
 
     const body = await req.json()
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = body
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, couponApplied,discountedPrice } = body
 
     const course = await db.course.findUnique({
       where: {
@@ -67,13 +67,15 @@ export async function POST(
 
     const isIndia = !userAddress || userAddress?.country === "India";
     const round_off_value = isIndia; 
-    const course_price = isIndia ? course?.price : course?.usdPrice;
+    let course_price = isIndia ? course?.price : course?.usdPrice;
     let tax_rate_value = 0;
     let course_price_with_tax = course_price;
-
+    if(couponApplied){
+      course_price = discountedPrice
+    }
     if (isIndia) {
       tax_rate_value = 18;
-      course_price_with_tax = course.price! + ((course.price! / 100) * tax_rate_value);
+      course_price_with_tax = course_price! + ((course_price! / 100) * tax_rate_value);
     }
 
     const invoicePayload: any = {
@@ -110,14 +112,14 @@ export async function POST(
         city: userAddress?.city,
         state: userAddress?.state,
         country: userAddress?.country,
-        pincode: userAddress?.pinCode || "123456"
+        pincode:(userAddress?.pinCode && userAddress.pinCode.toString().length >= 6) ? userAddress.pinCode.toString().slice(0, 6): "123456"      
       };
     }
 
     if (!isIndia) {
       invoicePayload.is_multi_currency = true;
       invoicePayload.export_invoice_details = {
-        export_type: "Multi Currency",
+        export_type: "Export with IGST",
         conversion_factor: 1,
         country_id: "United States",
         currency_id: "USD"

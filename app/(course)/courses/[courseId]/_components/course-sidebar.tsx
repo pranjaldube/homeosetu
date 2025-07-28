@@ -26,13 +26,14 @@ export const CourseSidebar = async ({
     return redirect("/");
   }
 
-  const purchase = await db.purchase.findUnique({
+  const purchase = await db.purchase.findFirst({
     where: {
-      userId_courseId: {
-        userId,
-        courseId: course.id,
-      }
-    }
+      userId,
+      courseId: course.id,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
 
   return (

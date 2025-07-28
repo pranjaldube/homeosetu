@@ -15,6 +15,7 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
+    const {couponApplied,discountedPrice} = await req.json()
     const user = await currentUser()
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
@@ -28,16 +29,28 @@ export async function POST(
       },
     })
 
-    const purchase = await db.purchase.findUnique({
+    const purchase = await db.purchase.findFirst({
       where: {
-        userId_courseId: {
-          userId: user.id,
-          courseId: params.courseId,
-        },
+        userId: user.id,
+        courseId: params.courseId,
+      },
+      orderBy: {
+        createdAt: 'desc', // sort latest first
       },
     })
+    
 
-    if (purchase) {
+    let isPurchaseExpired = false;
+    const EXPIRY_DAYS = course?.courseTimeLimit || 365;
+    if (purchase && purchase.createdAt) {
+      const now = new Date();
+      const createdAt = new Date(purchase.createdAt);
+      const diffTime = Math.abs(now.getTime() - createdAt.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      isPurchaseExpired = diffDays > EXPIRY_DAYS;
+    }
+
+    if (purchase && !isPurchaseExpired) {
       return new NextResponse("Already purchased", { status: 400 })
     }
 
@@ -59,13 +72,17 @@ export async function POST(
     const currency = (!userAddress || userAddress.country === "India") ? "INR" : "USD";
 
     let final_price: number;
-
+    let coursePrice = course.price!
+    if(couponApplied){
+      coursePrice = discountedPrice
+    }
     if (currency === "INR") {
-      const tax = Math.round((course.price! * 18) / 100); // 18% GST
-      final_price = course.price! + tax;
+      const tax = Math.round((coursePrice * 18) / 100); // 18% GST
+      final_price = coursePrice + tax;
     } else {
       final_price = course.usdPrice!;
     }
+
 
 
     const options = {
