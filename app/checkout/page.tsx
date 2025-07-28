@@ -690,7 +690,13 @@ export default function CheckoutPage() {
             </div>
 
             <div className="mt-6">
-              <Button className="w-full bg-purple-700 hover:bg-purple-800 text-white" onClick={onClick}>
+              <Button className="w-full bg-purple-700 hover:bg-purple-800 text-white" onClick={()=>{
+                if(!form.fullName || !form.country || !form.address1 || !form.city || !form.pinCode || !form.state){
+                  toast.error("Please fill the form")
+                }else{
+                  onClick()
+                }
+              }}>
                 Proceed to Payment...
               </Button>
             </div>
