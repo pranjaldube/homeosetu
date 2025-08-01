@@ -1,6 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { File } from "lucide-react";
 
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
@@ -10,6 +9,7 @@ import { Preview } from "@/components/preview";
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import { FileViewer } from "./_components/file-viewer";
 
 const ChapterIdPage = async ({
   params
@@ -97,19 +97,12 @@ const ChapterIdPage = async ({
           {!!attachments.length && (
             <>
               <Separator />
-              <div className="p-4">
+              <div className="p-4 space-y-3">
                 {!isPurchaseExpired && attachments.map((attachment) => (
-                  <a
-                    href={attachment.url}
-                    target="_blank"
+                  <FileViewer 
                     key={attachment.id}
-                    className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
-                  >
-                    <File />
-                    <p className="line-clamp-1">
-                      {attachment.name}
-                    </p>
-                  </a>
+                    attachment={attachment}
+                  />
                 ))}
               </div>
             </>
