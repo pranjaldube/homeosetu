@@ -488,6 +488,15 @@ export default function CheckoutPage() {
   const onClick = async () => {
     try {
       setIsLoading(true)
+      if(couponApplied && (discountedPrice === 0)){
+        const createFreePurchase = await axios.post(`/api/purchase`,{
+          courseId,
+          userId: user?.id,
+          userEmail: user?.emailAddresses?.[0]?.emailAddress
+        })
+        window.location.href = `/courses/${courseId}?success=1`
+        return;
+      }
 
       const res = await loadRazorpay()
       if (!res) {
@@ -685,7 +694,7 @@ export default function CheckoutPage() {
                 </p>
               </div>
               <div className='flex items-center justify-between text-green-700'>
-                <p className='text-sm'>- Available for {courseData?.courseTimeLimit ? courseData.courseTimeLimit : 365} days after purchase</p>
+                <p className='text-sm'>{courseData?.courseTimeLimit ? `- Available for ${courseData?.courseTimeLimit} days after purchase` : `- Lifetime Access`}</p>
               </div>
             </div>
 
@@ -697,7 +706,7 @@ export default function CheckoutPage() {
                   onClick()
                 }
               }}>
-                Proceed to Payment...
+                {(couponApplied && (discountedPrice === 0)) ? "Purchase" : "Proceed to Payment..."}
               </Button>
             </div>
           </div>
