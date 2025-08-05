@@ -41,8 +41,8 @@ export async function POST(
     
 
     let isPurchaseExpired = false;
-    const EXPIRY_DAYS = course?.courseTimeLimit || 365;
-    if (purchase && purchase.createdAt) {
+    const EXPIRY_DAYS = course?.courseTimeLimit || 0;
+    if (purchase && purchase.createdAt && EXPIRY_DAYS !== 0) {
       const now = new Date();
       const createdAt = new Date(purchase.createdAt);
       const diffTime = Math.abs(now.getTime() - createdAt.getTime());
