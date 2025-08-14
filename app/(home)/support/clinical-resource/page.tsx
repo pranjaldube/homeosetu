@@ -5,43 +5,48 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function ThreeSectionPage() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const clinicalRef = useRef<HTMLDivElement>(null);
   const observationRef = useRef<HTMLDivElement>(null);
   const analogyRef = useRef<HTMLDivElement>(null);
   const casetakingRef = useRef<HTMLDivElement>(null);
+  const [filePath, setFilePath] = useState("");
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const storeEmailInDB = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const payload = {
-        method: 'POST',
-        url: `/api/emailSchedule`,
-        data:{
-            name, 
-            email
-        }
-    }
+      method: "POST",
+      url: `/api/emailSchedule`,
+      data: {
+        name,
+        email,
+        filePath
+      },
+    };
 
-    await axios(payload).then((res)=>{
-        setIsLoading(false)
-        if(res.data === "Already Subscribed"){
-            toast.success(res.data)
-            return;
+    await axios(payload)
+      .then((res) => {
+        setIsLoading(false);
+        if (res.data === "Already Subscribed") {
+          toast.success(res.data);
+          return;
         }
-        toast.success('Subscribed Successfully')
-        setEmail('')
-        setName('')
-    }).catch((err)=>{
-        setIsLoading(false)
-        console.error('Internal server error: storeEmailInDB',err)
-    })
-  }
+        toast.success("Subscribed Successfully");
+        setEmail("");
+        setName("");
+        setFilePath("")
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.error("Internal server error: storeEmailInDB", err);
+      });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
@@ -147,14 +152,14 @@ export default function ThreeSectionPage() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-               storeEmailInDB()
+                storeEmailInDB();
               }}
               className="flex justify-center gap-2 sm:gap-3 items-center flex-wrap"
             >
               <input
                 type="text"
                 value={name}
-                onChange={(e)=>setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
                 className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
                 required
@@ -162,11 +167,21 @@ export default function ThreeSectionPage() {
               <input
                 type="email"
                 value={email}
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
                 required
               />
+              <select
+                value={filePath}
+                onChange={(e) => setFilePath(e.target.value)}
+                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
+                required
+              >
+                <option value="">Choose your PDF</option>
+                <option value="report.pdf">Report</option>
+                <option value="pitch.pdf">Pitch</option>
+              </select>
               <button
                 type="submit"
                 disabled={isLoading}

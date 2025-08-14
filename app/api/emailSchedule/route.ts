@@ -9,7 +9,7 @@ export const runtime = 'nodejs';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email} = body;
+    const { name, email, filePath} = body;
     if (!name || !email) {
       return NextResponse.json({ error: 'name, email and sendAt are required' }, { status: 400 });
     }
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
       data: { name, email },
     });
 
-    const pdfPath = path.join(process.cwd(), 'public', 'files', 'report.pdf');
+    const pdfPath = path.join(process.cwd(), 'public', 'files', filePath);
     
 
     await sendEmail({
