@@ -98,7 +98,10 @@ export default function ThreeSectionPage() {
 
         {/* Sections inside same container so navbar sticks in place */}
         <div>
-          <section
+          <div className="text-4xl my-8 font-bold mb-8">
+            <p className="flex items-center justify-center">Coming Soon</p>
+          </div>
+          {/* <section
             ref={observationRef}
             className="py-12 sm:py-20 px-4 sm:px-6 text-center"
           >
@@ -138,7 +141,7 @@ export default function ThreeSectionPage() {
               information about a case to ensure accurate diagnosis and
               effective solutions.
             </p>
-          </section>
+          </section> */}
 
           {/* Email Section */}
           <section className="py-12 sm:py-20 px-4 sm:px-6 text-center bg-white border-t max-w-3xl mx-auto">
