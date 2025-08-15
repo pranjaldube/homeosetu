@@ -35,6 +35,8 @@ export const CourseCardPublic = ({
     .split("; ")
     .find((c) => c.startsWith("preferred_currency="))
     ?.split("=")[1] || "INR";
+
+  console.log("price",price,"dolllar",dollar)
   
   const actualPrice = !currency || currency === "INR" ? price : dollar
   // const [country, setCountry] = useState<string>("India");
@@ -64,7 +66,7 @@ export const CourseCardPublic = ({
             src={imageUrl || "/placeholder-course.jpg"}
           />
           <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            {currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
+            {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
           </div>
         </div>
         <div className="flex flex-col pt-3">
