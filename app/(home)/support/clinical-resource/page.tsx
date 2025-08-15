@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 export default function ThreeSectionPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const clinicalRef = useRef<HTMLDivElement>(null);
   const observationRef = useRef<HTMLDivElement>(null);
@@ -26,7 +27,8 @@ export default function ThreeSectionPage() {
       data: {
         name,
         email,
-        filePath
+        filePath,
+        phone
       },
     };
 
@@ -37,10 +39,11 @@ export default function ThreeSectionPage() {
           toast.success(res.data);
           return;
         }
-        toast.success("Subscribed Successfully");
+        toast.success("Your pdf is generated and mailed");
         setEmail("");
         setName("");
         setFilePath("")
+        setPhone("")
       })
       .catch((err) => {
         setIsLoading(false);
@@ -74,10 +77,10 @@ export default function ThreeSectionPage() {
                 onClick={() => scrollToSection(observationRef)}
                 className="hover:text-blue-600 transition-colors"
               >
-                Observation
+                Freedom from Prejudice
               </button>
             </li>
-            <li>
+            {/* <li>
               <button
                 onClick={() => scrollToSection(analogyRef)}
                 className="hover:text-blue-600 transition-colors"
@@ -92,30 +95,29 @@ export default function ThreeSectionPage() {
               >
                 Casetaking
               </button>
-            </li>
+            </li> */}
           </ul>
         </nav>
 
         {/* Sections inside same container so navbar sticks in place */}
         <div>
-          <div className="text-4xl my-8 font-bold mb-8">
+          {/* <div className="text-4xl my-8 font-bold mb-8">
             <p className="flex items-center justify-center">Coming Soon</p>
-          </div>
-          {/* <section
+          </div> */}
+          <section
             ref={observationRef}
             className="py-12 sm:py-20 px-4 sm:px-6 text-center"
           >
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
-              Observation
+              Freedom from Prejudice
             </h2>
             <p className="text-base sm:text-lg text-gray-600">
-              Observation involves carefully examining and noting details about
-              a subject, situation, or phenomenon. It is the foundation of
-              accurate analysis and understanding.
+              A Homeopath always gets prejudiced in Case taking through reference of a single repertory / MM / Method.
+Our free PDF shall give you a structured overview for breaking your prejudices.
             </p>
           </section>
 
-          <section
+          {/* <section
             ref={analogyRef}
             className="py-12 sm:py-20 px-4 sm:px-6 text-center bg-gray-100"
           >
@@ -175,6 +177,14 @@ export default function ThreeSectionPage() {
                 className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
                 required
               />
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter your Phone Number"
+                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
+                required
+              />
               <select
                 value={filePath}
                 onChange={(e) => setFilePath(e.target.value)}
@@ -182,8 +192,8 @@ export default function ThreeSectionPage() {
                 required
               >
                 <option value="">Choose your PDF</option>
-                <option value="report.pdf">Report</option>
-                <option value="pitch.pdf">Pitch</option>
+                <option value="Get freedom from Prejudices - Toolkit for homeopaths.pdf">Freedom from Prejudice</option>
+                {/* <option value="pitch.pdf">Pitch</option> */}
               </select>
               <button
                 type="submit"

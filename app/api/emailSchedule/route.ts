@@ -9,9 +9,9 @@ export const runtime = 'nodejs';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, filePath} = body;
+    const { name, email, filePath, phone} = body;
     if (!name || !email) {
-      return NextResponse.json({ error: 'name, email and sendAt are required' }, { status: 400 });
+      return NextResponse.json({ error: 'name, email, phone and sendAt are required' }, { status: 400 });
     }
 
     const existingEmail = await db.scheduledEmail.findUnique({
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     }
 
     const record = await db.scheduledEmail.create({
-      data: { name, email },
+      data: { name, email, phone },
     });
 
     const pdfPath = path.join(process.cwd(), 'public', 'files', filePath);

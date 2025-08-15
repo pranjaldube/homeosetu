@@ -88,7 +88,7 @@ export const CourseCard = ({
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
+              {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
             </p>
           )}
         </div>
