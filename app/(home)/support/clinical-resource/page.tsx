@@ -8,6 +8,8 @@ export default function ThreeSectionPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
+  const [consent, setConsent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const clinicalRef = useRef<HTMLDivElement>(null);
   const observationRef = useRef<HTMLDivElement>(null);
@@ -28,7 +30,8 @@ export default function ThreeSectionPage() {
         name,
         email,
         filePath,
-        phone
+        phone: countryCode+" "+phone,
+        sent: consent
       },
     };
 
@@ -42,8 +45,10 @@ export default function ThreeSectionPage() {
         toast.success("Your pdf is generated and mailed");
         setEmail("");
         setName("");
-        setFilePath("")
-        setPhone("")
+        setFilePath("");
+        setPhone("");
+        setCountryCode("+91")
+        setConsent(false)
       })
       .catch((err) => {
         setIsLoading(false);
@@ -112,8 +117,9 @@ export default function ThreeSectionPage() {
               Freedom from Prejudice
             </h2>
             <p className="text-base sm:text-lg text-gray-600">
-              A Homeopath always gets prejudiced in Case taking through reference of a single repertory / MM / Method.
-Our free PDF shall give you a structured overview for breaking your prejudices.
+              A Homeopath always gets prejudiced in Case taking through
+              reference of a single repertory / MM / Method. Our free PDF shall
+              give you a structured overview for breaking your prejudices.
             </p>
           </section>
 
@@ -179,6 +185,14 @@ Our free PDF shall give you a structured overview for breaking your prejudices.
               />
               <input
                 type="text"
+                value={countryCode}
+                onChange={(e) => setCountryCode(e.target.value)}
+                placeholder="+91"
+                className="w-16 px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                required
+              />
+              <input
+                type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Enter your Phone Number"
@@ -192,17 +206,50 @@ Our free PDF shall give you a structured overview for breaking your prejudices.
                 required
               >
                 <option value="">Choose your PDF</option>
-                <option value="Get freedom from Prejudices - Toolkit for homeopaths.pdf">Freedom from Prejudice</option>
+                <option value="Get freedom from Prejudices - Toolkit for homeopaths.pdf">
+                  Freedom from Prejudice
+                </option>
                 {/* <option value="pitch.pdf">Pitch</option> */}
               </select>
+              <div className="flex items-start gap-2 mt-3 px-24">
+                <input
+                  type="checkbox"
+                  id="consent"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-1"
+                />
+                <label
+                  htmlFor="consent"
+                  className="text-xs sm:text-sm text-gray-600 leading-snug"
+                >
+                  By providing your information you agree to allow{" "}
+                  <strong>Homeosetu Software LLP</strong>, and/or its partners
+                  to contact you by mail, phone, email, or text even if the
+                  phone number is present on a state or national Do Not Call
+                  list. By submitting this information you agree to our
+                  <a href="/privacy-policy" className="text-blue-600 underline">
+                    {" "}
+                    Privacy Policy{" "}
+                  </a>
+                  and
+                  <a href="/tnc" className="text-blue-600 underline">
+                    {" "}
+                    Terms of Service
+                  </a>
+                  . If you wish to unsubscribe later on, you can do so by
+                  informing us.
+                </label>
+              </div>
               <button
                 type="submit"
                 disabled={isLoading}
                 className={`px-5 sm:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm sm:text-base`}
               >
-                {isLoading ? "Sending..." : "Subscribe"}
+                {isLoading ? "Sending..." : "GET FREE PDF"}
               </button>
             </form>
+            <div></div>
           </section>
         </div>
       </section>
