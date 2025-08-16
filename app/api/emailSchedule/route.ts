@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     await sendEmail({
             to: email,
             subject: 'Clinical Resources PDF : Freedom from Prejudices-Compiled by Homeosetu',
-            text: `Dear Dr Alpesh ,
+            text: `Dear Dr ${name} ,
 
 A Homeopath always gets prejudiced in Case taking through reference of a single repertory / MM / Method.
 
@@ -47,7 +47,7 @@ You can use PDF300 for an instant discount valid for the next 48 hours on all ou
 Regards,
 Team Homeosetu`,
             html: `
-    <p>Dear Dr Alpesh,</p>
+    <p>Dear Dr ${name},</p>
 
     <p>
       A Homeopath always gets prejudiced in Case taking through reference of a
