@@ -108,10 +108,10 @@ export async function POST(
       invoicePayload.party.billing_address = {
         addr_id_v2: "addr1",
         address_line1: userAddress?.address1 || "123 street",
-        address_line2: userAddress?.country,
-        city: userAddress?.city,
-        state: userAddress?.state,
-        country: userAddress?.country,
+        address_line2: userAddress?.country || "India",
+        city: userAddress?.city || "Virar",
+        state: userAddress?.state || "Maharashtra",
+        country: userAddress?.country || "India",
         pincode:(userAddress?.pinCode && userAddress.pinCode.toString().length >= 6) ? userAddress.pinCode.toString().slice(0, 6): "123456"      
       };
     }
