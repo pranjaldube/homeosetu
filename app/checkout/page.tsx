@@ -310,6 +310,8 @@ export default function CheckoutPage() {
   const [discountedPrice, setDiscountedPrice] = useState(0);
   const [editing, setEditing] = useState(false);
   const [couponId, setCouponId] = useState('');
+  const [savedChanges, setSavedChanges] = useState(true)
+  const [userCountry, setUserCountry] = useState('India')
 
   useEffect(() => {
     // Load cookies and set state
@@ -345,10 +347,6 @@ export default function CheckoutPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId, courseData]);
 
-  useEffect(() => {
-    setOriginalPrice(courseData?.price);
-  }, [courseData]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -379,6 +377,7 @@ export default function CheckoutPage() {
 
   const sendAddress = async (e: React.FormEvent) => {
     e.preventDefault()
+    setSavedChanges(true)
     if (!user || !user?.id || !user.emailAddresses?.[0]?.emailAddress) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
@@ -404,7 +403,10 @@ export default function CheckoutPage() {
         country: form.country,
         pinCode: form.pinCode
       })
-
+      setUserCountry(form.country)
+      if(form.country !== 'India'){
+        setCouponApplied(false)
+      }
       toast.success("Address saved successfully")
       setEditing(false)
     } catch (error) {
@@ -426,6 +428,7 @@ export default function CheckoutPage() {
 
       const userAddress = res.data.exists
       if (!userAddress) {
+        setSavedChanges(false)
         setEditing(true)
         return
       }
@@ -438,6 +441,7 @@ export default function CheckoutPage() {
         city: userAddress?.city,
         state: userAddress?.state,
       })
+      setUserCountry(userAddress?.country)
 
     } catch (err) {
       console.error(err)
@@ -566,6 +570,10 @@ export default function CheckoutPage() {
     })
   }
 
+  useEffect(() => {
+    setOriginalPrice(savedChanges ? userCountry === 'India' ? courseData?.price : courseData?.usdPrice : courseData?.price);
+  }, [courseData, userCountry]);
+
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Step progress bar */}
@@ -605,11 +613,19 @@ export default function CheckoutPage() {
               </>
             )}
             <div className='flex justify-end'>
-              <Button variant='outline' onClick={() => router.back()} className='mx-4'>
+              {!editing && <Button variant='outline' onClick={() => router.back()} className='mx-4'>
                 Back
-              </Button>
+              </Button>}
+              {editing && <Button variant='outline' onClick={() => {setEditing(!editing)
+                setSavedChanges(true)
+              }} className='mx-4'>
+                Cancel
+              </Button>}
             {!editing && <Button
-              onClick={() => setEditing(!editing)}
+              onClick={() => {
+                setEditing(!editing)
+                setSavedChanges(false)
+              }}
               disabled={isLoading}
               size="sm"
               className="w-full md:w-auto "
@@ -629,27 +645,10 @@ export default function CheckoutPage() {
 
         {/* Right: Coupon Section */}
         <div className="shadow-lg rounded-lg border border-gray-200 bg-white p-6">
-          {currency === "INR" && <div>
+          {(userCountry === 'India') && <div>
             <h2 className="text-xl font-semibold mb-4 text-center">Available Coupons</h2>
 
             <div className="space-y-4">
-              {/* Example Coupon */}
-              {/* <div className="border border-dashed border-gray-400 p-4 rounded-lg bg-purple-50">
-              <h3 className="text-lg font-bold text-purple-700">SAVE20</h3>
-              <p className="text-sm text-gray-700">Get 20% off on your order. Valid for today only!</p>
-              <div className="mt-2">
-                <Button size="sm" className="bg-purple-700 hover:bg-purple-800 text-white">Apply</Button>
-              </div>
-            </div>
-
-            <div className="border border-dashed border-gray-400 p-4 rounded-lg bg-green-50">
-              <h3 className="text-lg font-bold text-green-700">FREESHIP</h3>
-              <p className="text-sm text-gray-700">Free shipping on orders above ₹499.</p>
-              <div className="mt-2">
-                <Button size="sm" className="bg-green-700 hover:bg-green-800 text-white">Apply</Button>
-              </div>
-            </div> */}
-
               {/* Coupon Input */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2">
                 <label htmlFor="couponCode" className="text-sm font-medium text-gray-700">Have a coupon code?</label>
@@ -673,14 +672,14 @@ export default function CheckoutPage() {
                 </div>
                 <div className="text-right">
                   <p className={`text-base font-semibold ${couponApplied ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-                    ₹{originalPrice}
+                    {(userCountry === 'India') ? `₹${originalPrice}` : `$${courseData?.usdPrice}`}
                   </p>
-                  <p className="text-xs text-gray-500">+ GST</p>
+                  {(userCountry === 'India') && <p className="text-xs text-gray-500">+ GST</p>}
                 </div>
                 
               </div>
               {/* Discount Row (if coupon applied) */}
-              {couponApplied && (
+              {(couponApplied && savedChanges && userCountry === 'India') && (
                 <div className="flex items-center justify-between text-green-700">
                   <p className="text-sm font-medium">Coupon Applied</p>
                   <p className="text-sm font-semibold">− ₹{discountAmount}</p>
@@ -690,7 +689,7 @@ export default function CheckoutPage() {
               <div className="flex items-center justify-between pt-2">
                 <p className="font-semibold text-lg text-gray-900">Total</p>
                 <p className="text-lg font-bold text-purple-700">
-                  ₹{couponApplied ? discountedPrice : originalPrice} + GST
+                  {(userCountry === 'India') ? `₹${couponApplied ? discountedPrice : originalPrice} + GST` : `$${courseData?.usdPrice}`}
                 </p>
               </div>
               <div className='flex items-center justify-between text-green-700'>
@@ -700,8 +699,14 @@ export default function CheckoutPage() {
 
             <div className="mt-6">
               <Button className="w-full bg-purple-700 hover:bg-purple-800 text-white" onClick={()=>{
-                if(!form.fullName || !form.country || !form.address1 || !form.city || !form.pinCode || !form.state){
+                if(!form?.country){
                   toast.error("Please fill the form")
+                }else if(form.country === 'India' && (!form.fullName || !form.country || !form.address1 || !form.city || !form.pinCode || !form.state)){
+                  toast.error("Please fill the form")
+                }else if(form.country !== 'India' && !form.fullName){
+                  toast.error("Please fill the form")
+                }else if(!savedChanges){
+                  toast.error("Save the Changes")
                 }else{
                   onClick()
                 }
