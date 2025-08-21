@@ -404,6 +404,9 @@ export default function CheckoutPage() {
         pinCode: form.pinCode
       })
       setUserCountry(form.country)
+      if(form.country !== 'India'){
+        setCouponApplied(false)
+      }
       toast.success("Address saved successfully")
       setEditing(false)
     } catch (error) {
