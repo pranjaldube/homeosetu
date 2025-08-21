@@ -642,7 +642,7 @@ export default function CheckoutPage() {
 
         {/* Right: Coupon Section */}
         <div className="shadow-lg rounded-lg border border-gray-200 bg-white p-6">
-          {(savedChanges && userCountry === 'India') && <div>
+          {(userCountry === 'India') && <div>
             <h2 className="text-xl font-semibold mb-4 text-center">Available Coupons</h2>
 
             <div className="space-y-4">
@@ -669,9 +669,9 @@ export default function CheckoutPage() {
                 </div>
                 <div className="text-right">
                   <p className={`text-base font-semibold ${couponApplied ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-                    {(savedChanges && userCountry === 'India') ? `₹${originalPrice}` : `$${courseData?.usdPrice}`}
+                    {(userCountry === 'India') ? `₹${originalPrice}` : `$${courseData?.usdPrice}`}
                   </p>
-                  {(savedChanges && userCountry === 'India') && <p className="text-xs text-gray-500">+ GST</p>}
+                  {(userCountry === 'India') && <p className="text-xs text-gray-500">+ GST</p>}
                 </div>
                 
               </div>
@@ -686,7 +686,7 @@ export default function CheckoutPage() {
               <div className="flex items-center justify-between pt-2">
                 <p className="font-semibold text-lg text-gray-900">Total</p>
                 <p className="text-lg font-bold text-purple-700">
-                  {(savedChanges && userCountry === 'India') ? `₹${couponApplied ? discountedPrice : originalPrice} + GST` : `$${courseData?.usdPrice}`}
+                  {(userCountry === 'India') ? `₹${couponApplied ? discountedPrice : originalPrice} + GST` : `$${courseData?.usdPrice}`}
                 </p>
               </div>
               <div className='flex items-center justify-between text-green-700'>
