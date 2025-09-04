@@ -20,6 +20,7 @@ interface CourseCardPublicProps {
   category: string;
   dollar: number;
   courseDuration: string;
+  courseTimeLimit: number | null
 }
 
 export const CourseCardPublic = ({
@@ -31,6 +32,7 @@ export const CourseCardPublic = ({
   category,
   dollar,
   courseDuration,
+  courseTimeLimit
 }: CourseCardPublicProps) => {
   const { user } = useUser();
   // const [currency, setCurrency] = useState("INR")
@@ -61,7 +63,7 @@ export const CourseCardPublic = ({
   const addToCart = () => {
     setItems((prev) => {
       if (prev.find((c) => c.id === id)) return prev;
-      return [...prev, { id, title, price, dollar }];
+      return [...prev, { id, title, price, usdPrice:dollar , courseTimeLimit }];
     });
     toast.success("Added to cart")
   };

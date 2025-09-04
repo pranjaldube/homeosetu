@@ -320,6 +320,7 @@ export default function CheckoutPage() {
   const [userCountry, setUserCountry] = useState("India");
   const cartItems = useCartStore((state) => state.items);
   const hasSynced = useRef(false)
+  const hasAddressSynced = useRef(false)
   const [paymentButtonDisable, setPaymentButtonDisable] = useState(false)
   const setItems = useCartStore((state) => state.setItems)
   const clearCart = useCartStore((state)=>state.clearCart)
@@ -346,6 +347,9 @@ export default function CheckoutPage() {
       }
       if (cartItems.length === 0) {
         toast.error("Please select course first");
+        setTimeout(()=>{
+          router.back()
+        },3000)
         return;
       }
       setPaymentButtonDisable(true)
@@ -357,7 +361,7 @@ export default function CheckoutPage() {
           }).catch((err)=>{
             if(err.response?.status === 404){
               setItems((prev) => prev.filter((c) => c.id !== course.id));
-              console.error(`Course ${course.title} no longer exists and was removed from your cart`)
+              console.error(`Course ${course.title} no longer exists or was removed from your cart`)
             }
           })
         )
@@ -398,6 +402,9 @@ export default function CheckoutPage() {
     if (!user?.id) {
       return;
     }
+    if(paymentButtonDisable){
+      return
+    }
     setPaymentButtonDisable(true)
     await axios.delete("/api/cart", {
       data: {
@@ -410,17 +417,11 @@ export default function CheckoutPage() {
   };
 
   useEffect(() => {
-    // Only check after courseId and courseData have been set
-    if (courseId === null || courseData === null) return; // Wait for state to be set
-    if (!courseId || !courseData) {
-      router.back();
-      return;
-    }
-    if (user) {
+    if (user && !hasAddressSynced.current) {
       getUserAddress();
+      hasAddressSynced.current = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseId, courseData]);
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -903,7 +904,7 @@ export default function CheckoutPage() {
                 <p className="text-lg font-bold text-purple-700">
                   {userCountry === "India"
                     ? `₹${couponApplied ? discountedPrice : totalPrice} + GST`
-                    : `$${courseData?.usdPrice}`}
+                    : `$${totalPrice}`}
                 </p>
               </div>
               <div className="flex items-center justify-between text-green-700">

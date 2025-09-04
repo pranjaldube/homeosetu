@@ -1,6 +1,4 @@
 "use client"
-
-import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
 
@@ -9,8 +7,12 @@ import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/format"
 
 import { useRouter } from "next/navigation"
+import { useCartStore } from "@/hooks/cart"
 
 interface CoursePrice {
+  id: string
+  title: string
+  courseTimeLimit: number | null
   price: number | null
   usdPrice: number | null
 }
@@ -34,6 +36,8 @@ export const CourseEnrollButton = ({
 
   const { user } = useUser()
   const router = useRouter()
+  const setItems = useCartStore((state) => state.setItems);
+  
 
   const [form, setForm] = useState({
     fullName: "",
@@ -47,6 +51,7 @@ export const CourseEnrollButton = ({
   const currency = document.cookie.split("; ").find((c) => c.startsWith("preferred_currency="))?.split("=")[1] || "INR";
 
   const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
+  console.log("courseData", courseData)
 
   const sendToCheckout = () => {
     // if (typeof window !== "undefined") {
@@ -56,8 +61,13 @@ export const CourseEnrollButton = ({
 
     document.cookie = `enrolledCourse=${courseId}`
     document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+    setItems((prev:any) => {
+      if (prev.find((c:any) => c.id === courseData.id)) return prev;
+      return [...prev, { id: courseData.id , title: courseData.title , price: courseData.price , usdPrice: courseData.usdPrice, courseTimeLimit: courseData.courseTimeLimit }];
+    });
+    toast.success("Added to cart")
 
-    router.push("/checkout")
+    // router.push("/checkout")
   }
 
 

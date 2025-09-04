@@ -96,7 +96,7 @@ export async function POST(
       });
     } else {
       cartItems.forEach((item: any) => {
-        totalValue += item.course.usdValue; // ✅ if course is joined
+        totalValue += item.course.usdPrice; // ✅ if course is joined
       });
     }
 

@@ -5,7 +5,8 @@ type Course = {
   id: string;
   title: string;
   price: number;
-  dollar: number;
+  usdPrice: number;
+  courseTimeLimit: number | null
 };
 
 type CartStore = {
