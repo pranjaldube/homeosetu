@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import axios from "axios"
-import { useState } from "react"
-import toast from "react-hot-toast"
+import axios from "axios";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
-import { useUser } from "@clerk/nextjs"
-import { Button } from "@/components/ui/button"
-import { formatPrice } from "@/lib/format"
+import { useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/format";
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
 interface CoursePrice {
-  price: number | null
-  usdPrice: number | null
+  price: number | null;
+  usdPrice: number | null;
 }
 
 interface CourseEnrollButtonProps {
-  courseData: CoursePrice
-  courseId: string
+  courseData: CoursePrice;
+  courseId: string;
 }
 
 declare global {
   interface Window {
-    Razorpay: any
+    Razorpay: any;
   }
 }
 
@@ -30,10 +30,11 @@ export const CourseEnrollButton = ({
   courseData,
   courseId,
 }: CourseEnrollButtonProps) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = useUser()
-  const router = useRouter()
+  const { user } = useUser();
+  const [currency, setCurrency] = useState("INR");
+  const router = useRouter();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -41,12 +42,22 @@ export const CourseEnrollButton = ({
     city: "",
     state: "",
     country: "",
-    pinCode: ""
-  })
+    pinCode: "",
+  });
 
-  const currency = document.cookie.split("; ").find((c) => c.startsWith("preferred_currency="))?.split("=")[1] || "INR";
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const curr =
+        document.cookie
+          .split("; ")
+          .find((c) => c.startsWith("preferred_currency="))
+          ?.split("=")[1] || "INR";
+      setCurrency(curr);
+    }
+  }, []);
 
-  const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
+  const price: number | null =
+    !currency || currency === "INR" ? courseData?.price : courseData?.usdPrice;
 
   const sendToCheckout = () => {
     // if (typeof window !== "undefined") {
@@ -54,12 +65,11 @@ export const CourseEnrollButton = ({
     //   localStorage.setItem("enrolledCourseData", JSON.stringify(courseData))
     // }
 
-    document.cookie = `enrolledCourse=${courseId}`
-    document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+    document.cookie = `enrolledCourse=${courseId}`;
+    document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`;
 
-    router.push("/checkout")
-  }
-
+    router.push("/checkout");
+  };
 
   return (
     <>
@@ -69,8 +79,11 @@ export const CourseEnrollButton = ({
         size="sm"
         className="w-full md:w-auto"
       >
-        Enroll for {(!currency || currency === "INR") ? `${formatPrice(price)} + GST` : formatPrice(price)}
+        Enroll for{" "}
+        {!currency || currency === "INR"
+          ? `${formatPrice(price, currency)} + GST`
+          : formatPrice(price, currency)}
       </Button>
     </>
-  )
-}
+  );
+};
