@@ -82,7 +82,7 @@ export const PriceForm = ({
           !initialData.price && "text-slate-500 italic"
         )}>
           {initialData.price
-            ? formatPrice(initialData.price)
+            ? formatPrice(initialData.price, "INR")
             : "No price"
           }
         </p>

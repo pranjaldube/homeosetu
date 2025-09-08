@@ -1,5 +1,5 @@
 "use client"
-
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
@@ -31,12 +31,18 @@ export const CourseCardPublic = ({
 }: CourseCardPublicProps) => {
 
   const {user} = useUser();
-  const currency = document.cookie
-    .split("; ")
-    .find((c) => c.startsWith("preferred_currency="))
-    ?.split("=")[1] || "INR";
+  const [currency, setCurrency] = useState("INR")
 
-  console.log("price",price,"dolllar",dollar)
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const curr = document.cookie
+        .split("; ")
+        .find((c) => c.startsWith("preferred_currency="))
+        ?.split("=")[1] || "INR";
+      setCurrency(curr);
+    }
+  }, []);
+
   
   const actualPrice = !currency || currency === "INR" ? price : dollar
   // const [country, setCountry] = useState<string>("India");
@@ -66,7 +72,7 @@ export const CourseCardPublic = ({
             src={imageUrl || "/placeholder-course.jpg"}
           />
           <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
+            {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice, currency)} + GST` : formatPrice(actualPrice, currency)}
           </div>
         </div>
         <div className="flex flex-col pt-3">
