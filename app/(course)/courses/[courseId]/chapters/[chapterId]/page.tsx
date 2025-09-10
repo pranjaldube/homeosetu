@@ -16,12 +16,15 @@ const ChapterIdPage = async ({
 }: {
   params: { courseId: string; chapterId: string }
 }) => {
+  console.time("Auth time")
   const { userId } = await auth();
+  console.timeEnd("Auth time")
 
   if (!userId) {
     return redirect("/");
   }
 
+  console.time("Get Chapter Data Time");
   const {
     chapter,
     course,
@@ -36,6 +39,7 @@ const ChapterIdPage = async ({
     chapterId: params.chapterId,
     courseId: params.courseId,
   });
+  console.timeEnd("Get Chapter Data Time");
 
   if (!chapter || !course) {
     return redirect("/")
