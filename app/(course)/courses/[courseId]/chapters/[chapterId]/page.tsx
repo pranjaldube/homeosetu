@@ -16,6 +16,7 @@ const ChapterIdPage = async ({
 }: {
   params: { courseId: string; chapterId: string }
 }) => {
+  console.time("courseBuyout")
   console.time("Auth time")
   const { userId } = await auth();
   console.timeEnd("Auth time")
@@ -48,6 +49,7 @@ const ChapterIdPage = async ({
 
   const isLocked = (!chapter.isFree && !purchase) || isPurchaseExpired;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
+  console.timeEnd("courseBuyout")
 
   return (
     <div>
