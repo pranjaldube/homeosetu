@@ -27,9 +27,10 @@ const CourseIdPage = async ({
     return redirect("/");
   }
 
+  const hasNextChapter = course.chapters.length > 1;
   console.timeEnd("coursePrev")
 
-  return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`);
+  return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}?hasNextChapter=${hasNextChapter}`);
 }
  
 export default CourseIdPage;
