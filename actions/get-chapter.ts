@@ -13,6 +13,9 @@ export const getChapter = async ({
   chapterId,
 }: GetChapterProps) => {
   try {
+    console.time("[GET_CHAPTER] Total Execution Time");
+
+    console.time("[GET_CHAPTER] Fetch Purchase");
     const purchase = await db.purchase.findFirst({
       where: {
         userId,
@@ -22,30 +25,37 @@ export const getChapter = async ({
         createdAt: 'desc',
       },
     });
+    console.timeEnd("[GET_CHAPTER] Fetch Purchase");
 
+    console.time("[GET_CHAPTER] Fetch Course");
     const course = await db.course.findUnique({
       where: {
         isPublished: true,
         id: courseId,
       }
     });
+    console.timeEnd("[GET_CHAPTER] Fetch Course");
 
     let isPurchaseExpired = false;
     const EXPIRY_DAYS = course?.courseTimeLimit || 0;
     if (purchase && purchase.createdAt && EXPIRY_DAYS !== 0) {
+      console.time("[GET_CHAPTER] Calculate Expiry");
       const now = new Date();
       const createdAt = new Date(purchase.createdAt);
       const diffTime = Math.abs(now.getTime() - createdAt.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       isPurchaseExpired = diffDays > EXPIRY_DAYS;
+      console.timeEnd("[GET_CHAPTER] Calculate Expiry");
     }
 
+    console.time("[GET_CHAPTER] Fetch Chapter");
     const chapter = await db.chapter.findUnique({
       where: {
         id: chapterId,
         isPublished: true,
       }
     });
+    console.timeEnd("[GET_CHAPTER] Fetch Chapter");
 
     if (!chapter || !course) {
       throw new Error("Chapter or course not found");
@@ -56,20 +66,25 @@ export const getChapter = async ({
     let nextChapter: Chapter | null = null;
 
     if (purchase) {
+      console.time("[GET_CHAPTER] Fetch Attachments");
       attachments = await db.attachment.findMany({
         where: {
           courseId: courseId
         }
       });
+      console.timeEnd("[GET_CHAPTER] Fetch Attachments");
     }
 
     if (chapter.isFree || purchase) {
+      console.time("[GET_CHAPTER] Fetch MuxData");
       muxData = await db.muxData.findUnique({
         where: {
           chapterId: chapterId,
         }
       });
+      console.timeEnd("[GET_CHAPTER] Fetch MuxData");
 
+      console.time("[GET_CHAPTER] Fetch Next Chapter");
       nextChapter = await db.chapter.findFirst({
         where: {
           courseId: courseId,
@@ -82,8 +97,10 @@ export const getChapter = async ({
           position: "asc",
         }
       });
+      console.timeEnd("[GET_CHAPTER] Fetch Next Chapter");
     }
 
+    console.time("[GET_CHAPTER] Fetch User Progress");
     const userProgress = await db.userProgress.findUnique({
       where: {
         userId_chapterId: {
@@ -92,6 +109,9 @@ export const getChapter = async ({
         }
       }
     });
+    console.timeEnd("[GET_CHAPTER] Fetch User Progress");
+
+    console.timeEnd("[GET_CHAPTER] Total Execution Time");
 
     return {
       chapter,
@@ -114,6 +134,6 @@ export const getChapter = async ({
       userProgress: null,
       purchase: null,
       isPurchaseExpired: false,
-    }
+    };
   }
-}
+};
