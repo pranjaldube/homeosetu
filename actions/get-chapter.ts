@@ -5,12 +5,14 @@ interface GetChapterProps {
   userId: string;
   courseId: string;
   chapterId: string;
+  shouldCheckNext: boolean; // use lowercase 'boolean' for TypeScript
 }
 
 export const getChapter = async ({
   userId,
   courseId,
   chapterId,
+  shouldCheckNext
 }: GetChapterProps) => {
   try {
     console.time("[GET_CHAPTER] Total Execution Time");
@@ -75,24 +77,32 @@ export const getChapter = async ({
     }
 
     if (chapter.isFree || purchase) {
-      const [muxDataResult, nextChapterResult] = await Promise.all([
-        db.muxData.findUnique({
-          where: {
-            chapterId: chapterId,
-          },
-        }),
-        db.chapter.findFirst({
-          where: {
-            courseId: courseId,
-            isPublished: true,
-            position: {
-              gt: chapter.position,
+      // Always fetch muxData if allowed
+      const muxDataPromise = db.muxData.findUnique({
+        where: {
+          chapterId: chapterId,
+        },
+      });
+
+      // Conditionally fetch nextChapter based on shouldCheckNext
+      const nextChapterPromise = shouldCheckNext
+        ? db.chapter.findFirst({
+            where: {
+              courseId: courseId,
+              isPublished: true,
+              position: {
+                gt: chapter.position,
+              },
             },
-          },
-          orderBy: {
-            position: "asc",
-          },
-        }),
+            orderBy: {
+              position: "asc",
+            },
+          })
+        : Promise.resolve(null);
+
+      const [muxDataResult, nextChapterResult] = await Promise.all([
+        muxDataPromise,
+        nextChapterPromise,
       ]);
 
       muxData = muxDataResult;
