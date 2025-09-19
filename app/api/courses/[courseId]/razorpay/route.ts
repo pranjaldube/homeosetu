@@ -28,12 +28,9 @@ export async function POST(
       },
     });
 
-    // const course = await db.course.findUnique({
-    //   where: {
-    //     id: params.courseId,
-    //     isPublished: true,
-    //   },
-    // })
+    if (cartItems.length === 0) {
+      return new NextResponse("No items in cart", { status: 404 })
+    }
 
     // const purchase = await db.purchase.findFirst({
     //   where: {
@@ -70,15 +67,21 @@ export async function POST(
 
     let totalValue = 0;
 
-if (userAddress && userAddress.country === 'India') {
-  cartItems.forEach((item: any) => {
-    totalValue += item.course.price; // ✅ if course is joined
-  });
-} else {
-  cartItems.forEach((item: any) => {
-    totalValue += item.course.usdPrice; // ✅ if course is joined
-  });
-}
+    if (userAddress && userAddress.country === 'India') {
+      cartItems.forEach((item: any) => {
+        const price = item.course?.price || 0;
+        totalValue += price;
+      });
+    } else {
+      cartItems.forEach((item: any) => {
+        const price = item.course?.usdPrice || 0;
+        totalValue += price;
+      });
+    }
+
+    if (totalValue <= 0) {
+      return new NextResponse("Invalid total amount", { status: 400 })
+    }
     
     const receiptRaw = `${user.id}_${Date.now()}`
     const receipt = crypto
@@ -90,15 +93,21 @@ if (userAddress && userAddress.country === 'India') {
     const currency = (!userAddress || userAddress.country === "India") ? "INR" : "USD";
 
     let final_price: number;
-    let coursePrice = totalValue!
-    if(couponApplied){
-      coursePrice = discountedPrice
+    let coursePrice = totalValue;
+    
+    if (couponApplied && discountedPrice !== undefined && discountedPrice >= 0) {
+      coursePrice = discountedPrice;
     }
+    
     if (currency === "INR") {
       const tax = Math.round((coursePrice * 18) / 100); // 18% GST
       final_price = coursePrice + tax;
     } else {
-      final_price = totalValue;
+      final_price = coursePrice;
+    }
+
+    if (final_price <= 0) {
+      return new NextResponse("Invalid final amount", { status: 400 })
     }
 
     const options = {

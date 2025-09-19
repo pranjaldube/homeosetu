@@ -6,6 +6,7 @@ type Course = {
   title: string;
   price: number;
   usdPrice: number;
+  imageUrl?: string;
   courseTimeLimit: number | null
 };
 

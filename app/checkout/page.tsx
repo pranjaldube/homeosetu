@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import { NextResponse } from "next/server";
 import { useUser } from "@clerk/nextjs";
 import { useCartStore } from "@/hooks/cart";
-import { X } from "lucide-react";
 
 const countries = [
   "Afghanistan",
@@ -262,22 +261,19 @@ const StepProgress = ({ currentStep }: { currentStep: number }) => {
         <React.Fragment key={index}>
           <div className="flex items-center space-x-2">
             <div
-              className={`w-4 h-4 rounded-full border-2 ${
-                currentStep === index + 1 ? "border-black" : "border-gray-400"
-              } flex items-center justify-center`}
+              className={`w-4 h-4 rounded-full border-2 ${currentStep === index + 1 ? "border-black" : "border-gray-400"
+                } flex items-center justify-center`}
             >
               <div
-                className={`w-2 h-2 rounded-full ${
-                  currentStep === index + 1 ? "bg-black" : "bg-gray-400"
-                }`}
+                className={`w-2 h-2 rounded-full ${currentStep === index + 1 ? "bg-black" : "bg-gray-400"
+                  }`}
               />
             </div>
             <span
-              className={`text-sm ${
-                currentStep === index + 1
+              className={`text-sm ${currentStep === index + 1
                   ? "text-black font-semibold"
                   : "text-gray-500"
-              }`}
+                }`}
             >
               {step}
             </span>
@@ -323,12 +319,13 @@ export default function CheckoutPage() {
   const hasAddressSynced = useRef(false)
   const [paymentButtonDisable, setPaymentButtonDisable] = useState(false)
   const setItems = useCartStore((state) => state.setItems)
-  const clearCart = useCartStore((state)=>state.clearCart)
+  const clearCart = useCartStore((state) => state.clearCart)
 
   const totalPrice = useMemo(() => {
     return cartItems.reduce((sum: number, course: any) => {
       if (!course) return sum;
-      return sum + (userCountry === "India" ? course.price : course.usdPrice);
+      const price = userCountry === "India" ? course.price : course.usdPrice;
+      return sum + (price || 0);
     }, 0);
   }, [cartItems, userCountry]);
 
@@ -338,42 +335,61 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     const storeCartIntoDB = async () => {
-      if(hasSynced.current){
-        return
-      }
-      if (!user?.id) {
-        toast.error("Please Login first");
+      if (hasSynced.current || !user?.id) {
         return;
       }
+      
       if (cartItems.length === 0) {
         toast.error("Please select course first");
-        setTimeout(()=>{
-          router.back()
-        },3000)
+        setTimeout(() => {
+          router.push("/explore");
+        }, 3000);
         return;
       }
-      setPaymentButtonDisable(true)
-      await Promise.allSettled(
-        cartItems.map((course) =>
-          axios.post("/api/cart", {
-            userId: user?.id,
-            courseId: course.id,
-          }).catch((err)=>{
-            if(err.response?.status === 404){
-              setItems((prev) => prev.filter((c) => c.id !== course.id));
-              console.error(`Course ${course.title} no longer exists or was removed from your cart`)
+
+      setPaymentButtonDisable(true);
+      
+      try {
+        const results = await Promise.allSettled(
+          cartItems.map((course) =>
+            axios.post("/api/cart", {
+              userId: user.id,
+              courseId: course.id,
+            })
+          )
+        );
+
+        // Handle failed requests
+        const failedCourses: string[] = [];
+        results.forEach((result, index) => {
+          if (result.status === "rejected") {
+            const error = result.reason;
+            if (error.response?.status === 404) {
+              failedCourses.push(cartItems[index].id);
+              console.error(`Course ${cartItems[index].title} no longer exists`);
+            } else {
+              console.error(`Failed to add course ${cartItems[index].title}:`, error);
             }
-          })
-        )
-      );
-      setPaymentButtonDisable(false)
-      hasSynced.current = true
+          }
+        });
+
+        // Remove failed courses from cart
+        if (failedCourses.length > 0) {
+          setItems((prev) => prev.filter((c) => !failedCourses.includes(c.id)));
+          toast.error(`${failedCourses.length} course(s) were removed from cart as they no longer exist`);
+        }
+
+        hasSynced.current = true;
+      } catch (error) {
+        console.error("Error syncing cart:", error);
+        toast.error("Failed to sync cart with server");
+      } finally {
+        setPaymentButtonDisable(false);
+      }
     };
 
-    if (user) {
-      storeCartIntoDB();
-    }
-  }, [user, cartItems]);
+    storeCartIntoDB();
+  }, [user?.id]); // Only depend on user.id, not cartItems
 
   useEffect(() => {
     // Load cookies and set state
@@ -397,24 +413,6 @@ export default function CheckoutPage() {
       cookies["preferred_currency"] ? cookies["preferred_currency"] : "INR"
     );
   }, []);
-
-  const handleRemove = async (courseId: string) => {
-    if (!user?.id) {
-      return;
-    }
-    if(paymentButtonDisable){
-      return
-    }
-    setPaymentButtonDisable(true)
-    await axios.delete("/api/cart", {
-      data: {
-        courseId: courseId,
-      },
-    });
-
-    setItems((prev) => prev.filter(c => c.id !== courseId))
-    setPaymentButtonDisable(false)
-  };
 
   useEffect(() => {
     if (user && !hasAddressSynced.current) {
@@ -455,6 +453,7 @@ export default function CheckoutPage() {
     e.preventDefault();
     setSavedChanges(true);
     if (!user || !user?.id || !user.emailAddresses?.[0]?.emailAddress) {
+      toast.error("Please login")
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -568,31 +567,59 @@ export default function CheckoutPage() {
 
   const onClick = async () => {
     try {
-      if(cartItems.length === 0 || !cartItems[0].id){
+      if (cartItems.length === 0) {
+        toast.error("No items in cart");
         return;
       }
+
+      // Validate all cart items have required fields
+      const invalidItems = cartItems.filter(item => !item.id || !item.title);
+      if (invalidItems.length > 0) {
+        toast.error("Some items in cart are invalid");
+        return;
+      }
+
       setIsLoading(true);
-      // if (couponApplied && discountedPrice === 0) {
-      //   const createFreePurchase = await axios.post(`/api/purchase`, {
-      //     courseId,
-      //     userId: user?.id,
-      //     userEmail: user?.emailAddresses?.[0]?.emailAddress,
-      //   });
-      //   window.location.href = `/courses/${courseId}?success=1`;
-      //   return;
-      // }
+
+      // Handle free purchase case
+      if (couponApplied && discountedPrice === 0) {
+        try {
+          // Create purchases for all cart items
+          await Promise.all(
+            cartItems.map(course => 
+              axios.post(`/api/purchase`, {
+                courseId: course.id,
+                userId: user?.id,
+                userEmail: user?.emailAddresses?.[0]?.emailAddress,
+              })
+            )
+          );
+          clearCart();
+          window.location.href = `/explore?success=1`;
+          return;
+        } catch (error) {
+          console.error("Error creating free purchases:", error);
+          toast.error("Failed to complete free purchase");
+          return;
+        }
+      }
 
       const res = await loadRazorpay();
       if (!res) {
-        alert("Razorpay SDK Failed to load");
+        toast.error("Payment system failed to load");
         setIsLoading(false);
         return;
       }
 
-      const response = await axios.post(`/api/courses/${cartItems[0].id}/razorpay`, {
+      // For now, process only the first item (as per current API structure)
+      // TODO: Update API to handle multiple items in single payment
+      const firstCourse = cartItems[0];
+      const response = await axios.post(`/api/courses/${firstCourse.id}/razorpay`, {
         couponApplied: couponApplied,
         discountedPrice: discountedPrice,
+        cartItems: cartItems, // Pass all items for reference
       });
+      
       const { id, amount, currency } = response.data;
 
       const options = {
@@ -600,23 +627,29 @@ export default function CheckoutPage() {
         amount: amount,
         currency: currency,
         name: "Course Purchase",
-        description: "Course Enrollment",
+        description: `Enrolling in ${cartItems.length} course(s)`,
         order_id: id,
         handler: async function (response: any) {
           try {
-            await axios.post(`/api/courses/${cartItems[0].id}/verify`, {
+            await axios.post(`/api/courses/${firstCourse.id}/verify`, {
               couponApplied: couponApplied,
               discountedPrice: discountedPrice,
+              cartItems: cartItems,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
             });
-            // await axios.patch("/api/coupon", {
-            //   couponId: couponId,
-            // });
-            clearCart()
-            window.location.href = `/explore`;
+            
+            if (couponId) {
+              await axios.patch("/api/coupon", {
+                couponId: couponId,
+              });
+            }
+            
+            clearCart();
+            window.location.href = `/explore?success=1`;
           } catch (error) {
+            console.error("Payment verification failed:", error);
             toast.error("Payment verification failed");
           }
         },
@@ -628,7 +661,8 @@ export default function CheckoutPage() {
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
-      toast.error("Something went wrong");
+      console.error("Payment error:", error);
+      toast.error("Something went wrong during payment");
     } finally {
       setIsLoading(false);
     }
@@ -855,42 +889,50 @@ export default function CheckoutPage() {
             </h2>
 
             <div className="space-y-4">
-              {cartItems.map((course: any) => {
-                return (
-                  <div
-                    key={course.id}
-                    className="flex items-center justify-between border-b pb-3"
-                  >
-                    <button
-                      onClick={() => handleRemove(course.id)}
-                      className="flex items-center justify-center w-7 h-7 rounded-full mx-2 bg-red-100 text-red-500 hover:bg-red-500 hover:text-white transition"
+              {paymentButtonDisable ? (
+                <div className="text-center py-4">
+                  <p className="text-gray-500">Syncing cart with server...</p>
+                </div>
+              ) : cartItems.length === 0 ? (
+                <div className="text-center py-4">
+                  <p className="text-gray-500">No items in cart</p>
+                </div>
+              ) : (
+                cartItems.map((course: any) => {
+                  const price = userCountry === "India" ? course.price : course.usdPrice;
+                  return (
+                    <div
+                      key={course.id}
+                      className="flex items-center justify-between border-b pb-3"
                     >
-                      <X size={18} />
-                    </button>
-                    <div className="flex items-center justify-between flex-1 ml-3">
-                      <div>
-                        <p className="font-medium text-gray-800">
-                          {course?.title || "Loading..."}
-                        </p>
-                        {/* <p className="text-sm text-gray-500">Course Enrollment</p> */}
-                      </div>
-                      <div className="text-right">
-                        <p
-                          className={`text-base font-semibold ${
-                            couponApplied
-                              ? "line-through text-gray-400"
-                              : "text-gray-800"
-                          }`}
-                        >
-                          {userCountry === "India"
-                            ? `₹${course.price}`
-                            : `$${course?.usdPrice}`}
-                        </p>
+                      <div className="flex items-center justify-between flex-1 ml-3">
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            {course?.title || "Unknown Course"}
+                          </p>
+                          {course.courseTimeLimit && (
+                            <p className="text-xs text-gray-500">
+                              Access: {course.courseTimeLimit} days
+                            </p>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <p
+                            className={`text-base font-semibold ${couponApplied
+                                ? "line-through text-gray-400"
+                                : "text-gray-800"
+                              }`}
+                          >
+                            {userCountry === "India"
+                              ? `₹${price || 0}`
+                              : `$${price || 0}`}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
               {/* Discount Row (if coupon applied) */}
               {couponApplied && savedChanges && userCountry === "India" && (
                 <div className="flex items-center justify-between text-green-700">
@@ -907,44 +949,50 @@ export default function CheckoutPage() {
                     : `$${totalPrice}`}
                 </p>
               </div>
-              <div className="flex items-center justify-between text-green-700">
-                <p className="text-sm">
-                  {courseData?.courseTimeLimit
-                    ? `- Available for ${courseData?.courseTimeLimit} days after purchase`
-                    : `- Lifetime Access`}
-                </p>
-              </div>
             </div>
 
             <div className="mt-6">
               <Button
                 className="w-full bg-purple-700 hover:bg-purple-800 text-white"
-                disabled={paymentButtonDisable}
+                disabled={paymentButtonDisable || isLoading || cartItems.length === 0}
                 onClick={() => {
-                  if (!form?.country) {
-                    toast.error("Please fill the form");
-                  } else if (
-                    form.country === "India" &&
-                    (!form.fullName ||
-                      !form.country ||
-                      !form.address1 ||
-                      !form.city ||
-                      !form.pinCode ||
-                      !form.state)
-                  ) {
-                    toast.error("Please fill the form");
-                  } else if (form.country !== "India" && !form.fullName) {
-                    toast.error("Please fill the form");
-                  } else if (!savedChanges) {
-                    toast.error("Save the Changes");
-                  } else {
-                    onClick();
+                  // Validate cart
+                  if (cartItems.length === 0) {
+                    toast.error("No items in cart");
+                    return;
                   }
+
+                  // Validate form
+                  if (!form?.country) {
+                    toast.error("Please select a country");
+                    return;
+                  }
+
+                  if (form.country === "India") {
+                    if (!form.fullName || !form.address1 || !form.city || !form.pinCode || !form.state) {
+                      toast.error("Please fill all required fields");
+                      return;
+                    }
+                  } else if (!form.fullName) {
+                    toast.error("Please enter your full name");
+                    return;
+                  }
+
+                  if (!savedChanges) {
+                    toast.error("Please save your address changes");
+                    return;
+                  }
+
+                  onClick();
                 }}
               >
-                {couponApplied && discountedPrice === 0
-                  ? "Purchase"
-                  : "Proceed to Payment..."}
+                {isLoading 
+                  ? "Processing..." 
+                  : paymentButtonDisable 
+                    ? "Syncing Cart..." 
+                    : couponApplied && discountedPrice === 0
+                      ? "Complete Purchase"
+                      : "Proceed to Payment"}
               </Button>
             </div>
           </div>

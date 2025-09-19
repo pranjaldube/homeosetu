@@ -63,7 +63,7 @@ export const CourseCardPublic = ({
   const addToCart = () => {
     setItems((prev) => {
       if (prev.find((c) => c.id === id)) return prev;
-      return [...prev, { id, title, price, usdPrice:dollar , courseTimeLimit }];
+      return [...prev, { id, title, price, usdPrice:dollar , courseTimeLimit, imageUrl }];
     });
     toast.success("Added to cart")
   };

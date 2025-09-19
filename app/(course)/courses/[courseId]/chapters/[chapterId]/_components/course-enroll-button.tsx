@@ -51,7 +51,6 @@ export const CourseEnrollButton = ({
   const currency = document.cookie.split("; ").find((c) => c.startsWith("preferred_currency="))?.split("=")[1] || "INR";
 
   const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
-  console.log("courseData", courseData)
 
   const sendToCheckout = () => {
     // if (typeof window !== "undefined") {

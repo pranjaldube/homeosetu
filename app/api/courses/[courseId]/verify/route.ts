@@ -36,12 +36,9 @@ export async function POST(
       },
     });
 
-    // const course = await db.course.findUnique({
-    //   where: {
-    //     id: params.courseId,
-    //     isPublished: true,
-    //   },
-    // })
+    if (!cartItems || cartItems.length === 0) {
+      return new NextResponse("No items in cart", { status: 404 });
+    }
 
     if (!cartItems) {
       return new NextResponse("Not found", { status: 404 });
@@ -92,16 +89,18 @@ export async function POST(
     let totalValue = 0;
     if (userAddress && userAddress.country === "India") {
       cartItems.forEach((item: any) => {
-        totalValue += item.course.price; // ✅ if course is joined
+        const price = item.course?.price || 0;
+        totalValue += price;
       });
     } else {
       cartItems.forEach((item: any) => {
-        totalValue += item.course.usdPrice; // ✅ if course is joined
+        const price = item.course?.usdPrice || 0;
+        totalValue += price;
       });
     }
 
     const courseNames = cartItems
-      .map((item: any, index: number) => `${index + 1}. ${item.course.title}`)
+      .map((item: any, index: number) => `${index + 1}. ${item.course?.title || 'Unknown Course'}`)
       .join(", ");
 
     const now = new Date();
@@ -112,13 +111,14 @@ export async function POST(
     let course_price = totalValue;
     let tax_rate_value = 0;
     let course_price_with_tax = course_price;
-    if (couponApplied) {
+    
+    if (couponApplied && discountedPrice !== undefined && discountedPrice >= 0) {
       course_price = discountedPrice;
     }
+    
     if (isIndia) {
       tax_rate_value = 18;
-      course_price_with_tax =
-        course_price! + (course_price! / 100) * tax_rate_value;
+      course_price_with_tax = course_price + (course_price / 100) * tax_rate_value;
     }
 
     const invoicePayload: any = {
@@ -172,31 +172,52 @@ export async function POST(
       };
     }
 
-    const invoiceResponse = await axios.post(
-      "https://app.getswipe.in/api/partner/v2/doc",
-      invoicePayload,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.SWIPE_INVOICE_KEY}`,
-          "Content-Type": "application/json",
-        },
+    let swipeHashId: string | null = null;
+    
+    try {
+      const invoiceResponse = await axios.post(
+        "https://app.getswipe.in/api/partner/v2/doc",
+        invoicePayload,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.SWIPE_INVOICE_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      swipeHashId = invoiceResponse.data.data.hash_id;
+    } catch (error) {
+      console.error("Failed to generate invoice:", error);
+      // Continue without invoice - don't fail the entire transaction
+    }
+
+    // Update purchase records with invoice hash
+    try {
+      if (swipeHashId) {
+        await Promise.all(
+          purchases.map((item: any) =>
+            db.purchase.update({
+              where: { id: item.id },
+              data: { swipeHashId },
+            })
+          )
+        );
       }
-    );
+    } catch (error) {
+      console.error("Failed to update purchases with invoice hash:", error);
+      // Continue - purchases are still valid
+    }
 
-    const swipeHashId = invoiceResponse.data.data.hash_id;
-    // Create the purchase record
-    await Promise.all(
-      purchases.map((item: any) =>
-        db.purchase.update({
-          where: { id: item.id }, // purchase.id, not course.id
-          data: { swipeHashId },
-        })
-      )
-    );
-
-    await db.cart.deleteMany({
-      where: { userId: user.id },
-    });
+    // Clear cart after successful purchase
+    try {
+      await db.cart.deleteMany({
+        where: { userId: user.id },
+      });
+    } catch (error) {
+      console.error("Failed to clear cart:", error);
+      // Continue - purchases are still valid
+    }
     // await db.purchase.update({
     //   where: {
     //     id: purchase.id,
