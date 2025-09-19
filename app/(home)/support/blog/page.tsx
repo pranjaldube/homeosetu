@@ -17,8 +17,8 @@ export default function BlogPage() {
           <h1 className="text-4xl font-bold mb-12 text-center">
             Homeosetu Blog
           </h1>
-          
-          {featuredPost && (
+          <p className="text-2xl font-semibold text-center mb-10">COMING SOON INSPIRATIONAL ARTICLES TO INSPIRE AND MOTIVATE THE EVERYDAY HOMEOPATH</p>
+          {/* {featuredPost && (
             <Link href={`/blog/${featuredPost.slug}`}>
               <Card className="overflow-hidden hover:shadow-xl transition-shadow">
                 <div className="grid md:grid-cols-2 gap-6">
@@ -59,11 +59,11 @@ export default function BlogPage() {
                 </div>
               </Card>
             </Link>
-          )}
+          )} */}
         </div>
 
         {/* Recent Posts */}
-        <div>
+        {/* <div>
           <h2 className="text-2xl font-bold mb-8">Recent Articles</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {recentPosts.map((post) => (
@@ -96,7 +96,7 @@ export default function BlogPage() {
               </Link>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Newsletter Subscription */}
         <div className="mt-16 bg-purple-100 rounded-2xl p-8 text-center">
