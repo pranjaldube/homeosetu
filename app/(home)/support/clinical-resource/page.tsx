@@ -13,7 +13,7 @@ export default function ThreeSectionPage() {
   const [isLoading, setIsLoading] = useState(false);
   const clinicalRef = useRef<HTMLDivElement>(null);
   const observationRef = useRef<HTMLDivElement>(null);
-  const analogyRef = useRef<HTMLDivElement>(null);
+  const prejudiceRef = useRef<HTMLDivElement>(null);
   const casetakingRef = useRef<HTMLDivElement>(null);
   const [filePath, setFilePath] = useState("");
 
@@ -30,8 +30,8 @@ export default function ThreeSectionPage() {
         name,
         email,
         filePath,
-        phone: countryCode+" "+phone,
-        sent: consent
+        phone: countryCode + " " + phone,
+        sent: consent,
       },
     };
 
@@ -47,8 +47,8 @@ export default function ThreeSectionPage() {
         setName("");
         setFilePath("");
         setPhone("");
-        setCountryCode("+91")
-        setConsent(false)
+        setCountryCode("+91");
+        setConsent(false);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -79,10 +79,18 @@ export default function ThreeSectionPage() {
           <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 py-3 sm:py-4 text-base sm:text-lg font-medium">
             <li>
               <button
-                onClick={() => scrollToSection(observationRef)}
+                onClick={() => scrollToSection(prejudiceRef)}
                 className="hover:text-blue-600 transition-colors"
               >
                 Freedom from Prejudice
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => scrollToSection(observationRef)}
+                className="hover:text-blue-600 transition-colors"
+              >
+                108 Observation tips
               </button>
             </li>
             {/* <li>
@@ -110,7 +118,7 @@ export default function ThreeSectionPage() {
             <p className="flex items-center justify-center">Coming Soon</p>
           </div> */}
           <section
-            ref={observationRef}
+            ref={prejudiceRef}
             className="py-12 sm:py-20 px-4 sm:px-6 text-center"
           >
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
@@ -120,6 +128,21 @@ export default function ThreeSectionPage() {
               A Homeopath always gets prejudiced in Case taking through
               reference of a single repertory / MM / Method. Our free PDF shall
               give you a structured overview for breaking your prejudices.
+            </p>
+          </section>
+
+          <section
+            ref={observationRef}
+            className="py-12 sm:py-20 px-4 sm:px-6 text-center"
+          >
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+              108 Observation tips
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600">
+              In homeopathic case taking, non-verbal clues are often as
+              revealing as spoken words. Here's a structured overview with 108
+              Observation tips prepared by Dr Alpesh Oza, Founder and CEO of
+              Homeosetu from his 17 years of Homeopathic Practice.
             </p>
           </section>
 
@@ -208,6 +231,9 @@ export default function ThreeSectionPage() {
                 <option value="">Choose your PDF</option>
                 <option value="Get freedom from Prejudices - Toolkit for homeopaths.pdf">
                   Freedom from Prejudice
+                </option>
+                <option value="108 Observation Tips from Dr Alpesh Oza.pdf">
+                  108 Observation tips
                 </option>
                 {/* <option value="pitch.pdf">Pitch</option> */}
               </select>
