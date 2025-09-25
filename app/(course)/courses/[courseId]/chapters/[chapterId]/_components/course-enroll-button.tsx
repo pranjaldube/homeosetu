@@ -78,7 +78,7 @@ export const CourseEnrollButton = ({
         size="sm"
         className="w-full md:w-auto"
       >
-        Enroll for {(!currency || currency === "INR") ? `${formatPrice(price)} + GST` : formatPrice(price)}
+        {/* Enroll for {(!currency || currency === "INR") ? `${formatPrice(price)} + GST` : formatPrice(price)} */}Add to Cart
       </Button>
     </>
   )

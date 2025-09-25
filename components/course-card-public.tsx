@@ -20,7 +20,7 @@ interface CourseCardPublicProps {
   category: string;
   dollar: number;
   courseDuration: string;
-  courseTimeLimit: number | null
+  courseTimeLimit: number | null;
 }
 
 export const CourseCardPublic = ({
@@ -32,7 +32,7 @@ export const CourseCardPublic = ({
   category,
   dollar,
   courseDuration,
-  courseTimeLimit
+  courseTimeLimit,
 }: CourseCardPublicProps) => {
   const { user } = useUser();
   // const [currency, setCurrency] = useState("INR")
@@ -63,63 +63,64 @@ export const CourseCardPublic = ({
   const addToCart = () => {
     setItems((prev) => {
       if (prev.find((c) => c.id === id)) return prev;
-      return [...prev, { id, title, price, usdPrice:dollar , courseTimeLimit, imageUrl }];
+      return [
+        ...prev,
+        { id, title, price, usdPrice: dollar, courseTimeLimit, imageUrl },
+      ];
     });
-    toast.success("Added to cart")
+    toast.success("Added to cart");
   };
 
- return (
-  <div className="group hover:shadow-md transition-all duration-300 overflow-hidden border rounded-xl p-3 h-full bg-white hover:scale-[1.01]">
-    <Link href={href} className="block">
-      <div className="relative w-full aspect-video rounded-md overflow-hidden">
-        <Image
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-          alt={title}
-          src={imageUrl || "/placeholder-course.jpg"}
-        />
-        <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-          {!price && !dollar
-            ? "Free"
-            : currency === "INR"
-            ? `${formatPrice(actualPrice)} + GST`
-            : formatPrice(actualPrice)}
-        </div>
-      </div>
-      <div className="flex flex-col pt-3">
-        <div className="text-lg font-medium group-hover:text-purple-700 transition line-clamp-2 min-h-[56px]">
-          {title}
-        </div>
-        <p className="text-xs text-purple-600 bg-purple-100 inline-block px-2 py-1 rounded-full w-fit mt-2">
-          {category}
-        </p>
-        <div className="text-sm text-gray-500 mt-2 px-2 py-1">
-          {courseDuration ? `Time Duration: ${courseDuration}` : ""}
-        </div>
-        <div className="my-3 flex items-center gap-x-2 text-sm">
-          <div className="flex items-center gap-x-1 text-slate-500">
-            <IconBadge size="sm" icon={BookOpen} />
-            <span>
-              {chaptersLength}{" "}
-              {chaptersLength === 1 ? "Chapter" : "Chapters"}
-            </span>
+  return (
+    <div className="group hover:shadow-md transition-all duration-300 overflow-hidden border rounded-xl p-3 h-full bg-white hover:scale-[1.01]">
+      <Link href={href} className="block">
+        <div className="relative w-full aspect-video rounded-md overflow-hidden">
+          <Image
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            alt={title}
+            src={imageUrl || "/placeholder-course.jpg"}
+          />
+          <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
+            {!price && !dollar
+              ? "Free"
+              : currency === "INR"
+              ? `${formatPrice(actualPrice)} + GST`
+              : formatPrice(actualPrice)}
           </div>
         </div>
-      </div>
-    </Link>
+        <div className="flex flex-col pt-3">
+          <div className="text-lg font-medium group-hover:text-purple-700 transition line-clamp-2 min-h-[56px]">
+            {title}
+          </div>
+          <p className="text-xs text-purple-600 bg-purple-100 inline-block px-2 py-1 rounded-full w-fit mt-2">
+            {category}
+          </p>
+          <div className="text-sm text-gray-500 mt-2 px-2 py-1">
+            {courseDuration ? `Time Duration: ${courseDuration}` : ""}
+          </div>
+          <div className="my-3 flex items-center gap-x-2 text-sm">
+            <div className="flex items-center gap-x-1 text-slate-500">
+              <IconBadge size="sm" icon={BookOpen} />
+              <span>
+                {chaptersLength} {chaptersLength === 1 ? "Chapter" : "Chapters"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </Link>
 
-    <Button
-        onClick={(e)=>{
+      {(price || dollar) && <Button
+        onClick={(e) => {
           e.stopPropagation();
-          e.preventDefault()
-          addToCart()
+          e.preventDefault();
+          addToCart();
         }}
         size="sm"
-      className="mt-3 w-full px-4 py-2"
+        className="mt-3 w-full px-4 py-2"
       >
         Add to cart
-      </Button>
-  </div>
-);
-
+      </Button>}
+    </div>
+  );
 };
