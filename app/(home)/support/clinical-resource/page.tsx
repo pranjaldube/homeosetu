@@ -140,8 +140,8 @@ export default function ThreeSectionPage() {
             </h2>
             <p className="text-base sm:text-lg text-gray-600">
               In homeopathic case taking, non-verbal clues are often as
-              revealing as spoken words. Here's a structured overview with 108
-              Observation tips prepared by Dr Alpesh Oza, Founder and CEO of
+              revealing as spoken words. Here&apos;s a structured overview with
+              108 Observation tips prepared by Dr Alpesh Oza, Founder and CEO of
               Homeosetu from his 17 years of Homeopathic Practice.
             </p>
           </section>
