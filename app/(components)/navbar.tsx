@@ -25,6 +25,7 @@ const MAIN_LINKS = [
     title: "Support",
     children: [
       { title: "Clinical Resource", href: "/support/clinical-resource" },
+      { title: "Mentorship", href:"/support/mentorship"},
       { title: "Blog", href: "/support/blog" },
       // { title: "Forum", href: "/support/forum" },
     ],
