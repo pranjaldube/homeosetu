@@ -8,6 +8,7 @@ import { formatPrice } from "@/lib/format"
 
 import { useRouter } from "next/navigation"
 import { useCartStore } from "@/hooks/cart"
+import axios from "axios"
 
 interface CoursePrice {
   id: string
@@ -52,7 +53,7 @@ export const CourseEnrollButton = ({
 
   const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
 
-  const sendToCheckout = () => {
+  const sendToCheckout = async () => {
     // if (typeof window !== "undefined") {
     //   localStorage.setItem("enrolledCourse", courseId)
     //   localStorage.setItem("enrolledCourseData", JSON.stringify(courseData))
@@ -60,11 +61,25 @@ export const CourseEnrollButton = ({
 
     document.cookie = `enrolledCourse=${courseId}`
     document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+    let isDuplicate = false
     setItems((prev:any) => {
       if (prev.find((c:any) => c.id === courseData.id)) return prev;
       return [...prev, { id: courseData.id , title: courseData.title , price: courseData.price , usdPrice: courseData.usdPrice, courseTimeLimit: courseData.courseTimeLimit }];
     });
     toast.success("Added to cart")
+
+    // Persist to server cart if logged in
+    try {
+      if (user?.id) {
+        await axios.post("/api/cart", { courseId: courseData.id })
+      }
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        return
+      }
+      console.error("Failed to persist cart item:", error)
+      toast.error("Could not sync cart to server. Will retry at checkout.")
+    }
 
     // router.push("/checkout")
   }

@@ -333,63 +333,63 @@ export default function CheckoutPage() {
     setOriginalPrice(totalPrice);
   }, [totalPrice]);
 
-  useEffect(() => {
-    const storeCartIntoDB = async () => {
-      if (hasSynced.current || !user?.id) {
-        return;
-      }
+  // useEffect(() => {
+  //   const storeCartIntoDB = async () => {
+  //     if (hasSynced.current || !user?.id) {
+  //       return;
+  //     }
       
-      if (cartItems.length === 0) {
-        toast.error("Please select course first");
-        setTimeout(() => {
-          router.push("/explore");
-        }, 3000);
-        return;
-      }
+  //     if (cartItems.length === 0) {
+  //       toast.error("Please select course first");
+  //       setTimeout(() => {
+  //         router.push("/explore");
+  //       }, 3000);
+  //       return;
+  //     }
 
-      setPaymentButtonDisable(true);
+  //     setPaymentButtonDisable(true);
       
-      try {
-        const results = await Promise.allSettled(
-          cartItems.map((course) =>
-            axios.post("/api/cart", {
-              userId: user.id,
-              courseId: course.id,
-            })
-          )
-        );
+  //     try {
+  //       const results = await Promise.allSettled(
+  //         cartItems.map((course) =>
+  //           axios.post("/api/cart", {
+  //             userId: user.id,
+  //             courseId: course.id,
+  //           })
+  //         )
+  //       );
 
-        // Handle failed requests
-        const failedCourses: string[] = [];
-        results.forEach((result, index) => {
-          if (result.status === "rejected") {
-            const error = result.reason;
-            if (error.response?.status === 404) {
-              failedCourses.push(cartItems[index].id);
-              console.error(`Course ${cartItems[index].title} no longer exists`);
-            } else {
-              console.error(`Failed to add course ${cartItems[index].title}:`, error);
-            }
-          }
-        });
+  //       // Handle failed requests
+  //       const failedCourses: string[] = [];
+  //       results.forEach((result, index) => {
+  //         if (result.status === "rejected") {
+  //           const error = result.reason;
+  //           if (error.response?.status === 404) {
+  //             failedCourses.push(cartItems[index].id);
+  //             console.error(`Course ${cartItems[index].title} no longer exists`);
+  //           } else {
+  //             console.error(`Failed to add course ${cartItems[index].title}:`, error);
+  //           }
+  //         }
+  //       });
 
-        // Remove failed courses from cart
-        if (failedCourses.length > 0) {
-          setItems((prev) => prev.filter((c) => !failedCourses.includes(c.id)));
-          toast.error(`${failedCourses.length} course(s) were removed from cart as they no longer exist`);
-        }
+  //       // Remove failed courses from cart
+  //       if (failedCourses.length > 0) {
+  //         setItems((prev) => prev.filter((c) => !failedCourses.includes(c.id)));
+  //         toast.error(`${failedCourses.length} course(s) were removed from cart as they no longer exist`);
+  //       }
 
-        hasSynced.current = true;
-      } catch (error) {
-        console.error("Error syncing cart:", error);
-        toast.error("Failed to sync cart with server");
-      } finally {
-        setPaymentButtonDisable(false);
-      }
-    };
+  //       hasSynced.current = true;
+  //     } catch (error) {
+  //       console.error("Error syncing cart:", error);
+  //       toast.error("Failed to sync cart with server");
+  //     } finally {
+  //       setPaymentButtonDisable(false);
+  //     }
+  //   };
 
-    storeCartIntoDB();
-  }, [user?.id]); // Only depend on user.id, not cartItems
+  //   storeCartIntoDB();
+  // }, [user?.id]); // Only depend on user.id, not cartItems
 
   useEffect(() => {
     // Load cookies and set state
@@ -530,7 +530,6 @@ export default function CheckoutPage() {
         return;
       }
       const res = await axios.post("/api/coupon", {
-        courseId: courseId,
         couponCode: counponCode,
       });
 
@@ -555,8 +554,10 @@ export default function CheckoutPage() {
       setCouponId(res.data.couponId);
       const couponDiscount = res.data.discount;
       if (typeof couponDiscount === "number") {
+        const afterCouponDiscount = Math.round(totalPrice - (totalPrice/100)*couponDiscount)
+        console.log("adsdsad",afterCouponDiscount)
         setDiscountAmount(couponDiscount);
-        setDiscountedPrice(originalPrice - couponDiscount);
+        setDiscountedPrice(afterCouponDiscount);
         setCouponApplied(true);
       }
     } catch (error) {
@@ -918,9 +919,7 @@ export default function CheckoutPage() {
                         </div>
                         <div className="text-right">
                           <p
-                            className={`text-base font-semibold ${couponApplied
-                                ? "line-through text-gray-400"
-                                : "text-gray-800"
+                            className={`text-base font-semibold text-gray-800"
                               }`}
                           >
                             {userCountry === "India"
@@ -937,7 +936,7 @@ export default function CheckoutPage() {
               {couponApplied && savedChanges && userCountry === "India" && (
                 <div className="flex items-center justify-between text-green-700">
                   <p className="text-sm font-medium">Coupon Applied</p>
-                  <p className="text-sm font-semibold">− ₹{discountAmount}</p>
+                  <p className="text-sm font-semibold">−{discountAmount}% OFF</p>
                 </div>
               )}
               {/* Total Section */}

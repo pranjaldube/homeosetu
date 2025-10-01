@@ -11,11 +11,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/lib/format";
 import { Trash2 } from "lucide-react";
+import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 
 const CartPage = () => {
   const items = useCartStore((state) => state.items);
   const setItems = useCartStore((state) => state.setItems);
   const clearCart = useCartStore((state) => state.clearCart);
+  const { user } = useUser();
 
   const currency =
     typeof document !== "undefined"
@@ -33,8 +36,22 @@ const CartPage = () => {
     return { subtotal };
   }, [items, currency]);
 
-  const removeItem = (id: string) => {
+  const removeItem = async (id: string) => {
+    // Optimistic local update
     setItems((prev) => prev.filter((c) => c.id !== id));
+
+    // Sync to server if logged in
+    try {
+      if (user?.id) {
+        await axios.delete("/api/cart", { data: { courseId: id } });
+      }
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        return;
+      }
+      console.error("Failed to remove cart item from server:", error);
+      // Do not re-add locally to avoid jarring UX; user can refresh/sync at checkout
+    }
   };
 
   return (

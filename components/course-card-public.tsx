@@ -10,6 +10,7 @@ import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/hooks/cart";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 interface CourseCardPublicProps {
   id: string;
@@ -60,15 +61,41 @@ export const CourseCardPublic = ({
 
   const setItems = useCartStore((state) => state.setItems);
 
-  const addToCart = () => {
+  const addToCart = async () => {
+    // Optimistically update local store
+    let isDuplicate = false;
     setItems((prev) => {
-      if (prev.find((c) => c.id === id)) return prev;
+      if (prev.find((c) => c.id === id)) {
+        isDuplicate = true;
+        return prev;
+      }
       return [
         ...prev,
         { id, title, price, usdPrice: dollar, courseTimeLimit, imageUrl },
       ];
     });
+
+    if (isDuplicate) {
+      toast.success("Already in cart");
+      return;
+    }
+
     toast.success("Added to cart");
+
+    // If user is logged in, also persist to server cart
+    try {
+      if (user?.id) {
+        await axios.post("/api/cart", { courseId: id });
+      }
+    } catch (error: any) {
+      // Keep local cart; just notify if server persistence failed
+      if (error?.response?.status === 401) {
+        // not logged in/session expired; ignore silently
+        return;
+      }
+      console.error("Failed to persist cart item:", error);
+      toast.error("Could not sync cart to server. Will retry at checkout.");
+    }
   };
 
   return (
