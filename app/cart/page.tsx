@@ -106,8 +106,8 @@ const CartPage = () => {
                             <div className="text-sm text-gray-500">{currency}</div>
                             <div className="text-base font-semibold">
                               {currency === "INR"
-                                ? `${formatPrice(priceToShow)} + GST`
-                                : formatPrice(priceToShow)}
+                                ? `${formatPrice(priceToShow, currency)} + GST`
+                                : formatPrice(priceToShow, currency)}
                             </div>
                           </div>
                           <Button
