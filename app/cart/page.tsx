@@ -135,8 +135,8 @@ const CartPage = () => {
                       <span className="text-gray-600">Subtotal</span>
                       <span className="font-medium">
                         {currency === "INR"
-                          ? `${formatPrice(totals.subtotal)} + GST`
-                          : formatPrice(totals.subtotal)}
+                          ? `${formatPrice(totals.subtotal, currency)} + GST`
+                          : formatPrice(totals.subtotal, currency)}
                       </span>
                     </div>
                     <Separator />
