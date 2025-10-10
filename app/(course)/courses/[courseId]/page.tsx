@@ -6,6 +6,7 @@ const CourseIdPage = async ({
 }: {
   params: { courseId: string; }
 }) => {
+  console.time("coursePrev")
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
@@ -26,7 +27,10 @@ const CourseIdPage = async ({
     return redirect("/");
   }
 
-  return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`);
+  const hasNextChapter = course.chapters.length > 1;
+  console.timeEnd("coursePrev")
+
+  return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}?hasNextChapter=${hasNextChapter}`);
 }
  
 export default CourseIdPage;

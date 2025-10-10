@@ -12,16 +12,24 @@ import { CourseProgressButton } from "./_components/course-progress-button";
 import { FileViewer } from "./_components/file-viewer";
 
 const ChapterIdPage = async ({
-  params
+  params,
+  searchParams
 }: {
-  params: { courseId: string; chapterId: string }
+  params: { courseId: string; chapterId: string },
+  searchParams: {hasNextChapter?: string}
 }) => {
+  console.time("courseBuyout")
+  console.time("Auth time")
   const { userId } = await auth();
+  console.timeEnd("Auth time")
 
   if (!userId) {
     return redirect("/");
   }
+  const shouldCheckNext = searchParams.hasNextChapter === "true";
 
+
+  console.time("Get Chapter Data Time");
   const {
     chapter,
     course,
@@ -35,7 +43,9 @@ const ChapterIdPage = async ({
     userId,
     chapterId: params.chapterId,
     courseId: params.courseId,
+    shouldCheckNext
   });
+  console.timeEnd("Get Chapter Data Time");
 
   if (!chapter || !course) {
     return redirect("/")
@@ -44,6 +54,7 @@ const ChapterIdPage = async ({
 
   const isLocked = (!chapter.isFree && !purchase) || isPurchaseExpired;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
+  console.timeEnd("courseBuyout")
 
   return (
     <div>

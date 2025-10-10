@@ -36,13 +36,20 @@ export const CourseCardPublic = ({
   courseTimeLimit,
 }: CourseCardPublicProps) => {
   const { user } = useUser();
-  // const [currency, setCurrency] = useState("INR")
+  const [currency, setCurrency] = useState("INR")
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      // const [currency, setCurrency] = useState("INR")
   // const [actualPrice, setActualPrice] = useState(price)
-  const currency =
+  const curr =
     document.cookie
-      .split("; ")
-      .find((c) => c.startsWith("preferred_currency="))
-      ?.split("=")[1] || "INR";
+          .split("; ")
+          .find((c) => c.startsWith("preferred_currency="))
+          ?.split("=")[1] || "INR";
+      setCurrency(curr);
+    }
+  }, []);
 
   const actualPrice = !currency || currency === "INR" ? price : dollar;
 
@@ -109,11 +116,7 @@ export const CourseCardPublic = ({
             src={imageUrl || "/placeholder-course.jpg"}
           />
           <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            {!price && !dollar
-              ? "Free"
-              : currency === "INR"
-              ? `${formatPrice(actualPrice)} + GST`
-              : formatPrice(actualPrice)}
+            {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice, currency)} + GST` : formatPrice(actualPrice, currency)}
           </div>
         </div>
         <div className="flex flex-col pt-3">

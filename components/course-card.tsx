@@ -1,4 +1,5 @@
 "use client"
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
@@ -31,10 +32,18 @@ export const CourseCard = ({
   dollar,
   courseDuration
 }: CourseCardProps) => {
-  const currency = document.cookie
-    .split("; ")
-    .find((c) => c.startsWith("preferred_currency="))
-    ?.split("=")[1] || "INR";
+  
+  const [currency, setCurrency] = useState("INR")
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const curr = document.cookie
+        .split("; ")
+        .find((c) => c.startsWith("preferred_currency="))
+        ?.split("=")[1] || "INR";
+      setCurrency(curr);
+    }
+  }, []);
 
   const actualPrice = !currency || currency === "INR" ? price : dollar
 
@@ -88,7 +97,7 @@ export const CourseCard = ({
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice)} + GST` : formatPrice(actualPrice)}
+              {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice,currency)} + GST` : formatPrice(actualPrice, currency)}
             </p>
           )}
         </div>

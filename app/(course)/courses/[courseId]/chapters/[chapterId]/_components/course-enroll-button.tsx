@@ -1,10 +1,10 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
 
-import { useUser } from "@clerk/nextjs"
-import { Button } from "@/components/ui/button"
-import { formatPrice } from "@/lib/format"
+import { useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/format";
 
 import { useRouter } from "next/navigation"
 import { useCartStore } from "@/hooks/cart"
@@ -19,13 +19,13 @@ interface CoursePrice {
 }
 
 interface CourseEnrollButtonProps {
-  courseData: CoursePrice
-  courseId: string
+  courseData: CoursePrice;
+  courseId: string;
 }
 
 declare global {
   interface Window {
-    Razorpay: any
+    Razorpay: any;
   }
 }
 
@@ -33,7 +33,8 @@ export const CourseEnrollButton = ({
   courseData,
   courseId,
 }: CourseEnrollButtonProps) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [currency, setCurrency] = useState("INR");
 
   const { user } = useUser()
   const router = useRouter()
@@ -46,12 +47,22 @@ export const CourseEnrollButton = ({
     city: "",
     state: "",
     country: "",
-    pinCode: ""
-  })
+    pinCode: "",
+  });
 
-  const currency = document.cookie.split("; ").find((c) => c.startsWith("preferred_currency="))?.split("=")[1] || "INR";
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const curr =
+        document.cookie
+          .split("; ")
+          .find((c) => c.startsWith("preferred_currency="))
+          ?.split("=")[1] || "INR";
+      setCurrency(curr);
+    }
+  }, []);
 
-  const price:number | null = (!currency || currency === "INR") ? courseData?.price : courseData?.usdPrice
+  const price: number | null =
+    !currency || currency === "INR" ? courseData?.price : courseData?.usdPrice;
 
   const sendToCheckout = async () => {
     // if (typeof window !== "undefined") {
@@ -96,5 +107,5 @@ export const CourseEnrollButton = ({
         {/* Enroll for {(!currency || currency === "INR") ? `${formatPrice(price)} + GST` : formatPrice(price)} */}Add to Cart
       </Button>
     </>
-  )
-}
+  );
+};
