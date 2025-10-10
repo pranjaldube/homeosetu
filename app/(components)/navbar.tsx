@@ -21,7 +21,6 @@ const MAIN_LINKS = [
   { title: "About Us", href: "/about-us" },
   { title: "Study Courses", href: "/explore" },
   { title: "Software", href: "/software" },
-  { title: "Cart", href: "/cart" },
   {
     title: "Support",
     children: [
@@ -32,6 +31,8 @@ const MAIN_LINKS = [
     ],
   },
   { title: "Contact Us", href: "/contact-us" },
+  { title: "Cart", href: "/cart" },
+
 ];
 
 export const Navbar: React.FC = () => {
