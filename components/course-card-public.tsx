@@ -99,7 +99,7 @@ export const CourseCardPublic = ({
   };
 
   return (
-    <div className="group hover:shadow-md transition-all duration-300 overflow-hidden border rounded-xl p-3 h-full bg-white hover:scale-[1.01]">
+    <div className="flex flex-col justify-between group hover:shadow-md transition-all duration-300 overflow-hidden border rounded-xl p-3 h-full bg-white hover:scale-[1.01]">
       <Link href={href} className="block">
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
           <Image
