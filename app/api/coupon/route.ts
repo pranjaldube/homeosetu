@@ -20,7 +20,7 @@ export async function POST(req: Request) {
             return new NextResponse("Invalid Coupon Code", { status: 200 });
         }
 
-        if (coupon.count <= 0) {
+        if (coupon.count && coupon.count <= 0) {
             return new NextResponse("Coupon limit exceeded", { status: 200 });
         }
 
@@ -49,7 +49,7 @@ export async function PATCH(req: Request) {
             return new NextResponse("Coupon not found", { status: 200 });
         }
 
-        if (coupon.count <= 0) {
+        if (coupon.count && coupon.count <= 0) {
             return new NextResponse("Coupon limit exceeded", { status: 200 });
         }
 
