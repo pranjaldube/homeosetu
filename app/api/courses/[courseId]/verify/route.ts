@@ -1,9 +1,9 @@
-import { currentUser } from "@clerk/nextjs/server"
-import { NextResponse } from "next/server"
-import axios from "axios"
-import crypto from "crypto"
+import { currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import axios from "axios";
+import crypto from "crypto";
 
-import { db } from "@/lib/db"
+import { db } from "@/lib/db";
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString("en-GB").split("/").join("-"); // dd-mm-yyyy
@@ -14,68 +14,111 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const user = await currentUser()
+    const user = await currentUser();
 
     if (!user || !user.id) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const body = await req.json()
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, couponApplied,discountedPrice } = body
+    const body = await req.json();
+    const {
+      razorpay_payment_id,
+      razorpay_order_id,
+      razorpay_signature,
+      couponApplied,
+      discountedPrice,
+    } = body;
 
-    const course = await db.course.findUnique({
-      where: {
-        id: params.courseId,
-        isPublished: true,
+    const cartItems = await db.cart.findMany({
+      where: { userId: user.id },
+      include: {
+        course: true, // joins Course table
       },
-    })
+    });
 
-    if (!course) {
-      return new NextResponse("Not found", { status: 404 })
+    if (!cartItems || cartItems.length === 0) {
+      return new NextResponse("No items in cart", { status: 404 });
+    }
+
+    if (!cartItems) {
+      return new NextResponse("Not found", { status: 404 });
     }
 
     // Verify the payment signature
-    const toVerify = razorpay_order_id + "|" + razorpay_payment_id
+    const toVerify = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
       .update(toVerify.toString())
-      .digest("hex")
+      .digest("hex");
 
-    const isAuthentic = expectedSignature === razorpay_signature
+    const isAuthentic = expectedSignature === razorpay_signature;
 
     if (!isAuthentic) {
-      return new NextResponse("Invalid signature", { status: 400 })
+      return new NextResponse("Invalid signature", { status: 400 });
     }
 
-    const purchase = await db.purchase.create({
-      data: {
-        courseId: params.courseId,
-        userId: user.id,
-        swipeHashId: null,
-        userEmail: user.emailAddresses?.[0]?.emailAddress
-      },
-    })
+    const purchases = await Promise.all(
+      cartItems.map((item: any) =>
+        db.purchase.create({
+          data: {
+            courseId: item.course.id,
+            userId: user.id,
+            swipeHashId: null,
+            userEmail: user.emailAddresses?.[0]?.emailAddress,
+          },
+          select: { id: true }, // 👈 only fetch purchase id (faster)
+        })
+      )
+    );
+
+    // const purchase = await db.purchase.create({
+    //   data: {
+    //     courseId: params.courseId,
+    //     userId: user.id,
+    //     swipeHashId: null,
+    //     userEmail: user.emailAddresses?.[0]?.emailAddress
+    //   },
+    // })
 
     const userAddress = await db.userAddress.findUnique({
       where: {
-        userId: user.id
+        userId: user.id,
       },
-    })
+    });
+
+    let totalValue = 0;
+    if (userAddress && userAddress.country === "India") {
+      cartItems.forEach((item: any) => {
+        const price = item.course?.price || 0;
+        totalValue += price;
+      });
+    } else {
+      cartItems.forEach((item: any) => {
+        const price = item.course?.usdPrice || 0;
+        totalValue += price;
+      });
+    }
+
+    const courseNames = cartItems
+      .map((item: any, index: number) => `${index + 1}. ${item.course?.title || 'Unknown Course'}`)
+      .join(", ");
 
     const now = new Date();
     const date = formatDate(now);
 
     const isIndia = !userAddress || userAddress?.country === "India";
-    const round_off_value = isIndia; 
-    let course_price = isIndia ? course?.price : course?.usdPrice;
+    const round_off_value = isIndia;
+    let course_price = totalValue;
     let tax_rate_value = 0;
     let course_price_with_tax = course_price;
-    if(couponApplied){
-      course_price = discountedPrice
+    
+    if (couponApplied && discountedPrice !== undefined && discountedPrice >= 0) {
+      course_price = discountedPrice;
     }
+    
     if (isIndia) {
       tax_rate_value = 18;
-      course_price_with_tax = course_price! + ((course_price! / 100) * tax_rate_value);
+      course_price_with_tax = course_price + (course_price / 100) * tax_rate_value;
     }
 
     const invoicePayload: any = {
@@ -87,21 +130,21 @@ export async function POST(
         id: user.id,
         type: "customer",
         name: userAddress?.fullName || `${user?.firstName} ${user?.lastName}`,
-        email: user.emailAddresses?.[0]?.emailAddress
+        email: user.emailAddresses?.[0]?.emailAddress,
       },
       items: [
         {
           id: params.courseId,
-          name: course.title,
+          name: courseNames || "Homeosetu Course Purchase",
           quantity: 1,
           unit_price: course_price,
           tax_rate: tax_rate_value,
           price_with_tax: course_price_with_tax,
           net_amount: course_price,
           total_amount: course_price_with_tax,
-          item_type: "Product"
-        }
-      ]
+          item_type: "Product",
+        },
+      ],
     };
 
     if (isIndia) {
@@ -112,7 +155,10 @@ export async function POST(
         city: userAddress?.city || "Virar",
         state: userAddress?.state || "Maharashtra",
         country: userAddress?.country || "India",
-        pincode:(userAddress?.pinCode && userAddress.pinCode.toString().length >= 6) ? userAddress.pinCode.toString().slice(0, 6): "123456"      
+        pincode:
+          userAddress?.pinCode && userAddress.pinCode.toString().length >= 6
+            ? userAddress.pinCode.toString().slice(0, 6)
+            : "123456",
       };
     }
 
@@ -122,35 +168,68 @@ export async function POST(
         export_type: "Export with IGST",
         conversion_factor: 1,
         country_id: "United States",
-        currency_id: "USD"
+        currency_id: "USD",
       };
     }
 
-
-    const invoiceResponse = await axios.post("https://app.getswipe.in/api/partner/v2/doc",
-      invoicePayload,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.SWIPE_INVOICE_KEY}`,
-          "Content-Type": "application/json"
+    let swipeHashId: string | null = null;
+    
+    try {
+      const invoiceResponse = await axios.post(
+        "https://app.getswipe.in/api/partner/v2/doc",
+        invoicePayload,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.SWIPE_INVOICE_KEY}`,
+            "Content-Type": "application/json",
+          },
         }
-      },
-    )
+      );
 
-    const swipeHashId = invoiceResponse.data.data.hash_id
-    // Create the purchase record
-    await db.purchase.update({
-      where: {
-        id: purchase.id,
-      },
-      data: {
-        swipeHashId: swipeHashId,
-      },
-    });
+      swipeHashId = invoiceResponse.data.data.hash_id;
+    } catch (error) {
+      console.error("Failed to generate invoice:", error);
+      // Continue without invoice - don't fail the entire transaction
+    }
 
-    return new NextResponse("Payment verified", { status: 200 })
+    // Update purchase records with invoice hash
+    try {
+      if (swipeHashId) {
+        await Promise.all(
+          purchases.map((item: any) =>
+            db.purchase.update({
+              where: { id: item.id },
+              data: { swipeHashId },
+            })
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Failed to update purchases with invoice hash:", error);
+      // Continue - purchases are still valid
+    }
+
+    // Clear cart after successful purchase
+    try {
+      await db.cart.deleteMany({
+        where: { userId: user.id },
+      });
+    } catch (error) {
+      console.error("Failed to clear cart:", error);
+      // Continue - purchases are still valid
+    }
+    // await db.purchase.update({
+    //   where: {
+    //     id: purchase.id,
+    //   },
+    //   data: {
+    //     swipeHashId: swipeHashId,
+    //   },
+    // });
+
+    return new NextResponse("Payment verified", { status: 200 });
   } catch (error) {
-    console.log("[PAYMENT_VERIFICATION]", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    console.log("[PAYMENT_VERIFICATION]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

@@ -27,6 +27,7 @@ export const CoursesListPublic = ({
             category={item?.category?.name || "General"}
             dollar={item?.usdPrice!}
             courseDuration={item?.courseDuration!}
+            courseTimeLimit={item?.courseTimeLimit}
           />
         ))}
       </div>

@@ -1,18 +1,21 @@
-"use client";
-
-import axios from "axios";
-import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
+"use client"
+import { useState, useEffect } from "react"
+import toast from "react-hot-toast"
 
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"
+import { useCartStore } from "@/hooks/cart"
+import axios from "axios"
 
 interface CoursePrice {
-  price: number | null;
-  usdPrice: number | null;
+  id: string
+  title: string
+  courseTimeLimit: number | null
+  price: number | null
+  usdPrice: number | null
 }
 
 interface CourseEnrollButtonProps {
@@ -31,10 +34,12 @@ export const CourseEnrollButton = ({
   courseId,
 }: CourseEnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const { user } = useUser();
   const [currency, setCurrency] = useState("INR");
-  const router = useRouter();
+
+  const { user } = useUser()
+  const router = useRouter()
+  const setItems = useCartStore((state) => state.setItems);
+  
 
   const [form, setForm] = useState({
     fullName: "",
@@ -59,17 +64,37 @@ export const CourseEnrollButton = ({
   const price: number | null =
     !currency || currency === "INR" ? courseData?.price : courseData?.usdPrice;
 
-  const sendToCheckout = () => {
+  const sendToCheckout = async () => {
     // if (typeof window !== "undefined") {
     //   localStorage.setItem("enrolledCourse", courseId)
     //   localStorage.setItem("enrolledCourseData", JSON.stringify(courseData))
     // }
 
-    document.cookie = `enrolledCourse=${courseId}`;
-    document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`;
+    document.cookie = `enrolledCourse=${courseId}`
+    document.cookie = `enrolledCourseData=${JSON.stringify(courseData)}`
+    let isDuplicate = false
+    setItems((prev:any) => {
+      if (prev.find((c:any) => c.id === courseData.id)) return prev;
+      return [...prev, { id: courseData.id , title: courseData.title , price: courseData.price , usdPrice: courseData.usdPrice, courseTimeLimit: courseData.courseTimeLimit }];
+    });
+    toast.success("Added to cart")
 
-    router.push("/checkout");
-  };
+    // Persist to server cart if logged in
+    try {
+      if (user?.id) {
+        await axios.post("/api/cart", { courseId: courseData.id })
+      }
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        return
+      }
+      console.error("Failed to persist cart item:", error)
+      toast.error("Could not sync cart to server. Will retry at checkout.")
+    }
+
+    // router.push("/checkout")
+  }
+
 
   return (
     <>
@@ -79,10 +104,7 @@ export const CourseEnrollButton = ({
         size="sm"
         className="w-full md:w-auto"
       >
-        Enroll for{" "}
-        {!currency || currency === "INR"
-          ? `${formatPrice(price, currency)} + GST`
-          : formatPrice(price, currency)}
+        {/* Enroll for {(!currency || currency === "INR") ? `${formatPrice(price)} + GST` : formatPrice(price)} */}Add to Cart
       </Button>
     </>
   );
