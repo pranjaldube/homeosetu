@@ -1,8 +1,79 @@
 import { cn } from "@/lib/utils"
+import { generateMetadata } from "@/lib/seo"
+import { Metadata } from "next"
+import { FAQStructuredData } from "@/components/seo/structured-data"
+
+export const metadata: Metadata = generateMetadata({
+  title: "Frequently Asked Questions | Homeosetu Homeopathy Education",
+  description: "Find answers to common questions about our homeopathy courses, payment methods, technical requirements, and support. Get help with account registration, course access, and billing inquiries.",
+  keywords: [
+    "homeopathy FAQ",
+    "homeopathic education questions",
+    "homeopathy course help",
+    "homeopathy learning support",
+    "homeopathic training FAQ",
+    "homeopathy payment questions",
+    "homeopathy technical support",
+    "homeopathy account help",
+    "homeopathy course access",
+    "homeopathy billing support",
+    "homeopathy refund policy",
+    "homeopathy learning platform help",
+    "homeopathic education support",
+    "homeopathy student assistance",
+    "homeopathy platform guide"
+  ],
+  url: "/faq",
+})
+
+const faqData = [
+  {
+    question: "How do I create an account?",
+    answer: "Visit www.homeosetu.com, click Explore courses or login (top right option in the main page), enter your email address (Use Google Account) or enter your email id and password. It will open up the dashboard."
+  },
+  {
+    question: "I forgot my password. What should I do?",
+    answer: "If you have logged in through Google, choose the correct email id and it will allow access. If you have manually submitted password at the time of sign up on the login page, click Forgot Password, enter your email, and follow the reset link sent to you. An OTP will be generated and sent to your email address, please enter those in the box seen and reset your password."
+  },
+  {
+    question: "How do I view the courses?",
+    answer: "The dashboard shows the courses that you are currently viewing or those that are completed. If you are a new user, click on Browse Courses option, click on the desired Course and Purchase, enter the details at the time of billing and the course will be available on your dashboard."
+  },
+  {
+    question: "Do I get certificate on completing the courses?",
+    answer: "Currently, Certificates for individual videos are not available."
+  },
+  {
+    question: "Which payment methods do you accept?",
+    answer: "For Indian users - We accept major credit/debit cards, UPI, and net banking. For International users – Payment through credit cards on the links provided besides each video."
+  },
+  {
+    question: "My payment was deducted but I did not get invoice?",
+    answer: "Please send a screenshot of your date of payment and transaction details to homeosetu@gmail.com and we will respond soon."
+  },
+  {
+    question: "My payment was deducted but I did not get access to video?",
+    answer: "Please send a screenshot of your date of payment and transaction details to homeosetu@gmail.com and we will respond soon."
+  },
+  {
+    question: "What is your refund policy?",
+    answer: "Kindly refer our refund and Return policy mentioned on homepage."
+  },
+  {
+    question: "What are the technical requirements?",
+    answer: "A modern browser (Chrome, Firefox, Safari, Edge), internet speed ≥3 Mbps, and up-to-date video codecs."
+  },
+  {
+    question: "How can I get help?",
+    answer: "For Any Payment related issue or technical assistance, email homeosetu@gmail.com or kindly send a WhatsApp to +91 9975461833 with screenshot of details. We will get back to you with solutions as early as possible."
+  }
+]
 
 export default function Page() {
     return (
-        <div className="container min-h-screen p-4 flex flex-col space-y-6 items-center">
+        <>
+            <FAQStructuredData faqs={faqData} />
+            <div className="container min-h-screen p-4 flex flex-col space-y-6 items-center">
             <h1
                 className={cn(
                     "animate-in fade-in duration-700 font-bold",
@@ -99,5 +170,6 @@ export default function Page() {
                 </div>
             </div>
         </div>
+        </>
     )
 }
