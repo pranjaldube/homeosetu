@@ -14,7 +14,7 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const {couponApplied, discountedPrice, paymentType, amount} = await req.json()
+    const {couponApplied, discountedPrice, paymentType, amount, baseAmount, description, name} = await req.json()
     const user = await currentUser()
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
@@ -23,7 +23,7 @@ export async function POST(
 
     // Handle simple payment types (no backend verification)
     if (paymentType === 'simple') {
-      if (!amount || amount <= 0) {
+      if ((!amount || amount <= 0) && (!baseAmount || baseAmount <= 0)) {
         return new NextResponse("Invalid amount", { status: 400 })
       }
 
@@ -34,6 +34,16 @@ export async function POST(
 
       const currency = (!userAddress || userAddress.country === "India") ? "INR" : "USD";
 
+      // If baseAmount provided, apply GST for INR on server to keep client simple
+      let finalAmount = amount ?? baseAmount;
+      if (typeof baseAmount === 'number' && baseAmount > 0 && currency === 'INR') {
+        // 18% GST
+        finalAmount = Math.round(baseAmount + (baseAmount * 18) / 100);
+      }
+      if (!finalAmount || finalAmount <= 0) {
+        return new NextResponse("Invalid final amount", { status: 400 })
+      }
+
       const receiptRaw = `${user.id}_${Date.now()}_simple`
       const receipt = crypto
         .createHash("sha1")
@@ -42,7 +52,7 @@ export async function POST(
         .slice(0, 40)
       
       const options = {
-        amount: amount * 100, // amount in smallest currency unit
+        amount: finalAmount * 100, // amount in smallest currency unit
         currency,
         receipt,
         notes: {
