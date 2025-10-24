@@ -184,3 +184,14 @@ model Cart {
   @@index([courseId])
   @@unique([userId, courseId])
 }
+
+model MentorshipPurchase {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String
+  type              String   // e.g., "acute" | "chronic"
+  swipeHashId       String?
+  userEmail         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

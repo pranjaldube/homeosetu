@@ -1,9 +1,28 @@
 import { Metadata } from "next"
+import { generateMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "About Us | Homeosetu",
+export const metadata: Metadata = generateMetadata({
+  title: "About Us",
   description: "Learn more about Homeosetu - The bridge between academic and clinical homeopathic knowledge",
-}
+  keywords: [
+    "about homeopathy education",
+    "homeopathic learning platform",
+    "homeopathy training institute",
+    "homeopathic education center",
+    "homeopathy mission",
+    "homeopathic instructors",
+    "homeopathy clinical training",
+    "homeopathic education philosophy",
+    "homeopathy learning approach",
+    "homeopathic practice development",
+    "homeopathy education quality",
+    "homeopathic teaching methods",
+    "homeopathy student success",
+    "homeopathic education innovation",
+    "homeopathy learning community"
+  ],
+  url: "/about-us",
+})
 
 export default function AboutUsPage() {
   return (

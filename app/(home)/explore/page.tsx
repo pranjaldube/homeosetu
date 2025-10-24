@@ -3,6 +3,8 @@ import { CategoryFilters } from "@/components/category-filters";
 import { SearchInputPublic } from "@/components/search-input-public";
 import { CoursesListPublic } from "@/components/courses-list-public";
 import { getExploreCourses } from "@/actions/get-explore-courses";
+import { generateMetadata } from "@/lib/seo";
+import { Metadata } from "next";
 import Link from "next/link";
 
 interface ExplorePageProps {
@@ -11,6 +13,29 @@ interface ExplorePageProps {
     categoryId?: string;
   }
 }
+
+export const metadata: Metadata = generateMetadata({
+  title: "Explore Homeopathy Courses | Online Homeopathic Education",
+  description: "Discover our comprehensive collection of homeopathy courses online. From beginner to advanced levels, learn clinical homeopathy, materia medica, repertory, and case-taking techniques from expert practitioners.",
+  keywords: [
+    "homeopathy courses online",
+    "homeopathic education courses",
+    "clinical homeopathy training",
+    "homeopathic medicine courses",
+    "homeopathy learning platform",
+    "homeopathic certification courses",
+    "homeopathy workshops online",
+    "homeopathic repertory courses",
+    "homeopathic materia medica",
+    "homeopathy case studies",
+    "homeopathic research courses",
+    "homeopathy continuing education",
+    "homeopathy professional development",
+    "online homeopathy classes",
+    "homeopathy distance learning"
+  ],
+  url: "/explore",
+});
 
 const ExplorePage = async ({
   searchParams

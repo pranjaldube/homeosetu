@@ -14,13 +14,64 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const {couponApplied,discountedPrice} = await req.json()
+    const {couponApplied, discountedPrice, paymentType, amount, baseAmount, description, name} = await req.json()
     const user = await currentUser()
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
+    // Handle simple payment types (no backend verification)
+    if (paymentType === 'simple') {
+      if ((!amount || amount <= 0) && (!baseAmount || baseAmount <= 0)) {
+        return new NextResponse("Invalid amount", { status: 400 })
+      }
+
+      // Get user address for currency determination (same logic as original flow)
+      const userAddress = await db.userAddress.findUnique({
+        where: { userId: user.id },
+      })
+
+      const currency = (!userAddress || userAddress.country === "India") ? "INR" : "USD";
+
+      // If baseAmount provided, apply GST for INR on server to keep client simple
+      let finalAmount = amount ?? baseAmount;
+      if (typeof baseAmount === 'number' && baseAmount > 0 && currency === 'INR') {
+        // 18% GST
+        finalAmount = Math.round(baseAmount + (baseAmount * 18) / 100);
+      }
+      if (!finalAmount || finalAmount <= 0) {
+        return new NextResponse("Invalid final amount", { status: 400 })
+      }
+
+      const receiptRaw = `${user.id}_${Date.now()}_simple`
+      const receipt = crypto
+        .createHash("sha1")
+        .update(receiptRaw)
+        .digest("hex")
+        .slice(0, 40)
+      
+      const options = {
+        amount: finalAmount * 100, // amount in smallest currency unit
+        currency,
+        receipt,
+        notes: {
+          userId: user.id,
+          paymentType: paymentType,
+          simplePayment: true,
+        },
+      } as any
+
+      const order = await razorpay.orders.create(options)
+
+      return NextResponse.json({
+        id: order.id,
+        amount: order.amount,
+        currency: order.currency,
+      })
+    }
+
+    // Original cart-based payment flow
     const cartItems = await db.cart.findMany({
       where: { userId: user.id },
       include: {
