@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import posthog from "posthog-js";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -47,7 +48,10 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div
-            onClick={() => router.push("/")}
+            onClick={() => {
+              posthog.capture("navbar_click", { target: "logo", href: "/" });
+              router.push("/");
+            }}
             className="cursor-pointer relative after:absolute after:inset-0 after:bg-[#8C44FF] after:mix-blend-soft-light after:rounded-lg"
           >
             <Image
@@ -68,7 +72,10 @@ export const Navbar: React.FC = () => {
                   <div className="relative">
                     {/* Trigger */}
                     <button
-                      onClick={() => setIsOpen((prev) => !prev)}
+                      onClick={() => {
+                        posthog.capture("navbar_click", { target: link.title, type: "dropdown_toggle" });
+                        setIsOpen((prev) => !prev);
+                      }}
                       className="px-3 py-2 text-sm font-medium text-gray-950 hover:bg-accent rounded-md flex items-center gap-1"
                     >
                       {link.title}
@@ -98,7 +105,10 @@ export const Navbar: React.FC = () => {
                               <Link
                                 href={child.href}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-md"
-                                onClick={() => setIsOpen(false)} // close when clicked
+                                onClick={() => {
+                                  posthog.capture("navbar_click", { target: child.title, href: child.href, parent: link.title });
+                                  setIsOpen(false);
+                                }}
                               >
                                 {child.title}
                               </Link>
@@ -112,6 +122,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     href={link.href!}
                     className="px-3 py-2 text-sm font-medium text-gray-950 hover:bg-accent rounded-md"
+                    onClick={() => posthog.capture("navbar_click", { target: link.title, href: link.href })}
                   >
                     {link.title}
                   </Link>
@@ -122,9 +133,10 @@ export const Navbar: React.FC = () => {
             {/* Login / Dashboard Button */}
             <button
               className="bg-blue-500 text-white px-6 py-2 rounded-full text-sm hover:bg-blue-600 transition-colors"
-              onClick={() =>
-                user ? router.push("/dashboard") : router.push("/sign-in")
-              }
+              onClick={() => {
+                posthog.capture("navbar_click", { target: user ? "dashboard" : "login" });
+                user ? router.push("/dashboard") : router.push("/sign-in");
+              }}
             >
               {user ? "Dashboard" : "Login"}
             </button>
@@ -155,7 +167,10 @@ export const Navbar: React.FC = () => {
                       key={child.title}
                       href={child.href}
                       className="block text-gray-600 hover:text-gray-900"
-                      onClick={() => setMobileOpen(false)}
+                      onClick={() => {
+                        posthog.capture("navbar_click", { target: child.title, href: child.href, parent: link.title, device: "mobile" });
+                        setMobileOpen(false);
+                      }}
                     >
                       {child.title}
                     </Link>
@@ -167,7 +182,10 @@ export const Navbar: React.FC = () => {
                 key={link.title}
                 href={link.href!}
                 className="block text-gray-700 font-medium"
-                onClick={() => setMobileOpen(false)}
+                onClick={() => {
+                  posthog.capture("navbar_click", { target: link.title, href: link.href, device: "mobile" });
+                  setMobileOpen(false);
+                }}
               >
                 {link.title}
               </Link>
@@ -177,6 +195,7 @@ export const Navbar: React.FC = () => {
           <button
             className="w-full bg-blue-500 text-white px-6 py-2 rounded-full text-sm hover:bg-blue-600 transition-colors"
             onClick={() => {
+              posthog.capture("navbar_click", { target: user ? "dashboard" : "login", device: "mobile" });
               setMobileOpen(false);
               user ? router.push("/dashboard") : router.push("/sign-in");
             }}
