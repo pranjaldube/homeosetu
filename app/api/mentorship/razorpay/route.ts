@@ -15,11 +15,13 @@ export async function POST(req: Request) {
     const user = await currentUser()
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
 
-    if (!type || (type !== "acute" && type !== "chronic")) {
-      return new NextResponse("Invalid mentorship type", { status: 400 })
+    // Accepted payment types
+    const ALLOWED_TYPES = ["acute", "chronic", "chatbot"] as const
+    if (!type || !ALLOWED_TYPES.includes(type)) {
+      return NextResponse.json({ message: "Invalid payment type" }, { status: 400 })
     }
 
     const userAddress = await db.userAddress.findUnique({
@@ -28,13 +30,30 @@ export async function POST(req: Request) {
 
     const currency = (!userAddress || userAddress.country === "India") ? "INR" : "USD"
 
-    const baseAmount = type === "acute" ? 253 : 1271
+    // Determine base amount depending on type and currency
+    let baseAmount = 0
+    if (type === "acute") {
+      baseAmount = 253
+    } else if (type === "chronic") {
+      baseAmount = 1271
+    } else if (type === "chatbot") {
+      // Use environment-configured pricing for chatbot to avoid hardcoding
+      const chatbotInr = process.env.CHATBOT_INR_PRICE ? Number(process.env.CHATBOT_INR_PRICE) : undefined
+      const chatbotUsd = process.env.CHATBOT_USD_PRICE ? Number(process.env.CHATBOT_USD_PRICE) : undefined
+      baseAmount = currency === "INR" ? (chatbotInr ?? 0) : (chatbotUsd ?? 0)
+      if (!baseAmount || Number.isNaN(baseAmount)) {
+        return NextResponse.json({ message: "Chatbot payment temporarily unavailable. Please try again later." }, { status: 400 })
+      }
+    }
+
+    // Apply GST for INR payments
     let finalAmount = baseAmount
     if (currency === "INR") {
       finalAmount = Math.round(baseAmount + (baseAmount * 18) / 100)
     }
 
-    const receiptRaw = `${user.id}_${Date.now()}_mentorship`
+    const paymentCategory = (type === "acute" || type === "chronic") ? "mentorship" : "chatbot"
+    const receiptRaw = `${user.id}_${Date.now()}_${paymentCategory}`
     const receipt = crypto
       .createHash("sha1")
       .update(receiptRaw)
@@ -47,9 +66,10 @@ export async function POST(req: Request) {
       receipt,
       notes: {
         userId: user.id,
-        paymentType: "mentorship",
+        paymentType: paymentCategory,
         simplePayment: true,
-        mentorshipType: type,
+        mentorshipType: (type === "acute" || type === "chronic") ? type : undefined,
+        chatbotType: type === "chatbot" ? "chatbot" : undefined,
       },
     } as any
 
@@ -59,10 +79,13 @@ export async function POST(req: Request) {
       id: order.id,
       amount: order.amount,
       currency: order.currency,
+      message: "Order created successfully. Proceed to payment.",
+      type,
+      category: paymentCategory,
     })
   } catch (error) {
     console.log("[MENTORSHIP_RAZORPAY_ORDER]", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    return NextResponse.json({ message: "Something went wrong while creating the order. Please try again." }, { status: 500 })
   }
 }
 

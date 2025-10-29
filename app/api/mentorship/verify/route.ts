@@ -12,14 +12,15 @@ export async function POST(req: Request) {
   try {
     const user = await currentUser()
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
 
     const body = await req.json()
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature, type } = body
 
-    if (!type || (type !== "acute" && type !== "chronic")) {
-      return new NextResponse("Invalid mentorship type", { status: 400 })
+    const ALLOWED_TYPES = ["acute", "chronic", "chatbot"] as const
+    if (!type || !ALLOWED_TYPES.includes(type)) {
+      return NextResponse.json({ message: "Invalid payment type" }, { status: 400 })
     }
 
     // Verify signature
@@ -30,13 +31,23 @@ export async function POST(req: Request) {
       .digest("hex")
     const isAuthentic = expectedSignature === razorpay_signature
     if (!isAuthentic) {
-      return new NextResponse("Invalid signature", { status: 400 })
+      return NextResponse.json({ message: "Payment could not be verified. Please contact support if amount was deducted." }, { status: 400 })
     }
 
     const userAddress = await db.userAddress.findUnique({ where: { userId: user.id } })
 
     const isIndia = !userAddress || userAddress.country === "India"
-    const baseAmount = type === "acute" ? 253 : 1271
+    let baseAmount = 0
+    if (type === "acute") baseAmount = 253
+    else if (type === "chronic") baseAmount = 1271
+    else if (type === "chatbot") {
+      const chatbotInr = process.env.CHATBOT_INR_PRICE ? Number(process.env.CHATBOT_INR_PRICE) : undefined
+      const chatbotUsd = process.env.CHATBOT_USD_PRICE ? Number(process.env.CHATBOT_USD_PRICE) : undefined
+      baseAmount = isIndia ? (chatbotInr ?? 0) : (chatbotUsd ?? 0)
+      if (!baseAmount || Number.isNaN(baseAmount)) {
+        return NextResponse.json({ message: "Chatbot payment configuration missing. Please try again later." }, { status: 400 })
+      }
+    }
     let tax_rate_value = 0
     let course_price_with_tax = baseAmount
     if (isIndia) {
@@ -60,8 +71,12 @@ export async function POST(req: Request) {
       },
       items: [
         {
-          id: `mentorship-${type}`,
-          name: type === "acute" ? "Mentorship - Acute Consultation" : "Mentorship - Chronic Consultation",
+          id: (type === "acute" || type === "chronic") ? `mentorship-${type}` : `chatbot` ,
+          name: (type === "acute")
+            ? "Mentorship - Acute Consultation"
+            : (type === "chronic")
+              ? "Mentorship - Chronic Consultation"
+              : "Chatbot Consultation",
           quantity: 1,
           unit_price: baseAmount,
           tax_rate: tax_rate_value,
@@ -113,19 +128,21 @@ export async function POST(req: Request) {
       console.error("Failed to generate invoice:", error)
     }
 
-    await db.mentorshipPurchase.create({
+    // Store a record. We will keep using MentorshipPurchase for simplicity
+    const client: any = db
+    await client.mentorshipPurchase.create({
       data: {
         userId: user.id,
-        type,
+        type, // stores "acute" | "chronic" | "chatbot"
         swipeHashId: swipeHashId || null,
         userEmail: user.emailAddresses?.[0]?.emailAddress,
       },
     })
 
-    return new NextResponse("Payment verified", { status: 200 })
+    return NextResponse.json({ message: "Payment verified successfully. Invoice will be sent to your email." }, { status: 200 })
   } catch (error) {
     console.log("[MENTORSHIP_PAYMENT_VERIFICATION]", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    return NextResponse.json({ message: "Something went wrong while verifying the payment. Please try again." }, { status: 500 })
   }
 }
 
