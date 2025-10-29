@@ -5,10 +5,13 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 import AddressModal from "@/components/address-modal";
+import { Loader2 } from "lucide-react";
 
 export default function Mentorship() {
   const { user } = useUser()
   const [addressOpen, setAddressOpen] = React.useState(false)
+  const [userChoice, setUserChoice] = React.useState<"acute" | "chronic">("acute")
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const loadRazorpay = () => {
     return new Promise((resolve) => {
@@ -32,6 +35,7 @@ export default function Mentorship() {
 
   const startPayment = async (type: "acute" | "chronic") => {
     try {
+      setIsLoading(true);
       if (!user?.id) {
         toast.error("Please login");
         return;
@@ -79,6 +83,8 @@ export default function Mentorship() {
       razorpay.open();
     } catch (err) {
       toast.error("Payment failed");
+    } finally {
+      setIsLoading(false);
     }
   }
   return (
@@ -104,10 +110,20 @@ export default function Mentorship() {
 
           {/* Buttons */}
           <div className="flex flex-col lg:flex-row gap-4">
-            <Button className="w-full sm:w-auto" onClick={() => startPayment("acute") }>
+            <Button 
+              className="w-full sm:w-auto" 
+              onClick={() => { setUserChoice("acute"); startPayment("acute") }}
+              disabled={isLoading}
+            >
+              {isLoading && userChoice === "acute" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Consult for Acute case Rs.253 + GST
             </Button>
-            <Button className="w-full sm:w-auto" onClick={() => startPayment("chronic") }>
+            <Button 
+              className="w-full sm:w-auto" 
+              onClick={() => { setUserChoice("chronic"); startPayment("chronic") }}
+              disabled={isLoading}
+            >
+              {isLoading && userChoice === "chronic" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Consult for Chronic case Rs.1271 + GST
             </Button>
           </div>
@@ -124,7 +140,8 @@ export default function Mentorship() {
       </div>
       <AddressModal open={addressOpen} onClose={() => setAddressOpen(false)} onSaved={async () => {
         setAddressOpen(false)
-        toast.success("Address saved. Please click pay again.")
+        toast.success("Address saved")
+        await startPayment(userChoice)
       }} />
     </section>
   );

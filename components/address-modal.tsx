@@ -157,7 +157,6 @@ export const AddressModal: React.FC<AddressModalProps> = ({ open, onClose, onSav
         country: form.country,
         pinCode: form.pinCode,
       });
-      toast.success("Address saved successfully");
       onSaved?.();
       onClose();
     } catch (err) {
