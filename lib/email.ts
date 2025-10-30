@@ -90,3 +90,51 @@ export async function sendContactUsEmail({
   // Send both emails
   await t.sendMail(adminEmail);
 }
+
+export async function sendSurveyEmail({
+  name,
+  email,
+  selectiveOne,
+  selectiveTwo,
+  descriptiveOne,
+  descriptiveTwo,
+  descriptiveThree,
+}: {
+  name: string;
+  email: string;
+  selectiveOne: string;
+  selectiveTwo: string;
+  descriptiveOne: string;
+  descriptiveTwo: string;
+  descriptiveThree: string;
+}) {
+  const t = getTransporter();
+
+  // Send notification email to admin
+  const adminEmail = {
+    from: process.env.EMAIL_FROM,
+    to: process.env.EMAIL_FROM, // Send to admin email
+    subject: `New Contact Us Message from ${name}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">New Contact Us Message</h2>
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
+          <p style="margin: 10px 0;"><strong>Email:</strong> ${email}</p>
+          <p style="margin: 10px 0;"><strong>Message:</strong></p>
+          <p style="margin: 10px 0; line-height: 1.6; color: #333;">${selectiveOne}</p>
+          <p style="margin: 10px 0; line-height: 1.6; color: #333;">${selectiveTwo}</p>
+          <p style="margin: 10px 0; line-height: 1.6; color: #333;">${descriptiveOne}</p>
+          <p style="margin: 10px 0; line-height: 1.6; color: #333;">${descriptiveTwo}</p>
+          <p style="margin: 10px 0; line-height: 1.6; color: #333;">${descriptiveThree}</p>
+        </div>
+        <p style="color: #666;">
+          <strong>Reply to:</strong> ${email}
+        </p>
+      </div>
+    `,
+  };
+
+  // Send both emails
+  await t.sendMail(adminEmail);
+}

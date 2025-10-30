@@ -207,3 +207,18 @@ model ContactUs {
   
   @@index([email])
 }
+
+model Survey {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String?
+  email            String?
+  selectiveOne     String?
+  selectiveTwo     String?
+  descriptiveOne   String?
+  descriptiveTwo   String?
+  descriptiveThree String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  @@index([createdAt])
+}
