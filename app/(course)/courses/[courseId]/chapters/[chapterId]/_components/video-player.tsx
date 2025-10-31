@@ -71,7 +71,7 @@ export const VideoPlayer = ({
           </p>
         </div>
       )}
-      {!isLocked && (
+      {!isLocked && playbackId && (
         <MuxPlayer
           title={title}
           className={cn(
@@ -79,9 +79,21 @@ export const VideoPlayer = ({
           )}
           onCanPlay={() => setIsReady(true)}
           onEnded={onEnd}
+          onError={(event: any) => {
+            setIsReady(true);
+            const message = event?.detail?.message || "Media Error: unable to decode this video.";
+            toast.error(message);
+          }}
+          /* Help autoplay policies and reduce initial playback issues */
+          playsInline
           autoPlay
           playbackId={playbackId}
         />
+      )}
+      {!isLocked && !playbackId && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
+          <p className="text-sm">Video is processing. Please try again in a moment.</p>
+        </div>
       )}
     </div>
   )

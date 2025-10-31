@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import toast from "react-hot-toast"
+import axios from "axios"
 import {
   Card,
   CardContent,
@@ -12,26 +13,38 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Mail, Phone, MapPin } from "lucide-react"
-import { useForm, ValidationError } from "@formspree/react"
+import { Mail, Phone, MapPin, Loader2 } from "lucide-react"
 
 export default function Page() {
-  const [state, handleSubmit] = useForm(
-    process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID ?? ""
-  )
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [message, setMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // e.preventDefault()
-    handleSubmit(e)
-    // Here you would typically send the form data to your backend
-    // For this example, we'll just show a success message
-    toast.success("Message Sent! We'll get back to you as soon as possible.")
-    setName("")
-    setEmail("")
-    setMessage("")
+    e.preventDefault()
+    setIsLoading(true)
+
+    try {
+      const response = await axios.post("/api/contactUs", {
+        name,
+        email,
+        message,
+      })
+
+      if (response.data.success) {
+        toast.success("Message sent")
+        setName("")
+        setEmail("")
+        setMessage("")
+      }
+    } catch (error: any) {
+      console.error("Error submitting contact form:", error)
+      const errorMessage = error.response?.data?.error || "Failed to send message. Please try again later."
+      toast.error(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -54,12 +67,8 @@ export default function Page() {
                   name="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  disabled={isLoading}
                   required
-                />
-                <ValidationError
-                  prefix="Name"
-                  field="name"
-                  errors={state.errors}
                 />
               </div>
               <div className="grid gap-2">
@@ -70,12 +79,8 @@ export default function Page() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
                   required
-                />
-                <ValidationError
-                  prefix="Email"
-                  field="email"
-                  errors={state.errors}
                 />
               </div>
               <div className="grid gap-2">
@@ -85,16 +90,20 @@ export default function Page() {
                   name="message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
+                  disabled={isLoading}
                   required
-                />
-                <ValidationError
-                  prefix="Message"
-                  field="message"
-                  errors={state.errors}
+                  rows={6}
                 />
               </div>
-              <Button type="submit" disabled={state.submitting}>
-                Send Message
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  "Send Message"
+                )}
               </Button>
             </form>
             <div className="space-y-4">
