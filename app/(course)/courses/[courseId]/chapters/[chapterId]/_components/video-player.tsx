@@ -75,69 +75,69 @@ export const VideoPlayer = ({
       {!isLocked && playbackId && (
 
         // Mux data plus iframe fallback method 
-        // <div>
-        //   {!useIframe ? (
-        //     <MuxPlayer
-        //       title={title}
-        //       className={cn(
-        //         !isReady && "hidden"
-        //       )}
-        //       preload="auto"
-        //       onCanPlay={() => setIsReady(true)}
-        //       onEnded={onEnd}
-        //       onError={(event: any) => {
-        //         setIsReady(true);
-        //         const message = "we hit a error while playing these video. Please try again";
-        //         toast.error(message);
-        //         setUseIframe(true);
-        //       }}
-        //       /* Help autoplay policies and reduce initial playback issues */
-        //       playsInline
-        //       autoPlay
-        //       playbackId={playbackId}
-        //     />
-        //   ) : (
-        //     <iframe
-        //       src={`https://player.mux.com/${playbackId}?autoplay=1&playsinline=1`}
-        //       title={title}
-        //       style={{ width: "100%", border: "none", aspectRatio: "16 / 9" }}
-        //       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-        //       allowFullScreen
-        //     />
-        //   )}
-        // </div>
+        <div>
+          {!useIframe ? (
+            <MuxPlayer
+              title={title}
+              className={cn(
+                !isReady && "hidden"
+              )}
+              preload="auto"
+              onCanPlay={() => setIsReady(true)}
+              onEnded={onEnd}
+              onError={(event: any) => {
+                setIsReady(true);
+                const message = "we hit a error while playing these video. Please try again";
+                toast.error(message);
+                setUseIframe(true);
+              }}
+              /* Help autoplay policies and reduce initial playback issues */
+              playsInline
+              autoPlay
+              playbackId={playbackId}
+            />
+          ) : (
+            <iframe
+              src={`https://player.mux.com/${playbackId}?autoplay=1&playsinline=1`}
+              title={title}
+              style={{ width: "100%", border: "none", aspectRatio: "16 / 9" }}
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+              allowFullScreen
+            />
+          )}
+        </div>
 
 
         // html video player
-        <div>
-          <video
-            key={playbackId}
-            controls
-            autoPlay
-            playsInline
-            preload="auto"
-            onCanPlay={() => setIsReady(true)}
-            onEnded={onEnd}
-            onError={(e) => {
-              setIsReady(true);
-              const message = "We hit an error while playing this video. Please try again.";
-              toast.error(message);
-            }}
-            style={{ width: "100%", border: "none", aspectRatio: "16 / 9" }}
-          >
-            {/* Mux HLS stream */}
-            <source
-              src={`https://stream.mux.com/${playbackId}.m3u8`}
-              type="application/x-mpegURL"
-            />
-            {/* Optional MP4 fallback */}
-            <source
-              src={`https://stream.mux.com/${playbackId}/medium.mp4`}
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-        </div>
+        // <div>
+        //   <video
+        //     key={playbackId}
+        //     controls
+        //     autoPlay
+        //     playsInline
+        //     preload="auto"
+        //     onCanPlay={() => setIsReady(true)}
+        //     onEnded={onEnd}
+        //     onError={(e) => {
+        //       setIsReady(true);
+        //       const message = "We hit an error while playing this video. Please try again.";
+        //       toast.error(message);
+        //     }}
+        //     style={{ width: "100%", border: "none", aspectRatio: "16 / 9" }}
+        //   >
+        //     {/* Mux HLS stream */}
+        //     <source
+        //       src={`https://stream.mux.com/${playbackId}.m3u8`}
+        //       type="application/x-mpegURL"
+        //     />
+        //     {/* Optional MP4 fallback */}
+        //     <source
+        //       src={`https://stream.mux.com/${playbackId}/medium.mp4`}
+        //       type="video/mp4"
+        //     />
+        //     Your browser does not support the video tag.
+        //   </video>
+        // </div>
 
 
       )}
