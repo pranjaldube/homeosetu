@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       },
     });
 
-    // Send email notifications
+    // Send email notifications to ADMin
     try {
       await sendContactUsEmail({
         name,
