@@ -13,6 +13,18 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = generateMetadata({
   title: "Homeosetu — Homeopathy Courses & Clinical Resources",
   description: "Structured homeopathy education for students and clinicians: modular courses, interactive repertory tools, materia medica lessons, notes, live webinars.",
+  manifest: "/manifest.json",
+  themeColor: "#0f172a",
+  icons: {
+    icon: [
+      { url: "/images/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/images/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/images/icon-192x192.png" },
+      { url: "/images/icon-512x512.png" },
+    ],
+  },
   keywords: [
     "homeopathy education",
     "homeopathic courses",

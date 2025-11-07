@@ -1,21 +1,30 @@
 /** @type {import('next').NextConfig} */
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
+  buildExcludes: [/middleware-manifest.json$/],
+});
+
 const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'lszv047whj.ufs.sh',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "lszv047whj.ufs.sh",
+        port: "",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'utfs.io', // also allow utfs.io in case URLs change
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "utfs.io", // also allow utfs.io in case URLs change
+        port: "",
+        pathname: "/**",
       },
     ],
-    formats: ['image/webp', 'image/avif'],
+    formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
@@ -31,42 +40,42 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            key: "Referrer-Policy",
+            value: "origin-when-cross-origin",
           },
         ],
       },
       {
-        source: '/sitemap.xml',
+        source: "/sitemap.xml",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400, s-maxage=86400',
+            key: "Cache-Control",
+            value: "public, max-age=86400, s-maxage=86400",
           },
         ],
       },
       {
-        source: '/robots.txt',
+        source: "/robots.txt",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400, s-maxage=86400',
+            key: "Cache-Control",
+            value: "public, max-age=86400, s-maxage=86400",
           },
         ],
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
