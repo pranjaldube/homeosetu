@@ -47,6 +47,9 @@ export const SEO_CONFIG = {
 export function generateMetadata({
   title,
   description,
+  manifest,
+  themeColor,
+  icons,
   keywords = [],
   image = "/logo.png",
   url,
@@ -59,6 +62,12 @@ export function generateMetadata({
 }: {
   title?: string;
   description?: string;
+  manifest?: string,
+  themeColor?: string,
+  icons?: {
+    icon?: { url: string; sizes?: string; type?: string }[];
+    apple?: { url: string; sizes?: string; type?: string }[];
+  };
   keywords?: string[];
   image?: string;
   url?: string;
