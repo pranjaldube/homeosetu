@@ -62,8 +62,8 @@ export function generateMetadata({
 }: {
   title?: string;
   description?: string;
-  manifest: string,
-  themeColor: string,
+  manifest?: string,
+  themeColor?: string,
   icons?: {
     icon?: { url: string; sizes?: string; type?: string }[];
     apple?: { url: string; sizes?: string; type?: string }[];
