@@ -7,7 +7,12 @@ export async function POST(req: Request) {
   const payload = await req.text();
   const heads = headers();
 
-  const whSecret = process.env.CLERK_WEBHOOK_SECRET!;
+  const whSecret = process.env.CLERK_WEBHOOK_SECRET;
+  if (!whSecret) {
+    console.error("❌ Missing Clerk Webhook secret");
+    return new NextResponse("Server misconfiguration", { status: 500 });
+  }
+
   const svix_id = heads.get("svix-id");
   const svix_timestamp = heads.get("svix-timestamp");
   const svix_signature = heads.get("svix-signature");
@@ -29,7 +34,19 @@ export async function POST(req: Request) {
     return new NextResponse("Invalid signature", { status: 400 });
   }
 
-  const userId = evt.data.id;
+  const eventType = evt.type;
+  let userId: string | null = null;
+
+  if (eventType.startsWith("user.")) {
+    userId = evt.data.id;
+  } else if (eventType.startsWith("session.")) {
+    userId = evt.data.user_id;
+  }
+
+  if (!userId) {
+    console.error("❌ Could not determine userId from event:", eventType);
+    return new NextResponse("Invalid event data", { status: 400 });
+  }
 
   // 🪙 Add 5 points on every login
   try {
@@ -38,11 +55,10 @@ export async function POST(req: Request) {
       update: { points: { increment: 5 } },
       create: { userId, points: 5 },
     });
+    console.log(`✅ Added 5 loyalty points for user ${userId}`);
   } catch (err) {
     console.log("Error in updating loyal points in clerk webhook", err);
   }
-
-  console.log(`✅ Added 5 loyalty points for user ${userId}`);
 
   return NextResponse.json({ success: true });
 }
