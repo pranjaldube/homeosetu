@@ -222,3 +222,11 @@ model Survey {
   
   @@index([createdAt])
 }
+
+model LoyaltyPoints {
+  id        Int      @id @default(autoincrement())
+  userId    String   @unique
+  points    Int      @default(0)
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}

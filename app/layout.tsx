@@ -7,6 +7,7 @@ import { ConfettiProvider } from "@/components/providers/confetti-provider"
 import { CSPostHogProvider } from "@/components/providers/posthog-provider"
 import GeoCurrencyInitializer from "@/components/GeoCurrencyInitializer"
 import { generateMetadata, generateStructuredData } from "@/lib/seo"
+import UserLoyalty from "@/components/userLoyalty"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -66,6 +67,7 @@ export default function RootLayout({
             <GeoCurrencyInitializer />
             <ConfettiProvider />
             <ToastProvider />
+            <UserLoyalty />
             {children}
           </body>
         </html>
