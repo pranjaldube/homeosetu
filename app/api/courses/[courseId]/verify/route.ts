@@ -44,6 +44,25 @@ export async function POST(
       return new NextResponse("Not found", { status: 404 });
     }
 
+    cartItems.forEach(async (item) => {
+      const price = item.course?.price;
+      let loyalty_points;
+      if (price && price >= 1599) {
+        loyalty_points = 15;
+      } else if (price && price >= 1199) {
+        loyalty_points = 11;
+      } else if (price && price >= 799) {
+        loyalty_points = 7;
+      } else if (price && price >= 599) {
+        loyalty_points = 5;
+      }
+      await db.loyaltyPoints.upsert({
+        where: { userId: user.id },
+        update: { points: { increment: loyalty_points } }, // add or subtract
+        create: { userId: user.id, points: loyalty_points },
+      });
+    });
+
     // Verify the payment signature
     const toVerify = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
@@ -100,7 +119,10 @@ export async function POST(
     }
 
     const courseNames = cartItems
-      .map((item: any, index: number) => `${index + 1}. ${item.course?.title || 'Unknown Course'}`)
+      .map(
+        (item: any, index: number) =>
+          `${index + 1}. ${item.course?.title || "Unknown Course"}`
+      )
       .join(", ");
 
     const now = new Date();
@@ -111,14 +133,19 @@ export async function POST(
     let course_price = totalValue;
     let tax_rate_value = 0;
     let course_price_with_tax = course_price;
-    
-    if (couponApplied && discountedPrice !== undefined && discountedPrice >= 0) {
+
+    if (
+      couponApplied &&
+      discountedPrice !== undefined &&
+      discountedPrice >= 0
+    ) {
       course_price = discountedPrice;
     }
-    
+
     if (isIndia) {
       tax_rate_value = 18;
-      course_price_with_tax = course_price + (course_price / 100) * tax_rate_value;
+      course_price_with_tax =
+        course_price + (course_price / 100) * tax_rate_value;
     }
 
     const invoicePayload: any = {
@@ -142,6 +169,7 @@ export async function POST(
           price_with_tax: course_price_with_tax,
           net_amount: course_price,
           total_amount: course_price_with_tax,
+          hsn_code: "999259",
           item_type: "Product",
         },
       ],
@@ -173,7 +201,7 @@ export async function POST(
     }
 
     let swipeHashId: string | null = null;
-    
+
     try {
       const invoiceResponse = await axios.post(
         "https://app.getswipe.in/api/partner/v2/doc",

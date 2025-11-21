@@ -209,19 +209,58 @@ model ContactUs {
 }
 
 model Survey {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name             String?
-  email            String?
-  selectiveOne     String?
-  selectiveTwo     String?
-  descriptiveOne   String?
-  descriptiveTwo   String?
-  descriptiveThree String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serial              Int?      
+
+  fullName            String?
+  phone               String?
+  email               String?
+  city                String?
+  currentStatus       String?
+  currentStatusOther  String?
+
+  practiceTypes       String[]
+  practiceOther       String?
+
+  experience          String?
+
+  timeConsumption     String[]
+  timeConsumptionOther String?
+
+  softwareUsed        String?
+  helpfulLaptop       String?
+  helpfulMobile       String?
+
+  repertoryUsed       String?
+  rubricSource        String?
+  materiaMedica       String?
+
+  frustrationLaptop   String?
+  frustrationMobile   String?
+
+  learningSources     String[]
+  cmePlatforms        String?
+
+  toolPhrasing        String?
+  toolRepertory       String?
+  toolDifferential    String?
+  featureSuggestions  String?
+
+  paymentModel        String?
+
+  earlyAccess         String?
+  contactPermission   String?
+
+  consent1            Boolean?
+  consent2            Boolean?
+  consent3            Boolean?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
   @@index([createdAt])
 }
+
 
 model LoyaltyPoints {
   id        Int      @id @default(autoincrement())
