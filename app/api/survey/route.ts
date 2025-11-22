@@ -6,44 +6,29 @@ import { auth } from "@clerk/nextjs/server"; // Clerk auth
 
 const prisma = new PrismaClient();
 
-// Zod schema for validating the request
-const surveySchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Valid email required"),
-  selectiveOne: z.string().min(1, "This field is required"),
-  selectiveTwo: z.string().min(1, "This field is required"),
-  descriptiveOne: z.string().min(5, "Required, more than 5 characters"),
-  descriptiveTwo: z.string().min(5, "Required, more than 5 characters"),
-  descriptiveThree: z.string().min(5, "Required, more than 5 characters"),
-});
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const parsed = surveySchema.safeParse(body);
     const { userId } = await auth();
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: parsed.error.flatten().fieldErrors },
-        { status: 400 }
-      );
-    }
-
+    const total = await prisma.survey.count();
     const response = await prisma.survey.create({
-      data: parsed.data,
+      data: { ...body, serial: total + 1 },
     });
 
     if (!userId) {
-      return;
+      return NextResponse.json({
+        success: true,
+        message: "Form submitted successfully (no user logged in)",
+      });
     }
 
     try {
-      sendSurveyEmail(parsed.data);
+      await sendSurveyEmail({...body, serial:total + 1});
       await prisma.loyaltyPoints.upsert({
         where: { userId },
-        update: { points: { increment: 10 } },
-        create: { userId, points: 10 },
+        update: { points: { increment: 2 } },
+        create: { userId, points: 2 },
       });
     } catch (emailError) {
       console.error("Failed to send contact us email:", emailError);
