@@ -34,7 +34,8 @@ interface SurveyForm {
   timeConsumption: string[];
   timeConsumptionOther: string;
 
-  softwareUsed: string;
+  softwareUsedLaptop: string;
+  softwareUsedMobile: string;
   helpfulLaptop: string;
   helpfulMobile: string;
 
@@ -91,7 +92,8 @@ export default function SoftwarePage() {
     timeConsumption: [],
     timeConsumptionOther: "",
 
-    softwareUsed: "",
+    softwareUsedLaptop: "",
+    softwareUsedMobile: "",
     helpfulLaptop: "",
     helpfulMobile: "",
 
@@ -187,15 +189,18 @@ export default function SoftwarePage() {
       newErrors.timeConsumption = "Please select";
     }
 
+    if (!form.softwareUsedLaptop) {
+      newErrors.softwareUsedLaptop = "Please specify";
+    }
+    if (!form.softwareUsedMobile) {
+      newErrors.softwareUsedMobile = "Please specify";
+    }
+
     if (
       form.timeConsumption.includes("Other") &&
       !form.timeConsumptionOther.trim()
     ) {
       newErrors.timeConsumptionOther = "Please specify";
-    }
-
-    if (!form.softwareUsed) {
-      newErrors.softwareUsed = "Please select";
     }
 
     if (!form.helpfulLaptop) {
@@ -247,6 +252,10 @@ export default function SoftwarePage() {
       newErrors.contactPermission = "Please select";
     }
 
+    if (!form.consent1) {
+      newErrors.consent1 = "Please click these before proceeding";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -283,7 +292,8 @@ export default function SoftwarePage() {
           timeConsumption: [],
           timeConsumptionOther: "",
 
-          softwareUsed: "",
+          softwareUsedLaptop: "",
+          softwareUsedMobile: "",
           helpfulLaptop: "",
           helpfulMobile: "",
 
@@ -381,31 +391,36 @@ export default function SoftwarePage() {
           </div>
 
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
-            Homeosetu Homeopathic Software/Mobile App Survey
+            Homeosetu Homeopathic Software/Mobile App/AI Survey
           </h1>
           <div className="space-y-4 mb-12">
             <p className="text-xl text-gray-600">
               Most homeopathic software is designed without asking the people
-              who use it every day. Developers and owners talk to the stalwarts
-              — not to the many homeopaths who run unique, individual practices.
+              who use it every day.{" "}
             </p>
             <p className="text-xl text-gray-600">
-              But those individual voices matter most. Take the world’s first
-              5-minute survey by Homeosetu to help shape a smarter,
-              practitioner-friendly homeopathic app for mobile, web, and laptop.
+              Developers and owners talk to the stalwarts — not to the many
+              homeopaths who run unique, individual practices. But those
+              individual voices matter most.
+            </p>
+            <p className="text-xl text-gray-600">
+              Take the world’s first 5-minute survey by Homeosetu to help shape
+              a smarter, practitioner-friendly homeopathic app for mobile, web,
+              and laptop.
             </p>
             <p className="text-xl text-gray-600">
               Join the waitlist for the Phase 1 launch.
               <br />
               Join us in co-creating a better tool:
-            </p>
-            <p className="text-xl text-gray-600">
+              <br />
               Your suggestions — we build.
               <br />
               Your difficulties — we solve.
               <br />
               Your uncured queries — we guide you to cure.
               <br />
+            </p>
+            <p className="text-xl text-gray-600">
               Designed by everyday homeopaths, for everyday homeopaths, of
               everyday homeopaths.
               <br />
@@ -653,14 +668,14 @@ export default function SoftwarePage() {
                     </Label>
 
                     {[
-                      "Case recording",
+                      "Case recording (history taking)",
                       "Translating patient language into rubrics",
                       "Clinical Examination",
                       "Finalizing diagnosis / totality",
-                      "Searching repertory / Materia medica",
-                      "Choosing potency & repetition",
-                      "Follow-up remedy management",
-                      "Writing prescriptions",
+                      "Searching repertory or Materia medica",
+                      "Choosing potency and repetition schedule",
+                      "Remedy management in follow-ups (tracking responses)",
+                      "Writing prescriptions / patient instructions",
                       "Suggesting Diet & Regimen",
                       "Other",
                     ].map((item) => (
@@ -708,34 +723,35 @@ export default function SoftwarePage() {
                     <div>
                       <Label>
                         {language === "Eng"
-                          ? "Which homeopathy apps/software do you use?"
-                          : "आप कौन से होम्योपैथी ऐप/सॉफ्टवेयर उपयोग करते हैं? (सभी लागू करें; नाम लिखें)"}{" "}
+                          ? "Which homeopathy apps/software/AI do you use?"
+                          : "आप कौन से होम्योपैथी ऐप/सॉफ्टवेयर/AI उपयोग करते हैं (सभी लागू करें; नाम लिखें)"}{" "}
                       </Label>
-
-                      <div className="flex items-center gap-2 mt-2">
-                        <input
-                          type="radio"
-                          name="softwareUsed"
-                          value="laptop"
-                          checked={form.softwareUsed === "laptop"}
+                      <div>
+                        <Label>• Laptop</Label>
+                        <Textarea
+                          name="softwareUsedLaptop"
+                          rows={2}
+                          value={form.softwareUsedLaptop}
                           onChange={handleChange}
                         />
-                        <label>Laptop</label>
                       </div>
-
-                      <div className="flex items-center gap-2 mt-2">
-                        <input
-                          type="radio"
-                          name="softwareUsed"
-                          value="mobile"
-                          checked={form.softwareUsed === "mobile"}
-                          onChange={handleChange}
-                        />
-                        <label>Mobile</label>
-                      </div>
-                      {errors.softwareUsed && (
+                      {errors.softwareUsedLaptop && (
                         <p className="text-xs text-red-500">
-                          {errors.softwareUsed}
+                          {errors.softwareUsedLaptop}
+                        </p>
+                      )}
+                      <div>
+                        <Label>• Mobile</Label>
+                        <Textarea
+                          name="softwareUsedMobile"
+                          rows={2}
+                          value={form.softwareUsedMobile}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      {errors.softwareUsedMobile && (
+                        <p className="text-xs text-red-500">
+                          {errors.softwareUsedMobile}
                         </p>
                       )}
                     </div>
@@ -746,7 +762,7 @@ export default function SoftwarePage() {
                           ? "Most helpful feature(s) in your current app(s)"
                           : "वर्तमान ऐप/सॉफ्टवेयर की सबसे मददगार विशेषताएँ (संक्षेप)"}
                       </div>
-                      <Label>Most Helpful Features (Laptop)</Label>
+                      <Label>• Most Helpful Features (Laptop)</Label>
                       <Textarea
                         name="helpfulLaptop"
                         rows={2}
@@ -761,7 +777,7 @@ export default function SoftwarePage() {
                     )}
 
                     <div>
-                      <Label>Most Helpful Features (Mobile)</Label>
+                      <Label>• Most Helpful Features (Mobile)</Label>
                       <Textarea
                         name="helpfulMobile"
                         rows={2}
@@ -1043,13 +1059,13 @@ export default function SoftwarePage() {
                       className="block w-full border rounded-md px-3 py-2"
                     >
                       <option value="">Select</option>
-                      <option>Free with ads; paid upgrade</option>
-                      <option>Freemium</option>
-                      <option>One-time purchase</option>
+                      <option>Free with ads; paid upgrade to remove ads</option>
+                      <option>Freemium (basic free; paid premium features)</option>
+                      <option>One-time purchase (lifetime license)</option>
                       <option>Subscription (monthly)</option>
                       <option>Subscription (annual)</option>
-                      <option>I would not pay</option>
-                      <option>Not sure</option>
+                      <option>I would not pay for this app</option>
+                      <option>Not sure / need more info</option>
                     </select>
                   </div>
                   {errors.paymentModel && (
@@ -1128,6 +1144,9 @@ export default function SoftwarePage() {
                       : "मैं Homeosetu Software LLP द्वारा फोन, ईमेल या टेक्स्ट के माध्यम से उत्पाद अपडेट और परीक्षण के लिए संपर्क किए जाने के लिए सहमत हूँ; मैंने प्रायवेसी पॉलिसी और टर्म्स ऑफ़ सर्विस पढ़ लिए हैं."}
                   </span>
                 </div>
+                {errors.consent1 && (
+                  <p className="text-xs text-red-500">{errors.consent1}</p>
+                )}
 
                 <div className="flex items-center gap-2">
                   <input
@@ -1151,10 +1170,7 @@ export default function SoftwarePage() {
                     onChange={handleCheckChange}
                   />
                   <span>
-                    By submitting this survey, you allow Homeosetu to use your
-                    answers (without your name or contact details) to improve
-                    our app and share insights—like stats or anonymous quotes—on
-                    social media or in presentations.
+                    {language === "Eng" ? "By submitting this survey, you allow Homeosetu to use youranswers (without your name or contact details) to improveour app and share insights—like stats or anonymous quotes—onsocial media or in presentations." : "•	इस सर्वेक्षण को जमा करके, आप Homeosetu को अपनी जवाबों का उपयोग करने की अनुमति देते हैं (आपका नाम या संपर्क विवरण शामिल किए बिना) ताकि हमारे ऐप को बेहतर बनाया जा सके और आंकड़े या गुमनाम उद्धरण जैसे जानकारी सोशल मीडिया या प्रस्तुतियों में साझा की जा सकें।"}
                   </span>
                 </div>
 
@@ -1163,7 +1179,7 @@ export default function SoftwarePage() {
                   disabled={isSubmitting}
                   className="w-full mt-4"
                 >
-                  {isSubmitting ? "Submitting..." : "Submit Survey"}
+                  {isSubmitting ? "Submitting..." : "ENTER SURVEY AND JOIN THE WAITLIST"}
                 </Button>
               </form>
             </CardContent>

@@ -227,7 +227,8 @@ model Survey {
   timeConsumption     String[]
   timeConsumptionOther String?
 
-  softwareUsed        String?
+  softwareUsedLaptop        String?
+  softwareUsedMobile        String?
   helpfulLaptop       String?
   helpfulMobile       String?
 

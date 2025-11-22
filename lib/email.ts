@@ -108,7 +108,8 @@ export async function sendSurveyEmail({
   timeConsumption,
   timeConsumptionOther,
 
-  softwareUsed,
+  softwareUsedLaptop,
+  softwareUsedMobile,
   helpfulLaptop,
   helpfulMobile,
 
@@ -148,7 +149,8 @@ export async function sendSurveyEmail({
   timeConsumption: string[];
   timeConsumptionOther: string;
 
-  softwareUsed: string;
+  softwareUsedLaptop: string;
+  softwareUsedMobile: string;
   helpfulLaptop: string;
   helpfulMobile: string;
 
@@ -217,7 +219,8 @@ export async function sendSurveyEmail({
           <hr />
 
           <h3>Software Usage</h3>
-          <p><strong>Which homeopathy apps/software do you use?:</strong> ${softwareUsed}</p>
+          <p><strong>Which homeopathy apps/software do you use? (Laptop):</strong> ${softwareUsedLaptop}</p>
+          <p><strong>Which homeopathy apps/software do you use? (Mobile):</strong> ${softwareUsedMobile}</p>
           <p><strong>Most Helpful Features (Laptop):</strong> ${helpfulLaptop}</p>
           <p><strong>Most Helpful Features (Mobile):</strong> ${helpfulMobile}</p>
 
