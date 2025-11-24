@@ -124,6 +124,7 @@ export default function SoftwarePage() {
   const [language, setLanguage] = useState("Eng");
   const [errors, setErrors] = useState<SurveyErrors>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const FORM_EXPIRATION_DAYS = 15;
 
   // --------------------------------------------------------
   //  INPUT CHANGE HANDLER
@@ -321,6 +322,8 @@ export default function SoftwarePage() {
           consent2: false,
           consent3: false,
         });
+        localStorage.removeItem("surveyFormData");
+        localStorage.removeItem("surveyFormTimestamp");
         toast.success("Survey submitted successfully!");
       } else {
         toast.error("There are errors in your submission.");
@@ -359,6 +362,39 @@ export default function SoftwarePage() {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const saved = localStorage.getItem("surveyFormData");
+    const savedTime = localStorage.getItem("surveyFormTimestamp");
+
+    if (saved && savedTime) {
+      const ageInDays =
+        (Date.now() - parseInt(savedTime, 10)) / (1000 * 60 * 60 * 24);
+
+      if (ageInDays < FORM_EXPIRATION_DAYS) {
+        try {
+          setForm(JSON.parse(saved));
+        } catch {}
+      } else {
+        localStorage.removeItem("surveyFormData");
+        localStorage.removeItem("surveyFormTimestamp");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handler = setTimeout(() => {
+      localStorage.setItem("surveyFormData", JSON.stringify(form));
+      localStorage.setItem("surveyFormTimestamp", Date.now().toString());
+    }, 4000);
+
+    return () => clearTimeout(handler);
+  }, [form]);
+
   return (
     <div className="min-h-[80vh] relative overflow-hidden bg-gradient-to-b from-purple-50 to-white">
       <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply opacity-10 animate-blob"></div>
@@ -1060,7 +1096,9 @@ export default function SoftwarePage() {
                     >
                       <option value="">Select</option>
                       <option>Free with ads; paid upgrade to remove ads</option>
-                      <option>Freemium (basic free; paid premium features)</option>
+                      <option>
+                        Freemium (basic free; paid premium features)
+                      </option>
                       <option>One-time purchase (lifetime license)</option>
                       <option>Subscription (monthly)</option>
                       <option>Subscription (annual)</option>
@@ -1170,7 +1208,9 @@ export default function SoftwarePage() {
                     onChange={handleCheckChange}
                   />
                   <span>
-                    {language === "Eng" ? "By submitting this survey, you allow Homeosetu to use youranswers (without your name or contact details) to improveour app and share insights—like stats or anonymous quotes—onsocial media or in presentations." : "•	इस सर्वेक्षण को जमा करके, आप Homeosetu को अपनी जवाबों का उपयोग करने की अनुमति देते हैं (आपका नाम या संपर्क विवरण शामिल किए बिना) ताकि हमारे ऐप को बेहतर बनाया जा सके और आंकड़े या गुमनाम उद्धरण जैसे जानकारी सोशल मीडिया या प्रस्तुतियों में साझा की जा सकें।"}
+                    {language === "Eng"
+                      ? "By submitting this survey, you allow Homeosetu to use youranswers (without your name or contact details) to improveour app and share insights—like stats or anonymous quotes—onsocial media or in presentations."
+                      : "•	इस सर्वेक्षण को जमा करके, आप Homeosetu को अपनी जवाबों का उपयोग करने की अनुमति देते हैं (आपका नाम या संपर्क विवरण शामिल किए बिना) ताकि हमारे ऐप को बेहतर बनाया जा सके और आंकड़े या गुमनाम उद्धरण जैसे जानकारी सोशल मीडिया या प्रस्तुतियों में साझा की जा सकें।"}
                   </span>
                 </div>
 
@@ -1179,7 +1219,9 @@ export default function SoftwarePage() {
                   disabled={isSubmitting}
                   className="w-full mt-4"
                 >
-                  {isSubmitting ? "Submitting..." : "ENTER SURVEY AND JOIN THE WAITLIST"}
+                  {isSubmitting
+                    ? "Submitting..."
+                    : "ENTER SURVEY AND JOIN THE WAITLIST"}
                 </Button>
               </form>
             </CardContent>
