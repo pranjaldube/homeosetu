@@ -390,7 +390,7 @@ export default function SoftwarePage() {
     const handler = setTimeout(() => {
       localStorage.setItem("surveyFormData", JSON.stringify(form));
       localStorage.setItem("surveyFormTimestamp", Date.now().toString());
-    }, 4000);
+    }, 1000);
 
     return () => clearTimeout(handler);
   }, [form]);
