@@ -19,7 +19,7 @@ export default function LoyaltyPointsField() {
         htmlFor="loyaltyPoints"
         className="text-sm font-medium text-gray-600"
       >
-        Loyalty Points
+        Homeosetu Points
       </label>
       <Input
         id="loyaltyPoints"
