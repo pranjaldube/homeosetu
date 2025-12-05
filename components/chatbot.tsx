@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './chatbot.css';
 
 // Type definitions
@@ -150,15 +150,11 @@ const Chatbot: React.FC = () => {
         setMessages(prev => [...prev, botMessage]);
       }
     }
-  };
-
-  const scrollToBottom = () => {
     const container = messagesContainerRef.current;
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
   };
-
 
   const handleReset = (): void => {
     setCurrentNodeId('level1');
@@ -172,7 +168,7 @@ const Chatbot: React.FC = () => {
       <div className="chatbot-container">
         <div className="chatbot-header">
           <h2>Chatbot</h2>
-          {/* <button onClick={handleReset} className="reset-btn">Reset</button> */}
+          <button onClick={handleReset} className="reset-btn">Reset</button>
         </div>
         <div className="chatbot-messages">
           <div className="message bot">
@@ -182,10 +178,6 @@ const Chatbot: React.FC = () => {
       </div>
     );
   }
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
 
   return (
     <div className="chatbot-container">
