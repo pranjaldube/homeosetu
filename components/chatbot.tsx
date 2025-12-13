@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './chatbot.css';
 
 // Type definitions
@@ -120,6 +120,45 @@ const Chatbot: React.FC = () => {
   ]);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // Encode function to protect copied content
+  const encodeText = (text: string): string => {
+    // Base64 encode the text and add watermark
+    const encoded = btoa(unescape(encodeURIComponent(text)));
+    return encoded;
+  };
+
+  // Handle copy event
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const handleCopy = (e: ClipboardEvent) => {
+      const selection = window.getSelection();
+      if (!selection || selection.toString().length === 0) return;
+
+      const selectedText = selection.toString();
+      const encodedText = encodeText(selectedText);
+
+      e.clipboardData?.setData('text/plain', encodedText);
+      e.preventDefault();
+    };
+
+    container.addEventListener('copy', handleCopy);
+    return () => {
+      container.removeEventListener('copy', handleCopy);
+    };
+  }, []);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (container) {
+      // Use setTimeout to ensure DOM has updated
+      setTimeout(() => {
+        container.scrollTop = container.scrollHeight;
+      }, 0);
+    }
+  }, [messages]);
 
   const getCurrentNode = (): ChatNode | null => {
     return chatbotGraph[currentNodeId] || null;
@@ -149,10 +188,6 @@ const Chatbot: React.FC = () => {
         const botMessage: Message = { type: 'bot', text: nextNode.question };
         setMessages(prev => [...prev, botMessage]);
       }
-    }
-    const container = messagesContainerRef.current;
-    if (container) {
-      container.scrollTop = container.scrollHeight;
     }
   };
 
@@ -188,6 +223,9 @@ const Chatbot: React.FC = () => {
 
       <div>
         <div className="chatbot-messages" ref={messagesContainerRef}>
+          <div className="chatbot-logo">
+            <img src="/logo.svg" alt="Homeosetu Logo" />
+          </div>
           {messages.map((msg, index) => (
             <div key={index} className={`message ${msg.type}`}>
               <div className="message-content">
@@ -217,4 +255,3 @@ const Chatbot: React.FC = () => {
 };
 
 export default Chatbot;
-
