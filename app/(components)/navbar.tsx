@@ -27,12 +27,16 @@ const MAIN_LINKS = [
       { title: "Clinical Resource", href: "/support/clinical-resource" },
       { title: "Mentorship", href:"/support/mentorship"},
       { title: "Blog", href: "/support/blog" },
+      {
+        title: "Kent Repertory",
+        href: "/kent-repertory",
+        external: true,
+      },
       // { title: "Forum", href: "/support/forum" },
     ],
   },
   { title: "Contact Us", href: "/contact-us" },
   { title: "Cart", href: "/cart" },
-
 ];
 
 export const Navbar: React.FC = () => {
