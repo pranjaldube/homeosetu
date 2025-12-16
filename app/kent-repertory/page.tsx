@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Head from "next/head"
+import Chatbot from "@/components/chatbot"
 
 import {
   KENT_REPERTORY,
@@ -514,6 +515,35 @@ class KentRepertoryApp {
     })
     console.log("filteredRubrics",filteredRubrics)
     this.renderRubrics(filteredRubrics)
+  }
+
+  applyChatQuery(intent: string | { query?: string; chapterId?: string }) {
+    const query = typeof intent === "string" ? intent : intent?.query || ""
+    const chapterId = typeof intent === "string" ? undefined : intent?.chapterId
+
+    if (chapterId) {
+      this.selectChapter(chapterId)
+      // For pure chapter selection from chatbot, clear any previous search text
+      if (!query && this.searchInput) {
+        this.searchInput.value = ""
+      }
+    } else if (!this.currentChapter) {
+      const firstChapterWithRubrics = KENT_REPERTORY.chapters.find(
+        (ch) => ch.rubrics.length > 0
+      )
+      if (firstChapterWithRubrics) {
+        this.selectChapter(firstChapterWithRubrics.id)
+      }
+    }
+
+    if (query && this.searchInput) {
+      this.searchInput.value = query
+      this.handleSearch(query)
+    } else if (query) {
+      this.handleSearch(query)
+    }
+
+    this.rubricsContainer?.scrollIntoView({ behavior: "smooth", block: "start" })
   }
 
   navigateToCrossRef(chapterName: string, rubricName: string) {
@@ -2242,12 +2272,120 @@ body::before {
         justify-content: center;
     }
 }
+
+/* ============================================
+   Chatbot Shortcut
+   ============================================ */
+.chatbot-fab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff;
+    font-size: 24px;
+    box-shadow: 0 12px 30px rgba(79, 70, 229, 0.35);
+    cursor: pointer;
+    z-index: 120;
+    display: grid;
+    place-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chatbot-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(79, 70, 229, 0.4);
+}
+
+.kent-chatbot-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 130;
+}
+
+.kent-chatbot-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 96px;
+    width: 380px;
+    max-width: calc(100% - 32px);
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
+    z-index: 140;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.kent-chatbot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: #f5f4ff;
+    color: #2d2a44;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.kent-chatbot-close {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #5046e5;
+    line-height: 1;
+}
 `
 
 const KentRepertoryPage = () => {
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false)
+  const KENT_CHAT_QUERY_KEY = "kentChatQuery"
+
+  const handleKentRedirect = (intent?: string | { query?: string; chapterId?: string }) => {
+    if (typeof window === "undefined") return
+
+    const payload =
+      typeof intent === "string" ? { query: intent } : intent || undefined
+
+    const app = (window as any).kentApp as KentRepertoryApp | undefined
+    // If Kent app is already loaded (we're on this page), just apply without closing chatbot
+    if (app && typeof app.applyChatQuery === "function") {
+      app.applyChatQuery(payload || "")
+      return
+    }
+
+    // Otherwise we're being called from another page: persist intent and navigate
+    if (payload) {
+      sessionStorage.setItem(KENT_CHAT_QUERY_KEY, JSON.stringify(payload))
+    } else {
+      sessionStorage.removeItem(KENT_CHAT_QUERY_KEY)
+    }
+
+    window.location.href = "/kent-repertory"
+  }
+
   useEffect(() => {
     if (typeof window === "undefined") return
-    new KentRepertoryApp()
+    const app = new KentRepertoryApp()
+    ;(window as any).kentApp = app
+
+    const storedQuery = sessionStorage.getItem(KENT_CHAT_QUERY_KEY)
+    if (storedQuery) {
+      let parsed: string | { query?: string; chapterId?: string } = storedQuery
+      try {
+        parsed = JSON.parse(storedQuery)
+      } catch {
+        parsed = storedQuery
+      }
+      app.applyChatQuery(parsed)
+      sessionStorage.removeItem(KENT_CHAT_QUERY_KEY)
+    }
   }, [])
 
   return (
@@ -2428,6 +2566,36 @@ const KentRepertoryPage = () => {
         </div>
 
         <div className="overlay" id="overlay" />
+
+        <button
+          className="chatbot-fab"
+          onClick={() => setIsChatbotOpen(true)}
+          aria-label="Open chatbot"
+        >
+          💬
+        </button>
+
+        {isChatbotOpen && (
+          <>
+            <div
+              className="kent-chatbot-backdrop"
+              onClick={() => setIsChatbotOpen(false)}
+            />
+            <div className="kent-chatbot-panel">
+              <div className="kent-chatbot-header">
+                <span>Ask Homeosetu</span>
+                <button
+                  className="kent-chatbot-close"
+                  onClick={() => setIsChatbotOpen(false)}
+                  aria-label="Close chatbot"
+                >
+                  ×
+                </button>
+              </div>
+              <Chatbot onKentRequested={handleKentRedirect} />
+            </div>
+          </>
+        )}
       </div>
 
       <style jsx global>{KENT_STYLES}</style>

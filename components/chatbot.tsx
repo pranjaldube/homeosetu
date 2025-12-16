@@ -1,13 +1,15 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './chatbot.css';
+import { KENT_REPERTORY } from "@/app/kent-repertory/data";
 
 // Type definitions
 type OptionNode = {
   label: string;
   next?: string;       // id of next node
   message?: string;    // final output if no next node
+  kentChapterId?: string;
 };
 
 type ChatNode = {
@@ -26,8 +28,12 @@ type Message = {
   text: string;
 };
 
-// Static data structure with graph-based approach
-const chatbotGraph: ChatbotGraph = {
+type ChatbotProps = {
+  onKentRequested?: (payload?: { query?: string; chapterId?: string }) => void;
+};
+
+// Static data structure with graph-based approach. Kent chapters are injected below.
+const baseChatbotGraph: ChatbotGraph = {
   level1: {
     id: "level1",
     question: "Hello! Please select an option to get started:",
@@ -38,6 +44,7 @@ const chatbotGraph: ChatbotGraph = {
       d: { label: "4. Homeosetu Clinical Prescriber", next: "level1D" },
       e: { label: "5. Remedy Relationship", next: "level1E" },
       f: { label: "6. Homeosetu Remedy Validator", next: "level1F" },
+      g: { label: "Kent Repertory: Browse chapters", next: "kentChapters" },
     }
   },
 
@@ -110,10 +117,36 @@ const chatbotGraph: ChatbotGraph = {
     options: {
       a: { label: "Done", next: 'level1' }
     }
+  },
+  kentChapters: {
+    id: "kentChapters",
+    question: "Choose a Kent Repertory chapter to open:",
+    options: {} // populated at runtime
   }
 };
 
-const Chatbot: React.FC = () => {
+const KENT_KEYWORDS = ["kent", "repertory", "rubric", "remedy"];
+
+const Chatbot: React.FC<ChatbotProps> = ({ onKentRequested }) => {
+  const chatbotGraph = useMemo<ChatbotGraph>(() => {
+    const chapterOptions = (KENT_REPERTORY?.chapters || []).reduce<Record<string, OptionNode>>((acc, ch, idx) => {
+      const key = String.fromCharCode(97 + idx); // a, b, c...
+      acc[key] = {
+        label: `${ch.name}`,
+        message: `Opening Kent chapter: ${ch.name}`,
+        kentChapterId: ch.id,
+      };
+      return acc;
+    }, {});
+
+    return {
+      ...baseChatbotGraph,
+      kentChapters: {
+        ...baseChatbotGraph.kentChapters,
+        options: chapterOptions,
+      },
+    };
+  }, []);
   const [currentNodeId, setCurrentNodeId] = useState<string>('level1');
   const [messages, setMessages] = useState<Message[]>([
     { type: 'bot', text: chatbotGraph.level1.question }
@@ -164,10 +197,26 @@ const Chatbot: React.FC = () => {
     return chatbotGraph[currentNodeId] || null;
   };
 
+  const isKentRelated = (text: string): boolean => {
+    const normalized = text.toLowerCase();
+    return KENT_KEYWORDS.some((keyword) => normalized.includes(keyword));
+  };
+
   const handleOptionClick = (optionKey: string, option: OptionNode): void => {
     // Add user message
     const userMessage: Message = { type: 'user', text: option.label };
     setMessages(prev => [...prev, userMessage]);
+
+    if (onKentRequested && (isKentRelated(option.label) || option.kentChapterId)) {
+      const payload: { query?: string; chapterId?: string } = {};
+
+      if (option.kentChapterId) {
+        // For Kent chapter selection, only change chapter – no search query
+        payload.chapterId = option.kentChapterId;
+      } 
+
+      onKentRequested(payload);
+    }
 
     // Check if this is a final option (has message, no next)
     if (option.message && !option.next) {
