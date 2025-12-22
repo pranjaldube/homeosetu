@@ -5,15 +5,18 @@ import Head from "next/head"
 import Chatbot from "@/components/chatbot"
 
 import {
-  KENT_REPERTORY,
+  REPERTORY_BOOKS,
   getRemedyFullName,
   formatRemedy,
   Rubric,
   Note,
+  KentRepertory,
+  Chapter,
 } from "./data"
 
 class KentRepertoryApp {
   currentChapter: any = null
+  currentBookIndex = 0
   userNotes: Record<string, { text: string; timestamp: number }[]> = {}
   compareMode = false
   selectedRubrics: Set<string> = new Set()
@@ -50,12 +53,20 @@ class KentRepertoryApp {
     this.init()
   }
 
+  getCurrentBook(): KentRepertory {
+    return REPERTORY_BOOKS[this.currentBookIndex]
+  }
+
+  getCurrentChapters() {
+    return this.getCurrentBook().chapters
+  }
+
   init() {
     this.cacheElements()
     this.renderChapters()
     this.bindEvents()
 
-    const firstChapterWithRubrics = KENT_REPERTORY.chapters.find(
+    const firstChapterWithRubrics = this.getCurrentChapters().find(
       (ch) => ch.rubrics.length > 0
     )
     
@@ -137,29 +148,73 @@ class KentRepertoryApp {
 
   renderChapters() {
     if (!this.chaptersList) return
-    this.chaptersList.innerHTML = KENT_REPERTORY.chapters
-      .map(
-        (chapter) => `
-            <div class="chapter-item" data-chapter-id="${chapter.id}">
-                <div class="chapter-icon">${chapter.icon}</div>
-                <div class="chapter-info">
-                    <div class="chapter-name">${chapter.name}</div>
-                    <div class="chapter-rubric-count">${chapter.rubrics.length} rubrics</div>
-                </div>
-            </div>
-        `
-      )
-      .join("")
 
+    const currentBook = this.getCurrentBook()
+
+    this.chaptersList.innerHTML = `
+      <div class="book-selector-wrapper">
+        <select id="bookDropdown" class="book-dropdown">
+          ${REPERTORY_BOOKS.map(
+            (book, idx) =>
+              `<option value="${idx}" ${
+                idx === this.currentBookIndex ? "selected" : ""
+              }>${book.bookName}</option>`
+          ).join("")}
+        </select>
+      </div>
+      <div class="chapters-list-inner">
+        ${currentBook.chapters
+          .map(
+            (chapter) => `
+          <div class="chapter-item ${
+            this.currentChapter && this.currentChapter.id === chapter.id
+              ? "active"
+              : ""
+          }" data-book-index="${this.currentBookIndex}" data-chapter-id="${chapter.id}">
+            <div class="chapter-icon-small">${chapter.icon}</div>
+            <div class="chapter-info">
+              <div class="chapter-name">${chapter.name}</div>
+              <div class="chapter-rubric-count">${chapter.rubrics.length} rubrics</div>
+            </div>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `
+
+    // Bind book dropdown
+    const bookDropdown = this.chaptersList.querySelector(
+      "#bookDropdown"
+    ) as HTMLSelectElement | null
+    if (bookDropdown) {
+      bookDropdown.addEventListener("change", (e) => {
+        const idx = Number((e.target as HTMLSelectElement).value)
+        this.currentBookIndex = idx
+        this.renderChapters()
+        const firstChapterWithRubrics = this.getCurrentChapters().find(
+          (ch) => ch.rubrics.length > 0
+        )
+        if (firstChapterWithRubrics) {
+          this.selectChapter(firstChapterWithRubrics.id)
+        }
+      })
+    }
+
+    // Bind chapter clicks
     this.chaptersList.querySelectorAll(".chapter-item").forEach((item) => {
       item.addEventListener("click", () => {
+        const bookIndex = Number(
+          (item as HTMLElement).dataset.bookIndex || 0
+        )
+        this.currentBookIndex = bookIndex
         this.selectChapter((item as HTMLElement).dataset.chapterId || "")
       })
     })
   }
 
   selectChapter(chapterId: string) {
-    this.currentChapter = KENT_REPERTORY.chapters.find(
+    this.currentChapter = this.getCurrentChapters().find(
       (ch) => ch.id === chapterId
     )
     if (!this.currentChapter) return
@@ -245,8 +300,9 @@ class KentRepertoryApp {
           </div>
         </div>
         <div class="rubric-content">
-          ${this.createRemediesSectionHTML(rubric.remedies)}
+          ${this.createRemediesSectionHTML(rubric.remedies, rubric.id)}
           ${rubric.meaning ? this.createMeaningSectionHTML(rubric.meaning) : ""}
+          ${this.createRemedyDetailsPlaceholderHTML(rubric.id)}
           ${this.createNotesSectionHTML(allNotes)}
           ${rubric.crossReferences ? this.createCrossRefSectionHTML(rubric.crossReferences) : ""}
           ${this.createAddNoteSectionHTML(rubric.id)}
@@ -255,7 +311,7 @@ class KentRepertoryApp {
     `
   }
 
-  createRemediesSectionHTML(remedies: Rubric["remedies"]) {
+  createRemediesSectionHTML(remedies: Rubric["remedies"], rubricId: string) {
     const grade3 = remedies.filter((r) => r.grade === 3)
     const grade2 = remedies.filter((r) => r.grade === 2)
     const grade1 = remedies.filter((r) => r.grade === 1)
@@ -264,7 +320,7 @@ class KentRepertoryApp {
       group
         .map(
           (r) => `
-            <span class="remedy-tag grade-${grade}" data-abbr="${r.abbr}" data-grade="${r.grade}">
+            <span class="remedy-tag grade-${grade}" data-abbr="${r.abbr}" data-grade="${r.grade}" data-rubric-id="${rubricId}">
               <span class="grade-indicator"></span>
               ${r.abbr}
             </span>
@@ -289,6 +345,49 @@ class KentRepertoryApp {
       <div class="meaning-section">
         <div class="section-label">Meaning</div>
         <p class="meaning-text">${meaning}</p>
+      </div>
+    `
+  }
+
+  createRemedyDetailsPlaceholderHTML(rubricId: string) {
+    return `
+      <div class="remedy-details-container" data-rubric-id="${rubricId}"></div>
+    `
+  }
+
+  createRemedyDetailsHTML(abbr: string, grade: number, rubricId: string) {
+    const fullName = getRemedyFullName(abbr)
+    const gradeText = `${grade} Mark${grade > 1 ? "s" : ""} (${this.getGradeDescription(grade)})`
+    
+    // Placeholder data - can be replaced with actual remedy data structure later
+    const description = `Detailed description for ${fullName} (${abbr}) in this context.`
+    const causes = `Common causes and clinical conditions associated with ${fullName}.`
+    const investigations = `Recommended investigations: Complete blood count, specific diagnostic tests, etc.`
+
+    return `
+      <div class="remedy-details-section" data-abbr="${abbr}">
+        <div class="remedy-details-header">
+          <div class="remedy-details-title">
+            <span class="remedy-name-display">${fullName}</span>
+            <span class="remedy-abbr-display">${abbr}</span>
+            <span class="remedy-grade-badge grade-${grade}">${gradeText}</span>
+          </div>
+          <button class="close-remedy-details" data-rubric-id="${rubricId}" data-abbr="${abbr}">×</button>
+        </div>
+        <div class="remedy-details-content">
+          <div class="remedy-detail-item">
+            <div class="remedy-detail-label">Description</div>
+            <p class="remedy-detail-text">${description}</p>
+          </div>
+          <div class="remedy-detail-item">
+            <div class="remedy-detail-label">Causes for Clinical Condition</div>
+            <p class="remedy-detail-text">${causes}</p>
+          </div>
+          <div class="remedy-detail-item">
+            <div class="remedy-detail-label">Investigations to Advise</div>
+            <p class="remedy-detail-text">${investigations}</p>
+          </div>
+        </div>
       </div>
     `
   }
@@ -388,7 +487,20 @@ class KentRepertoryApp {
       tag.addEventListener("click", (e) => {
         e.stopPropagation()
         const el = tag as HTMLElement
-        this.showRemedyPanel(el.dataset.abbr || "", el.dataset.grade || "1")
+        const abbr = el.dataset.abbr || ""
+        const grade = Number(el.dataset.grade || "1")
+        const rubricId = el.dataset.rubricId || ""
+        this.showRemedyDetails(abbr, grade, rubricId)
+      })
+    })
+
+    // Bind close buttons for remedy details
+    this.rubricsContainer?.querySelectorAll(".close-remedy-details").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation()
+        const el = btn as HTMLElement
+        const rubricId = el.dataset.rubricId || ""
+        this.hideRemedyDetails(rubricId)
       })
     })
 
@@ -461,6 +573,109 @@ class KentRepertoryApp {
     })
   }
 
+  showRemedyDetails(abbr: string, grade: number, rubricId: string) {
+    const container = this.rubricsContainer?.querySelector(
+      `.remedy-details-container[data-rubric-id="${rubricId}"]`
+    ) as HTMLElement | null
+
+    if (!container) return
+
+    // Check if details already exist for this remedy
+    const existingDetails = container.querySelector(
+      `.remedy-details-section[data-abbr="${abbr}"]`
+    ) as HTMLElement | null
+
+    // Accordion behavior: Close and remove all other remedy details in this rubric
+    const allDetails = container.querySelectorAll(".remedy-details-section")
+    allDetails.forEach((details) => {
+      const detailsEl = details as HTMLElement
+      if (detailsEl.dataset.abbr !== abbr) {
+        detailsEl.classList.remove("active")
+        // Remove from DOM after animation completes
+        setTimeout(() => {
+          if (!detailsEl.classList.contains("active")) {
+            detailsEl.remove()
+          }
+        }, 300)
+      }
+    })
+
+    if (existingDetails) {
+      // Toggle visibility - if already active, close it; otherwise open it
+      if (existingDetails.classList.contains("active")) {
+        existingDetails.classList.remove("active")
+        // Remove from DOM after animation completes
+        setTimeout(() => {
+          if (!existingDetails.classList.contains("active") && existingDetails.parentNode) {
+            existingDetails.remove()
+          }
+        }, 300)
+      } else {
+        existingDetails.classList.add("active")
+        setTimeout(() => {
+          existingDetails.scrollIntoView({ behavior: "smooth", block: "nearest" })
+        }, 10)
+      }
+      return
+    }
+
+    // Create and insert new remedy details (all others already closed above)
+    const detailsHTML = this.createRemedyDetailsHTML(abbr, grade, rubricId)
+    container.insertAdjacentHTML("beforeend", detailsHTML)
+
+    // Make it visible
+    const newDetails = container.querySelector(
+      `.remedy-details-section[data-abbr="${abbr}"]`
+    ) as HTMLElement | null
+    if (newDetails) {
+      setTimeout(() => {
+        newDetails.classList.add("active")
+        newDetails.scrollIntoView({ behavior: "smooth", block: "nearest" })
+      }, 10)
+    }
+
+    // Bind close button
+    const closeBtn = container.querySelector(
+      `.close-remedy-details[data-abbr="${abbr}"]`
+    )
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation()
+        this.hideRemedyDetails(rubricId, abbr)
+      })
+    }
+  }
+
+  hideRemedyDetails(rubricId: string, abbr?: string) {
+    const container = this.rubricsContainer?.querySelector(
+      `.remedy-details-container[data-rubric-id="${rubricId}"]`
+    ) as HTMLElement | null
+
+    if (!container) return
+
+    if (abbr) {
+      // Hide specific remedy details
+      const details = container.querySelector(
+        `.remedy-details-section[data-abbr="${abbr}"]`
+      ) as HTMLElement | null
+      if (details) {
+        details.classList.remove("active")
+        setTimeout(() => {
+          details.remove()
+        }, 300)
+      }
+    } else {
+      // Hide all remedy details for this rubric
+      const allDetails = container.querySelectorAll(".remedy-details-section")
+      allDetails.forEach((details) => {
+        ;(details as HTMLElement).classList.remove("active")
+        setTimeout(() => {
+          details.remove()
+        }, 300)
+      })
+    }
+  }
+
   showRemedyPanel(abbr: string, grade: string | number) {
     const fullName = getRemedyFullName(abbr)
     const g = Number(grade) || 1
@@ -528,10 +743,11 @@ class KentRepertoryApp {
         this.searchInput.value = ""
       }
     } else if (!this.currentChapter) {
-      const firstChapterWithRubrics = KENT_REPERTORY.chapters.find(
-        (ch) => ch.rubrics.length > 0
+      const firstChapterWithRubrics = REPERTORY_BOOKS[0].chapters.find(
+        (ch: Chapter) => ch.rubrics.length > 0
       )
       if (firstChapterWithRubrics) {
+        this.currentBookIndex = 0
         this.selectChapter(firstChapterWithRubrics.id)
       }
     }
@@ -547,9 +763,14 @@ class KentRepertoryApp {
   }
 
   navigateToCrossRef(chapterName: string, rubricName: string) {
-    const chapter = KENT_REPERTORY.chapters.find(
-      (ch) => ch.name.toLowerCase() === chapterName.toLowerCase()
-    )
+    const chapter =
+      REPERTORY_BOOKS[0].chapters.find(
+        (ch: Chapter) =>
+          ch.name.toLowerCase() === chapterName.toLowerCase()
+      ) ||
+      this.getCurrentChapters().find(
+        (ch: Chapter) => ch.name.toLowerCase() === chapterName.toLowerCase()
+      )
     if (!chapter) return
 
     this.selectChapter(chapter.id)
@@ -1370,6 +1591,132 @@ body::before {
     font-size: 0.95rem;
     color: var(--text-secondary);
     line-height: 1.7;
+}
+
+/* Remedy Details Section */
+.remedy-details-container {
+    margin-bottom: 0;
+    min-height: 0;
+}
+
+.remedy-details-container:empty {
+    display: none;
+}
+
+.remedy-details-container:not(:empty) {
+    margin-bottom: var(--space-lg);
+}
+
+.remedy-details-section {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-primary);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+}
+
+.remedy-details-section.active {
+    opacity: 1;
+    max-height: 2000px;
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.remedy-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.remedy-details-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.remedy-name-display {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.remedy-abbr-display {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.remedy-grade-badge {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.remedy-grade-badge.grade-1 {
+    background: rgba(100, 180, 220, 0.15);
+    color: var(--gradation-1);
+}
+
+.remedy-grade-badge.grade-2 {
+    background: rgba(232, 185, 75, 0.15);
+    color: var(--gradation-2);
+}
+
+.remedy-grade-badge.grade-3 {
+    background: rgba(224, 92, 92, 0.15);
+    color: var(--gradation-3);
+}
+
+.close-remedy-details {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+}
+
+.close-remedy-details:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.remedy-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.remedy-detail-item {
+    padding: var(--space-sm);
+}
+
+.remedy-detail-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.remedy-detail-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
 }
 
 /* Notes Section */
@@ -2240,6 +2587,65 @@ body::before {
     font-size: 0.9rem;
 }
 
+/* Book accordion in sidebar */
+/* Book Dropdown Selector */
+.book-selector-wrapper {
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.book-dropdown {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-primary);
+    background: var(--bg-secondary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%234f46e5' stroke-width='2' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.book-dropdown:hover {
+    border-color: var(--accent-tertiary);
+    box-shadow: var(--shadow-soft);
+}
+
+.book-dropdown:focus {
+    outline: none;
+    border-color: var(--accent-tertiary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.chapters-list-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.chapter-icon-small {
+    width: 28px;
+    height: 28px;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.chapter-item.active .chapter-icon-small {
+    background: var(--accent-secondary);
+}
+
 /* ============================================
    Compare Mode Responsive
    ============================================ */
@@ -2436,8 +2842,7 @@ const KentRepertoryPage = () => {
         <main className="main-content">
           <aside className="chapters-sidebar">
             <div className="sidebar-header">
-              <h2>Chapters</h2>
-              <span className="chapter-count">37 Chapters</span>
+              <h2>Books & Chapters</h2>
             </div>
             <div className="chapters-list" id="chaptersList" />
           </aside>
