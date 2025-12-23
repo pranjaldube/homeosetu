@@ -5,6 +5,7 @@ import {
   BarChart,
   ResponsiveContainer,
   XAxis,
+  Tooltip,
   YAxis,
 } from "recharts";
 
