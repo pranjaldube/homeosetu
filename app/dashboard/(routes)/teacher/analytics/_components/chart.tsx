@@ -92,6 +92,8 @@ const CustomXAxisTick = ({ x, y, payload }: any) => {
    Chart Component
 ======================= */
 export const Chart = ({ data }: ChartProps) => {
+
+  console.log("chartData",data)
   return (
     <Card className="p-4">
       <ResponsiveContainer width="100%" height={350}>
