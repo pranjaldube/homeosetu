@@ -368,8 +368,7 @@ class KentRepertoryApp {
       <div class="remedy-details-section" data-abbr="${abbr}">
         <div class="remedy-details-header">
           <div class="remedy-details-title">
-            <span class="remedy-name-display">${fullName}</span>
-            <span class="remedy-abbr-display">${abbr}</span>
+            <span class="remedy-name-display">${abbr}</span>
             <span class="remedy-grade-badge grade-${grade}">${gradeText}</span>
           </div>
           <button class="close-remedy-details" data-rubric-id="${rubricId}" data-abbr="${abbr}">×</button>
@@ -377,15 +376,7 @@ class KentRepertoryApp {
         <div class="remedy-details-content">
           <div class="remedy-detail-item">
             <div class="remedy-detail-label">Description</div>
-            <p class="remedy-detail-text">${description}</p>
-          </div>
-          <div class="remedy-detail-item">
-            <div class="remedy-detail-label">Causes for Clinical Condition</div>
-            <p class="remedy-detail-text">${causes}</p>
-          </div>
-          <div class="remedy-detail-item">
-            <div class="remedy-detail-label">Investigations to Advise</div>
-            <p class="remedy-detail-text">${investigations}</p>
+            <p class="remedy-detail-text">${fullName}</p>
           </div>
         </div>
       </div>
