@@ -69,7 +69,7 @@ class KentRepertoryApp {
     const firstChapterWithRubrics = this.getCurrentChapters().find(
       (ch) => ch.rubrics.length > 0
     )
-    
+
     if (firstChapterWithRubrics) {
       this.selectChapter(firstChapterWithRubrics.id)
     }
@@ -129,7 +129,7 @@ class KentRepertoryApp {
         document
           .querySelectorAll(".nav-btn")
           .forEach((b) => b.classList.remove("active"))
-        ;(e.target as HTMLElement).classList.add("active")
+          ; (e.target as HTMLElement).classList.add("active")
       })
     })
 
@@ -155,22 +155,20 @@ class KentRepertoryApp {
       <div class="book-selector-wrapper">
         <select id="bookDropdown" class="book-dropdown">
           ${REPERTORY_BOOKS.map(
-            (book, idx) =>
-              `<option value="${idx}" ${
-                idx === this.currentBookIndex ? "selected" : ""
-              }>${book.bookName}</option>`
-          ).join("")}
+      (book, idx) =>
+        `<option value="${idx}" ${idx === this.currentBookIndex ? "selected" : ""
+        }>${book.bookName}</option>`
+    ).join("")}
         </select>
       </div>
       <div class="chapters-list-inner">
         ${currentBook.chapters
-          .map(
-            (chapter) => `
-          <div class="chapter-item ${
-            this.currentChapter && this.currentChapter.id === chapter.id
+        .map(
+          (chapter) => `
+          <div class="chapter-item ${this.currentChapter && this.currentChapter.id === chapter.id
               ? "active"
               : ""
-          }" data-book-index="${this.currentBookIndex}" data-chapter-id="${chapter.id}">
+            }" data-book-index="${this.currentBookIndex}" data-chapter-id="${chapter.id}">
             <div class="chapter-icon-small">${chapter.icon}</div>
             <div class="chapter-info">
               <div class="chapter-name">${chapter.name}</div>
@@ -178,8 +176,8 @@ class KentRepertoryApp {
             </div>
           </div>
         `
-          )
-          .join("")}
+        )
+        .join("")}
       </div>
     `
 
@@ -358,7 +356,7 @@ class KentRepertoryApp {
   createRemedyDetailsHTML(abbr: string, grade: number, rubricId: string) {
     const fullName = getRemedyFullName(abbr)
     const gradeText = `${grade} Mark${grade > 1 ? "s" : ""} (${this.getGradeDescription(grade)})`
-    
+
     // Placeholder data - can be replaced with actual remedy data structure later
     const description = `Detailed description for ${fullName} (${abbr}) in this context.`
     const causes = `Common causes and clinical conditions associated with ${fullName}.`
@@ -504,7 +502,7 @@ class KentRepertoryApp {
         ) as HTMLElement | null
         if (inputArea) {
           inputArea.classList.add("active")
-          ;(btn as HTMLElement).style.display = "none"
+            ; (btn as HTMLElement).style.display = "none"
         }
       })
     })
@@ -659,7 +657,7 @@ class KentRepertoryApp {
       // Hide all remedy details for this rubric
       const allDetails = container.querySelectorAll(".remedy-details-section")
       allDetails.forEach((details) => {
-        ;(details as HTMLElement).classList.remove("active")
+        ; (details as HTMLElement).classList.remove("active")
         setTimeout(() => {
           details.remove()
         }, 300)
@@ -719,7 +717,7 @@ class KentRepertoryApp {
         return true
       return false
     })
-    console.log("filteredRubrics",filteredRubrics)
+    console.log("filteredRubrics", filteredRubrics)
     this.renderRubrics(filteredRubrics)
   }
 
@@ -2673,29 +2671,111 @@ body::before {
 /* ============================================
    Chatbot Shortcut
    ============================================ */
+@keyframes chatbot-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 .chatbot-fab {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: none;
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    color: #fff;
-    font-size: 24px;
-    box-shadow: 0 12px 30px rgba(79, 70, 229, 0.35);
-    cursor: pointer;
-    z-index: 120;
-    display: grid;
-    place-items: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: fixed;
+  right: 24px;
+  bottom: 65px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff;
+  font-size: 24px;
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.35);
+  cursor: pointer;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  animation: chatbot-bounce 2.5s ease-in-out infinite;
 }
 
 .chatbot-fab:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 36px rgba(79, 70, 229, 0.4);
+  animation: none; /* stops bouncing on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(79, 70, 229, 0.4);
 }
+
+.chatbot-fab-wrapper {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 120;
+}
+
+.chatbot-note {
+  position: absolute;
+  bottom: 110px;
+  right: -24px;
+  background: #111827;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+}
+
+/* small arrow */
+.chatbot-note::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #111827 transparent transparent transparent;
+}
+
+
+@keyframes scroll-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.scroll-top-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 8px; /* sits nicely above chatbot button */
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #111827;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  z-index: 120;
+  animation: scroll-bounce 3s ease-in-out infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+}
+
+.scroll-top-btn:hover {
+  animation: none;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
 
 .kent-chatbot-backdrop {
     position: fixed;
@@ -2770,7 +2850,7 @@ const KentRepertoryPage = () => {
   useEffect(() => {
     if (typeof window === "undefined") return
     const app = new KentRepertoryApp()
-    ;(window as any).kentApp = app
+      ; (window as any).kentApp = app
 
     const storedQuery = sessionStorage.getItem(KENT_CHAT_QUERY_KEY)
     if (storedQuery) {
@@ -2963,13 +3043,25 @@ const KentRepertoryPage = () => {
 
         <div className="overlay" id="overlay" />
 
+        <div className="chatbot-fab-wrapper">
+          <div className="chatbot-note">Need help?</div>
+
+          <button
+            className="chatbot-fab"
+            onClick={() => setIsChatbotOpen(true)}
+            aria-label="Open chatbot"
+          >
+            💬
+          </button>
+        </div>
         <button
-          className="chatbot-fab"
-          onClick={() => setIsChatbotOpen(true)}
-          aria-label="Open chatbot"
-        >
-          💬
-        </button>
+  className="scroll-top-btn"
+  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+  aria-label="Scroll to top"
+>
+  ⬆️
+</button>
+
 
         {isChatbotOpen && (
           <>
