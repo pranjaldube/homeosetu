@@ -8,6 +8,7 @@ import { CSPostHogProvider } from "@/components/providers/posthog-provider"
 import GeoCurrencyInitializer from "@/components/GeoCurrencyInitializer"
 import { generateMetadata, generateStructuredData } from "@/lib/seo"
 import UserLoyalty from "@/components/userLoyalty"
+import ImagePopup from "@/components/imagePopup"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -68,6 +69,7 @@ export default function RootLayout({
             <ConfettiProvider />
             <ToastProvider />
             <UserLoyalty />
+            <ImagePopup />
             {children}
           </body>
         </html>
