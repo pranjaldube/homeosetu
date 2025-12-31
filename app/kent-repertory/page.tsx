@@ -19,7 +19,7 @@ class KentRepertoryApp {
   currentBookIndex = 0
   userNotes: Record<string, { text: string; timestamp: number }[]> = {}
   compareMode = false
-  selectedRubrics: Set<string> = new Set()
+  selectedRubrics: Array<{ rubricId: string; chapterId: string; bookIndex: number }> = []
 
   chaptersList: HTMLElement | null = null
   rubricsContainer: HTMLElement | null = null
@@ -228,12 +228,17 @@ class KentRepertoryApp {
 
     this.updateBreadcrumb()
     this.renderRubrics(this.currentChapter.rubrics)
+    // Update selection UI for all rubrics in the newly selected chapter
+    this.currentChapter.rubrics.forEach((rubric: Rubric) => {
+      this.updateSelectionUI(rubric.id)
+    })
   }
 
   updateBreadcrumb() {
     if (!this.currentChapter || !this.breadcrumb) return
+    const currentBook = this.getCurrentBook()
     this.breadcrumb.innerHTML = `
-      <span class="crumb">Kent Repertory</span>
+      <span class="crumb">${currentBook.bookName}</span>
       <span class="separator">›</span>
       <span class="crumb active">${this.currentChapter.name}</span>
     `
@@ -283,7 +288,7 @@ class KentRepertoryApp {
     const remedyCount = rubric.remedies.length
 
     const allNotes = [...(rubric.notes || []), ...this.getUserNotesForRubric(rubric.id)]
-    const isSelected = this.selectedRubrics.has(rubric.id)
+    const isSelected = this.isRubricSelected(rubric.id)
 
     return `
       <div class="rubric-accordion ${isSelected ? "selected" : ""}" data-rubric-id="${rubric.id}">
@@ -354,14 +359,16 @@ class KentRepertoryApp {
   }
 
   createRemedyDetailsHTML(abbr: string, grade: number, rubricId: string) {
-    const fullName = getRemedyFullName(abbr)
+    // const rubricName = rubricId.split("-").pop()
+    // if (rubricName !== "clarke") return null
+    console.log("rubricId",rubricId)
+    const fullName = getRemedyFullName(abbr, rubricId)
     const gradeText = `${grade} Mark${grade > 1 ? "s" : ""} (${this.getGradeDescription(grade)})`
 
     // Placeholder data - can be replaced with actual remedy data structure later
     const description = `Detailed description for ${fullName} (${abbr}) in this context.`
     const causes = `Common causes and clinical conditions associated with ${fullName}.`
     const investigations = `Recommended investigations: Complete blood count, specific diagnostic tests, etc.`
-
     return `
       <div class="remedy-details-section" data-abbr="${abbr}">
         <div class="remedy-details-header">
@@ -610,7 +617,10 @@ class KentRepertoryApp {
 
     // Create and insert new remedy details (all others already closed above)
     const detailsHTML = this.createRemedyDetailsHTML(abbr, grade, rubricId)
-    container.insertAdjacentHTML("beforeend", detailsHTML)
+
+if (detailsHTML) {
+  container.insertAdjacentHTML("beforeend", detailsHTML)
+}
 
     // Make it visible
     const newDetails = container.querySelector(
@@ -836,10 +846,34 @@ class KentRepertoryApp {
   }
 
   toggleRubricSelection(rubricId: string) {
-    if (this.selectedRubrics.has(rubricId)) this.selectedRubrics.delete(rubricId)
-    else this.selectedRubrics.add(rubricId)
+    if (!this.currentChapter) return
+    
+    const existingIndex = this.selectedRubrics.findIndex(
+      (r) => r.rubricId === rubricId && 
+             r.chapterId === this.currentChapter.id && 
+             r.bookIndex === this.currentBookIndex
+    )
+    
+    if (existingIndex >= 0) {
+      this.selectedRubrics.splice(existingIndex, 1)
+    } else {
+      this.selectedRubrics.push({
+        rubricId,
+        chapterId: this.currentChapter.id,
+        bookIndex: this.currentBookIndex,
+      })
+    }
     this.updateSelectionUI(rubricId)
     this.updateCompareBar()
+  }
+
+  isRubricSelected(rubricId: string): boolean {
+    if (!this.currentChapter) return false
+    return this.selectedRubrics.some(
+      (r) => r.rubricId === rubricId && 
+             r.chapterId === this.currentChapter.id && 
+             r.bookIndex === this.currentBookIndex
+    )
   }
 
   updateSelectionUI(rubricId: string) {
@@ -849,28 +883,31 @@ class KentRepertoryApp {
     const checkbox = this.rubricsContainer?.querySelector(
       `.rubric-checkbox[data-rubric-id="${rubricId}"]`
     )
-    const isSelected = this.selectedRubrics.has(rubricId)
+    const isSelected = this.isRubricSelected(rubricId)
     accordion?.classList.toggle("selected", isSelected)
     checkbox?.classList.toggle("checked", isSelected)
   }
 
   updateCompareBar() {
-    const count = this.selectedRubrics.size
+    const count = this.selectedRubrics.length
     if (this.selectedCount)
       this.selectedCount.textContent = `${count} rubric${count !== 1 ? "s" : ""} selected`
     if (this.viewComparisonBtn) this.viewComparisonBtn.disabled = count < 2
   }
 
   clearRubricSelection() {
-    this.selectedRubrics.forEach((rubricId) => {
-      this.updateSelectionUI(rubricId)
-    })
-    this.selectedRubrics.clear()
+    // Update UI for all currently visible rubrics
+    if (this.currentChapter) {
+      this.currentChapter.rubrics.forEach((rubric: Rubric) => {
+        this.updateSelectionUI(rubric.id)
+      })
+    }
+    this.selectedRubrics = []
     this.updateCompareBar()
   }
 
   showComparisonPanel() {
-    if (this.selectedRubrics.size < 2) return
+    if (this.selectedRubrics.length < 2) return
     const selectedRubricsData = this.getSelectedRubricsData()
     const commonRemedies = this.findCommonRemedies(selectedRubricsData)
     this.renderSelectedRubricsList(selectedRubricsData)
@@ -886,22 +923,45 @@ class KentRepertoryApp {
     }
   }
 
-  getSelectedRubricsData() {
-    if (!this.currentChapter) return []
-    return this.currentChapter.rubrics.filter((rubric: Rubric) =>
-      this.selectedRubrics.has(rubric.id)
-    )
+  getSelectedRubricsData(): Array<{ rubric: Rubric; chapter: Chapter; book: KentRepertory }> {
+    const result: Array<{ rubric: Rubric; chapter: Chapter; book: KentRepertory }> = []
+    
+    this.selectedRubrics.forEach((selected) => {
+      const book = REPERTORY_BOOKS[selected.bookIndex]
+      if (!book) return
+      
+      const chapter = book.chapters.find((ch) => ch.id === selected.chapterId)
+      if (!chapter) return
+      
+      const rubric = chapter.rubrics.find((r) => r.id === selected.rubricId)
+      if (rubric) {
+        result.push({ rubric, chapter, book })
+      }
+    })
+    
+    return result
   }
 
-  findCommonRemedies(rubrics: Rubric[]) {
-    if (rubrics.length < 2) return []
+  findCommonRemedies(selectedData: Array<{ rubric: Rubric; chapter: Chapter; book: KentRepertory }>) {
+    if (selectedData.length < 2) return []
     const remedyMap = new Map<
       string,
-      { abbr: string; fullName: string; occurrences: { rubricId: string; rubricName: string; grade: number }[] }
+      { 
+        abbr: string
+        fullName: string
+        occurrences: { 
+          rubricId: string
+          rubricName: string
+          chapterName: string
+          bookName: string
+          grade: number 
+        }[] 
+      }
     >()
 
-    rubrics.forEach((rubric) => {
+    selectedData.forEach(({ rubric, chapter, book }) => {
       rubric.remedies.forEach((remedy) => {
+        console.log(remedy)
         const key = remedy.abbr.toLowerCase()
         if (!remedyMap.has(key)) {
           remedyMap.set(key, {
@@ -913,13 +973,15 @@ class KentRepertoryApp {
         remedyMap.get(key)?.occurrences.push({
           rubricId: rubric.id,
           rubricName: rubric.name,
+          chapterName: chapter.name,
+          bookName: book.bookName,
           grade: remedy.grade,
         })
       })
     })
 
     const commonRemedies = Array.from(remedyMap.values()).filter(
-      (remedy) => remedy.occurrences.length === rubrics.length
+      (remedy) => remedy.occurrences.length === selectedData.length
     )
 
     commonRemedies.sort((a, b) => {
@@ -931,13 +993,18 @@ class KentRepertoryApp {
     return commonRemedies
   }
 
-  renderSelectedRubricsList(rubrics: Rubric[]) {
+  renderSelectedRubricsList(selectedData: Array<{ rubric: Rubric; chapter: Chapter; book: KentRepertory }>) {
     if (!this.selectedRubricsList) return
-    this.selectedRubricsList.innerHTML = rubrics
+    this.selectedRubricsList.innerHTML = selectedData
       .map(
-        (rubric) => `
+        ({ rubric, chapter, book }) => `
         <div class="selected-rubric-item">
-          <span class="selected-rubric-name">${rubric.name}</span>
+          <div style="flex: 1;">
+            <div class="selected-rubric-name">${rubric.name}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+              ${book.bookName} › ${chapter.name}
+            </div>
+          </div>
           <span class="selected-rubric-count">${rubric.remedies.length} remedies</span>
         </div>
       `
@@ -966,7 +1033,7 @@ class KentRepertoryApp {
             (occ: any) => `
             <div class="grade-in-rubric">
               <span class="grade-dot g${occ.grade}"></span>
-              <span class="rubric-ref" title="${occ.rubricName}">${occ.rubricName}</span>
+              <span class="rubric-ref" title="${occ.bookName} › ${occ.chapterName} › ${occ.rubricName}">${occ.rubricName}</span>
             </div>
           `
           )

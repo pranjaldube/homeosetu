@@ -42,9 +42,10 @@ const baseChatbotGraph: ChatbotGraph = {
       b: { label: "2. Homeosetu Case Analytics", next: "level1B" },
       c: { label: "3. Homeosetu Diagnostic Map", next: "level1C" },
       d: { label: "4. Homeosetu Clinical Prescriber", next: "level1D" },
-      e: { label: "5. Remedy Relationship", next: "level1E" },
+      e: { label: "5. Remedy Relationship", next: "remedyRelationship" },
       f: { label: "6. Homeosetu Remedy Validator", next: "level1F" },
       g: { label: "Kent Repertory: Browse chapters", next: "kentChapters" },
+      // h: { label: "Remedy Relationships", next:"remedyRelationship"}
     }
   },
 
@@ -111,6 +112,99 @@ const baseChatbotGraph: ChatbotGraph = {
       b: { label: "Go Back", next: "level1" }
     }
   },
+  remedyRelationship:{
+    id:"remedyRelationship",
+    question:"Select the remedy from below",
+    options:{
+      a:{label: "Abrot.", next: "abrot"},
+      b:{label: "Acet.ac.", next: "acet"}
+    }
+  },
+  abrot:{
+    id:"abrot",
+    question:"Select the Types",
+    options:{
+      a:{label:"Allen",next:"allen"},
+      b:{label:"Boericke",next:"boericke"},
+      c:{label:"Boger",next:"boger"}
+    }
+  },
+  acet:{
+    id:"acet",
+    question:"Please choose from the following option",
+    options:{
+      a: { label: "Coming Soon", next: "level3" },
+      b: { label: "Go Back", next: "level1" }
+    }
+  },
+  allen:{
+    id:"allen",
+    question:"Please choose from the following option",
+    options:{
+      a: { label: "a.Follows Well After :", next: "allen-a" },
+      b: { label: "b.Similar to :", next: "allen-b" },
+      c: { label: "Go Back", next:"abrot"}
+    }
+  },
+  "allen-a":{
+    id:"allen-a",
+    question:`Acon.(in pleurisy, when a pressing sensation remains in affected side impeding respiration)
+    
+    Bry.(in pleurisy, when a pressing sensation remains in affected side impeding respiration)`,
+    options: {
+      a: { label: "Done", next: 'level1' },
+      b: { label: "Go Back", next: 'allen'}
+    }
+  },
+  "allen-b":{
+    id:"allen-b",
+    question:`Iod.(Marasmus of children with marked emaciation, especially of legs)(losing flesh while eating well)
+    Tub.(Marasmus of children with marked emaciation, especially of legs)(losing flesh while eating well)
+    Sanic.(Marasmus of children with marked emaciation, especially of legs) (skin of neck is flabby and hangs loose in folds) (losing flesh while eating well)
+    Aeth. (In marasmus head weak, cannot hold it up)
+    Agar.,(itching Chilblains)
+    Op. (Face old,Pale,Wrinkled)`,
+    options: {
+      a: { label: "Done", next: 'level1' },
+      b: { label: "Go Back", next: 'allen'}
+    }
+  },
+  boericke:{
+    id:"boericke",
+    question:"Please choose from the following option",
+    options:{
+      a: { label: "a. Compare :", next: "boericke-a" },
+      b: { label: "b. Go Back", next:"abrot"}
+    }
+  },
+  "boericke-a":{
+    id:"boericke-a",
+    question:`Scroph-n.,
+    Bry.,
+    Stel.,
+    Benz-ac., (in gout)
+    Nat-m., ( in marasmus)
+    Iod.(in marasmus)`,
+    options: {
+      a: { label: "Done", next: 'level1' },
+    }
+  },
+  boger:{
+    id:"boger",
+    question:"Please choose from the following option",
+    options:{
+      a: { label: "a. RELATED", next: "boger-a" },
+      b: { label: "b. Go Back", next:"abrot"}
+    }
+  },
+  "boger-a":{
+    id:"boger-a",
+    question:`Chin.,
+    Led.,`,
+    options: {
+      a: { label: "Done", next: 'level1' },
+    }
+  },
   level3: {
     id: "level3",
     question: "the selected content will be coming soon as it is getting refined and want to make sure that correct and accurate content reaches to our users",
@@ -125,7 +219,8 @@ const baseChatbotGraph: ChatbotGraph = {
   }
 };
 
-const KENT_KEYWORDS = ["kent", "repertory", "rubric", "remedy"];
+// const KENT_KEYWORDS = ["kent", "repertory", "rubric", "remedy"];
+const KENT_KEYWORDS:any = []
 
 const Chatbot: React.FC<ChatbotProps> = ({ onKentRequested }) => {
   const chatbotGraph = useMemo<ChatbotGraph>(() => {
@@ -199,7 +294,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onKentRequested }) => {
 
   const isKentRelated = (text: string): boolean => {
     const normalized = text.toLowerCase();
-    return KENT_KEYWORDS.some((keyword) => normalized.includes(keyword));
+    return KENT_KEYWORDS.some((keyword:any) => normalized.includes(keyword));
   };
 
   const handleOptionClick = (optionKey: string, option: OptionNode): void => {
