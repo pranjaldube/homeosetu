@@ -5,6 +5,7 @@ import {
   BarChart,
   ResponsiveContainer,
   XAxis,
+  Tooltip,
   YAxis,
 } from "recharts";
 
@@ -17,34 +18,59 @@ interface ChartProps {
   }[];
 }
 
-export const Chart = ({
-  data
-}: ChartProps) => {
+export const Chart = ({ data }: ChartProps) => {
+
   return (
-    <Card>
+    <Card className="p-4">
       <ResponsiveContainer width="100%" height={350}>
-        <BarChart data={data}>
+        <BarChart
+          data={data}
+          margin={{ top: 20, right: 20, left: 10, bottom: 80 }}
+        >
           <XAxis
             dataKey="name"
-            stroke="#888888"
-            fontSize={12}
             tickLine={false}
             axisLine={false}
+            interval={0}
+            tick={({ x, y, payload }) => (
+              <g transform={`translate(${x},${y})`}>
+                <text
+                  x={0}
+                  y={0}
+                  dy={16}
+                  textAnchor="end"
+                  fill="#555"
+                  transform="rotate(-35)"
+                  style={{ fontSize: 11 }}
+                >
+                  {payload.value.length > 25
+                    ? payload.value.slice(0, 25) + "…"
+                    : payload.value}
+                </text>
+              </g>
+            )}
           />
+
           <YAxis
-            stroke="#888888"
-            fontSize={12}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value) => `$${value}`}
+            fontSize={12}
+            tickFormatter={(value) => `₹${value}`}
           />
+
+          <Tooltip
+            formatter={(value: number) => [`₹${value}`, "Revenue"]}
+            labelStyle={{ fontWeight: "bold" }}
+          />
+
           <Bar
             dataKey="total"
             fill="#0369a1"
-            radius={[4, 4, 0, 0]}
+            radius={[6, 6, 0, 0]}
+            maxBarSize={90}
           />
         </BarChart>
       </ResponsiveContainer>
     </Card>
-  )
-}
+  );
+};
