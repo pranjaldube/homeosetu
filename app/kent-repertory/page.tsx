@@ -361,7 +361,7 @@ class KentRepertoryApp {
   createRemedyDetailsHTML(abbr: string, grade: number, rubricId: string) {
     // const rubricName = rubricId.split("-").pop()
     // if (rubricName !== "clarke") return null
-    console.log("rubricId",rubricId)
+
     const fullName = getRemedyFullName(abbr, rubricId)
     const gradeText = `${grade} Mark${grade > 1 ? "s" : ""} (${this.getGradeDescription(grade)})`
 
@@ -618,9 +618,9 @@ class KentRepertoryApp {
     // Create and insert new remedy details (all others already closed above)
     const detailsHTML = this.createRemedyDetailsHTML(abbr, grade, rubricId)
 
-if (detailsHTML) {
-  container.insertAdjacentHTML("beforeend", detailsHTML)
-}
+    if (detailsHTML) {
+      container.insertAdjacentHTML("beforeend", detailsHTML)
+    }
 
     // Make it visible
     const newDetails = container.querySelector(
@@ -847,13 +847,13 @@ if (detailsHTML) {
 
   toggleRubricSelection(rubricId: string) {
     if (!this.currentChapter) return
-    
+
     const existingIndex = this.selectedRubrics.findIndex(
-      (r) => r.rubricId === rubricId && 
-             r.chapterId === this.currentChapter.id && 
-             r.bookIndex === this.currentBookIndex
+      (r) => r.rubricId === rubricId &&
+        r.chapterId === this.currentChapter.id &&
+        r.bookIndex === this.currentBookIndex
     )
-    
+
     if (existingIndex >= 0) {
       this.selectedRubrics.splice(existingIndex, 1)
     } else {
@@ -870,9 +870,9 @@ if (detailsHTML) {
   isRubricSelected(rubricId: string): boolean {
     if (!this.currentChapter) return false
     return this.selectedRubrics.some(
-      (r) => r.rubricId === rubricId && 
-             r.chapterId === this.currentChapter.id && 
-             r.bookIndex === this.currentBookIndex
+      (r) => r.rubricId === rubricId &&
+        r.chapterId === this.currentChapter.id &&
+        r.bookIndex === this.currentBookIndex
     )
   }
 
@@ -925,20 +925,20 @@ if (detailsHTML) {
 
   getSelectedRubricsData(): Array<{ rubric: Rubric; chapter: Chapter; book: KentRepertory }> {
     const result: Array<{ rubric: Rubric; chapter: Chapter; book: KentRepertory }> = []
-    
+
     this.selectedRubrics.forEach((selected) => {
       const book = REPERTORY_BOOKS[selected.bookIndex]
       if (!book) return
-      
+
       const chapter = book.chapters.find((ch) => ch.id === selected.chapterId)
       if (!chapter) return
-      
+
       const rubric = chapter.rubrics.find((r) => r.id === selected.rubricId)
       if (rubric) {
         result.push({ rubric, chapter, book })
       }
     })
-    
+
     return result
   }
 
@@ -946,16 +946,16 @@ if (detailsHTML) {
     if (selectedData.length < 2) return []
     const remedyMap = new Map<
       string,
-      { 
+      {
         abbr: string
         fullName: string
-        occurrences: { 
+        occurrences: {
           rubricId: string
           rubricName: string
           chapterName: string
           bookName: string
-          grade: number 
-        }[] 
+          grade: number
+        }[]
       }
     >()
 
@@ -1012,6 +1012,21 @@ if (detailsHTML) {
       .join("")
   }
 
+  // downloadHTML(content: string, filename: string) {
+  //   const blob = new Blob([content], { type: "text/html;charset=utf-8;" })
+  //   const url = URL.createObjectURL(blob)
+
+  //   const a = document.createElement("a")
+  //   a.href = url
+  //   a.download = filename
+  //   document.body.appendChild(a)
+  //   a.click()
+
+  //   document.body.removeChild(a)
+  //   URL.revokeObjectURL(url)
+  // }
+
+
   renderCommonRemedies(commonRemedies: any[]) {
     if (this.commonCount) this.commonCount.textContent = `${commonRemedies.length} found`
 
@@ -1043,10 +1058,10 @@ if (detailsHTML) {
           <div class="common-remedy-card" data-abbr="${remedy.abbr}">
             <div class="common-remedy-header">
               <div>
-                <div class="common-remedy-name">${remedy.fullName}</div>
                 <div class="common-remedy-abbr">${remedy.abbr}</div>
+
+
               </div>
-              <div class="total-grade-score">${totalScore}</div>
             </div>
             <div class="common-remedy-grades">
               ${gradesHTML}
@@ -1055,6 +1070,28 @@ if (detailsHTML) {
         `
       })
       .join("")
+
+    // this.commonRemediesList
+    //   .querySelectorAll(".common-remedy-card")
+    //   .forEach((card) => {
+    //     card.addEventListener("click", () => {
+    //       const element = card as HTMLElement
+    //       const abbr = element.dataset.abbr ?? ""
+    //       if (!abbr) return
+
+    //       // 🔽 DOWNLOAD ONLY THIS CARD'S HTML
+    //       const htmlToDownload = element.outerHTML
+    //       this.downloadHTML(htmlToDownload, `${abbr}.html`)
+
+    //       // Existing logic (optional)
+    //       const remedy = commonRemedies.find((r) => r.abbr === abbr)
+    //       if (remedy) {
+    //         const maxGrade = Math.max(...remedy.occurrences.map((o: any) => o.grade))
+    //         this.showRemedyPanel(abbr, maxGrade)
+    //       }
+    //     })
+    //   })
+
 
     this.commonRemediesList.querySelectorAll(".common-remedy-card").forEach((card) => {
       card.addEventListener("click", () => {
@@ -2393,6 +2430,11 @@ body::before {
 /* ============================================
    Comparison Panel
    ============================================ */
+.common-remedies-icon {
+    width: 50px;
+    height: 50px;
+    margin-right:10px;
+}
 .comparison-panel {
     position: fixed;
     right: -450px;
@@ -2533,7 +2575,8 @@ body::before {
 
 .common-remedy-abbr {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    font-weight: 600;
+    color: var(--text-primary);
     font-family: monospace;
 }
 
@@ -2964,15 +3007,15 @@ const KentRepertoryPage = () => {
               </div>
             </div>
             <nav className="main-nav">
-              <button className="nav-btn active" data-section="repertory">
+              {/* <button className="nav-btn active" data-section="repertory">
                 Repertory
-              </button>
-              <button className="nav-btn" data-section="remedies">
+              </button> */}
+              {/* <button className="nav-btn" data-section="remedies">
                 Remedies Index
               </button>
               <button className="nav-btn" data-section="notes">
                 My Notes
-              </button>
+              </button> */}
             </nav>
           </div>
         </header>
@@ -3074,9 +3117,7 @@ const KentRepertoryPage = () => {
         <div className="comparison-panel" id="comparisonPanel">
           <div className="panel-header comparison-header">
             <div className="comparison-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M16 3h5v5M8 3H3v5M3 16v5h5M21 16v5h-5" />
-              </svg>
+              <img src="/images/icons-192x192.png" alt="logo" className="common-remedies-icon" />
               <h3>Common Remedies</h3>
             </div>
             <button className="close-panel" id="closeComparison">
@@ -3122,12 +3163,12 @@ const KentRepertoryPage = () => {
           </button>
         </div>
         <button
-  className="scroll-top-btn"
-  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-  aria-label="Scroll to top"
->
-  ⬆️
-</button>
+          className="scroll-top-btn"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Scroll to top"
+        >
+          ⬆️
+        </button>
 
 
         {isChatbotOpen && (
