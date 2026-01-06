@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import Head from "next/head"
+import { useUser } from "@clerk/nextjs"
 import Chatbot from "@/components/chatbot"
 
 import {
@@ -14,10 +15,23 @@ import {
   Chapter,
 } from "./data"
 
+const MIND_CHAPTER_ID = "mind"
+
+type MindNotePayload = {
+  id: string
+  rubricId: string
+  chapterId: string
+  text: string
+  createdAt: string
+  userName?: string
+}
+
 class KentRepertoryApp {
+  userId?: string
+  userName?: string
   currentChapter: any = null
   currentBookIndex = 0
-  userNotes: Record<string, { text: string; timestamp: number }[]> = {}
+  userNotes: Record<string, { text: string; timestamp: number; userName?: string }[]> = {}
   compareMode = false
   selectedRubrics: Array<{ rubricId: string; chapterId: string; bookIndex: number }> = []
 
@@ -48,7 +62,9 @@ class KentRepertoryApp {
   commonCount: HTMLElement | null = null
   comparisonEmpty: HTMLElement | null = null
 
-  constructor() {
+  constructor(options?: { userId?: string; userName?: string }) {
+    this.userId = options?.userId
+    this.userName = options?.userName
     this.userNotes = this.loadUserNotes()
     this.init()
   }
@@ -71,7 +87,7 @@ class KentRepertoryApp {
     )
 
     if (firstChapterWithRubrics) {
-      this.selectChapter(firstChapterWithRubrics.id)
+      void this.selectChapter(firstChapterWithRubrics.id)
     }
   }
 
@@ -194,7 +210,7 @@ class KentRepertoryApp {
           (ch) => ch.rubrics.length > 0
         )
         if (firstChapterWithRubrics) {
-          this.selectChapter(firstChapterWithRubrics.id)
+          void this.selectChapter(firstChapterWithRubrics.id)
         }
       })
     }
@@ -206,12 +222,12 @@ class KentRepertoryApp {
           (item as HTMLElement).dataset.bookIndex || 0
         )
         this.currentBookIndex = bookIndex
-        this.selectChapter((item as HTMLElement).dataset.chapterId || "")
+        void this.selectChapter((item as HTMLElement).dataset.chapterId || "")
       })
     })
   }
 
-  selectChapter(chapterId: string) {
+  async selectChapter(chapterId: string) {
     this.currentChapter = this.getCurrentChapters().find(
       (ch) => ch.id === chapterId
     )
@@ -225,6 +241,10 @@ class KentRepertoryApp {
           (item as HTMLElement).dataset.chapterId === chapterId
         )
       )
+
+    if (this.shouldUseServerNotes(chapterId)) {
+      await this.syncMindNotesFromServer()
+    }
 
     this.updateBreadcrumb()
     this.renderRubrics(this.currentChapter.rubrics)
@@ -537,7 +557,7 @@ class KentRepertoryApp {
     this.rubricsContainer
       ?.querySelectorAll(".note-action-btn.save")
       .forEach((btn) => {
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", async (e) => {
           e.stopPropagation()
           const inputArea = (btn as HTMLElement).closest(
             ".note-input-area"
@@ -547,7 +567,10 @@ class KentRepertoryApp {
           const textarea = inputArea.querySelector("textarea") as HTMLTextAreaElement
           const text = textarea?.value.trim()
           if (!rubricId || !text) return
-          this.addUserNote(rubricId, text)
+
+          const saved = await this.addUserNote(rubricId, text)
+          if (!saved) return
+
           textarea.value = ""
           inputArea.classList.remove("active")
           const addBtn = this.rubricsContainer?.querySelector(
@@ -736,7 +759,7 @@ class KentRepertoryApp {
     const chapterId = typeof intent === "string" ? undefined : intent?.chapterId
 
     if (chapterId) {
-      this.selectChapter(chapterId)
+      void this.selectChapter(chapterId)
       // For pure chapter selection from chatbot, clear any previous search text
       if (!query && this.searchInput) {
         this.searchInput.value = ""
@@ -747,7 +770,7 @@ class KentRepertoryApp {
       )
       if (firstChapterWithRubrics) {
         this.currentBookIndex = 0
-        this.selectChapter(firstChapterWithRubrics.id)
+        void this.selectChapter(firstChapterWithRubrics.id)
       }
     }
 
@@ -772,7 +795,7 @@ class KentRepertoryApp {
       )
     if (!chapter) return
 
-    this.selectChapter(chapter.id)
+    void this.selectChapter(chapter.id)
 
     setTimeout(() => {
       const rubricElement = Array.from(
@@ -792,7 +815,7 @@ class KentRepertoryApp {
     }, 100)
   }
 
-  loadUserNotes(): Record<string, { text: string; timestamp: number }[]> {
+  loadUserNotes(): Record<string, { text: string; timestamp: number; userName?: string }[]> {
     try {
       const saved = localStorage.getItem("kentRepertory_userNotes")
       const parsed = saved ? JSON.parse(saved) : {}
@@ -811,21 +834,122 @@ class KentRepertoryApp {
     }
   }
 
+  shouldUseServerNotes(chapterId?: string) {
+    // Use server-side storage for notes whenever a user is signed in
+    return Boolean(this.userId)
+  }
+
+  addNoteToCache(
+    chapterId: string,
+    rubricId: string,
+    text: string,
+    timestamp: number,
+    userName?: string
+  ) {
+    const key = `${chapterId}_${rubricId}`
+    if (!this.userNotes[key]) this.userNotes[key] = []
+    this.userNotes[key].push({ text: String(text), timestamp, userName })
+  }
+
+  async syncMindNotesFromServer() {
+    if (!this.shouldUseServerNotes()) return
+    try {
+      const res = await fetch(`/api/kent-notes?chapterId=${MIND_CHAPTER_ID}`)
+      if (!res.ok) {
+        throw new Error(`Failed to load notes: ${res.statusText}`)
+      }
+      const data = (await res.json()) as { notes: MindNotePayload[] }
+
+      // Clear any locally cached Mind notes before applying the server copy
+      Object.keys(this.userNotes).forEach((key) => {
+        if (key.startsWith(`${MIND_CHAPTER_ID}_`)) {
+          delete this.userNotes[key]
+        }
+      })
+
+      data.notes.forEach((note) => {
+        const timestamp = new Date(note.createdAt).getTime()
+        this.addNoteToCache(
+          note.chapterId,
+          note.rubricId,
+          note.text,
+          timestamp,
+          note.userName
+        )
+      })
+    } catch (error) {
+      console.error("Failed to load Mind notes from server:", error)
+    }
+  }
+
+  async saveMindNoteToServer(rubricId: string, text: string) {
+    const res = await fetch("/api/kent-notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        rubricId,
+        text,
+        chapterId: this.currentChapter?.id || MIND_CHAPTER_ID,
+        userName: this.userName,
+      }),
+    })
+
+    if (!res.ok) {
+      throw new Error("Unable to save note")
+    }
+
+    const data = (await res.json()) as { note: MindNotePayload }
+    const timestamp = new Date(data.note.createdAt).getTime()
+    this.addNoteToCache(
+      data.note.chapterId,
+      data.note.rubricId,
+      data.note.text,
+      timestamp,
+      data.note.userName
+    )
+  }
+
   getUserNotesForRubric(rubricId: string): Note[] {
     const key = `${this.currentChapter?.id}_${rubricId}`
     const notes = this.userNotes[key] || []
     return notes.map<Note>((n) => ({
       type: "user",
-      source: new Date(n.timestamp).toLocaleDateString(),
+      source: [
+        n.userName,
+        new Date(n.timestamp).toLocaleDateString(),
+      ]
+        .filter(Boolean)
+        .join(" • "),
       text: n.text,
     }))
   }
 
-  addUserNote(rubricId: string, text: string) {
-    const key = `${this.currentChapter?.id}_${rubricId}`
-    if (!this.userNotes[key]) this.userNotes[key] = []
-    this.userNotes[key].push({ text: String(text), timestamp: Date.now() })
+  addLocalUserNote(rubricId: string, text: string) {
+    const chapterId = this.currentChapter?.id || ""
+    if (!chapterId) return
+    // Keep local cache in sync for fast UI, but source of truth is the server
+    this.addNoteToCache(chapterId, rubricId, text, Date.now(), this.userName)
     this.saveUserNotes()
+  }
+
+  async addUserNote(rubricId: string, text: string): Promise<boolean> {
+    if (this.shouldUseServerNotes()) {
+      if (!this.userId) {
+        alert("Please sign in to save notes.")
+        return false
+      }
+      try {
+        await this.saveMindNoteToServer(rubricId, text)
+        return true
+      } catch (error) {
+        console.error("Failed to save Mind note:", error)
+        alert("We couldn't save your note. Please try again.")
+        return false
+      }
+    }
+
+    this.addLocalUserNote(rubricId, text)
+    return true
   }
 
   toggleCompareMode() {
@@ -2932,7 +3056,14 @@ body::before {
 
 const KentRepertoryPage = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false)
+  const { user, isLoaded } = useUser()
   const KENT_CHAT_QUERY_KEY = "kentChatQuery"
+
+  const currentUserName =
+    user?.fullName ||
+    user?.username ||
+    user?.primaryEmailAddress?.emailAddress ||
+    undefined
 
   const handleKentRedirect = (intent?: string | { query?: string; chapterId?: string }) => {
     if (typeof window === "undefined") return
@@ -2958,8 +3089,26 @@ const KentRepertoryPage = () => {
   }
 
   useEffect(() => {
-    if (typeof window === "undefined") return
-    const app = new KentRepertoryApp()
+    if (typeof window === "undefined" || !isLoaded) return
+
+    const existingApp = (window as any).kentApp as KentRepertoryApp | undefined
+    if (existingApp) {
+      existingApp.userId = user?.id
+      existingApp.userName = currentUserName
+      if (existingApp.currentChapter?.id === MIND_CHAPTER_ID && user?.id) {
+        existingApp
+          .syncMindNotesFromServer()
+          .then(() => {
+            if (existingApp.currentChapter) {
+              existingApp.renderRubrics(existingApp.currentChapter.rubrics)
+            }
+          })
+          .catch(() => null)
+      }
+      return
+    }
+
+    const app = new KentRepertoryApp({ userId: user?.id, userName: currentUserName })
       ; (window as any).kentApp = app
 
     const storedQuery = sessionStorage.getItem(KENT_CHAT_QUERY_KEY)
@@ -2973,7 +3122,7 @@ const KentRepertoryPage = () => {
       app.applyChatQuery(parsed)
       sessionStorage.removeItem(KENT_CHAT_QUERY_KEY)
     }
-  }, [])
+  }, [isLoaded, user?.id])
 
   return (
     <>
