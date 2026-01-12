@@ -13,6 +13,8 @@ import {
     KentRepertory,
     Chapter,
 } from "./data"
+import { useKentAccessStore } from "@/hooks/acess"
+import { useRouter } from "next/navigation"
 
 const MIND_CHAPTER_ID = "mind"
 
@@ -143,6 +145,7 @@ function findCommonRemedies(selected: SelectedRubric[]): CommonRemedy[] {
 
 const KentRepertoryPage: React.FC = () => {
     const { user, isLoaded } = useUser()
+    const router = useRouter();
     const [isChatbotOpen, setIsChatbotOpen] = useState(false)
 
     const [currentBookIndex, setCurrentBookIndex] = useState(0)
@@ -154,6 +157,7 @@ const KentRepertoryPage: React.FC = () => {
 
     const [userNotes, setUserNotes] = useState<UserNoteCache>({})
     const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({})
+    const { kentAccess } = useKentAccessStore();
 
     const [selectedRemedies, setSelectedRemedies] = useState<{
         [rubricId: string]: {
@@ -403,10 +407,17 @@ const KentRepertoryPage: React.FC = () => {
 
     const selectedCount = selectedRubrics.length
 
+
+    useEffect(()=>{
+        if(!kentAccess){
+            router.push('/software/access')
+        }
+    },[kentAccess, router])
+
     return (
         <>
             <Head>
-                <title>Kent Repertory | Homeosetu</title>
+                <title>Homeosetu | WebApp</title>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
                     rel="stylesheet"
@@ -418,23 +429,11 @@ const KentRepertoryPage: React.FC = () => {
                     <div className="mx-auto flex items-center justify-between gap-6 px-5 py-3">
                         <div className="flex items-center gap-3">
                             <div className="h-12 w-12 text-emerald-400">
-                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2" />
-                                    <path
-                                        d="M24 8v32M8 24h32"
-                                        stroke="currentColor"
-                                        strokeWidth={2.5}
-                                        strokeLinecap="round"
-                                    />
-                                    <circle cx="24" cy="24" r="8" stroke="currentColor" strokeWidth="1.5" />
-                                </svg>
+                                <img src="/logo.jpg" alt="Homeosetu Logo" className="h-full w-full" />
                             </div>
                             <div className="space-y-0.5">
                                 <div className="font-serif text-xl font-semibold tracking-[0.12em] uppercase">
-                                    Kent Repertory
-                                </div>
-                                <div className="text-xs uppercase tracking-[0.22em] text-slate-400">
-                                Homeosetu Web App
+                                Homeosetu WebApp
                                 </div>
                             </div>
                         </div>

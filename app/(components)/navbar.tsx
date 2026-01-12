@@ -23,7 +23,7 @@ const MAIN_LINKS = [
   { title: "Software", 
     children: [
       {title:"Survey", href:"/software/survey"},
-      { title: "WebApp", href: "/software/kent-repertory" },
+      { title: "WebApp", href: "/software/access" },
     ],
     external: true,
    },

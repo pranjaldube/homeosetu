@@ -1152,7 +1152,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
 }
 
 export const KENT_REPERTORY: KentRepertory = {
-  bookName: "Kent",
+  bookName: "Kent Repertory",
   chapters: [
     {
       id: "mind",
@@ -2075,254 +2075,1623 @@ export const KENT_REPERTORY: KentRepertory = {
   ],
 }
 
-export const CLINICAL_REPERTORY: KentRepertory = {
-  bookName: "Clinical",
+export const Homeosetu_Clinical_Repertory: KentRepertory = {
+  bookName: "Homeosetu Clinical Repertory",
   chapters: [
     {
-      id: "clinical-abdomen",
-      name: "Clinical – Abdomen & Abscess",
-      icon: "⚕️",
-      description: "Clinical rubrics from Clarke and Boericke for abdomen and abscess",
+      id: "clinical-allen",
+      name: "Clinical (Allen)",
+      icon: "",
       rubrics: [
         {
-          id: "abdomen-coldness-in-clarke",
-          name: "Abdomen; Coldness in (Clarke)",
+          id: "asthma",
+          name: "Asthma",
+          remedies: [{ abbr: "hep", grade: 1 }],
+          notes: []
+        },
+        {
+          id: "brights-disease",
+          name: "Brights Disease",
+          remedies: [{ abbr: "Kali-br", grade: 1 }],
+          notes: []
+        },
+        {
+          id: "conjunctivitis",
+          name: "Conjunctivitis",
+          remedies: [{ abbr: "Ham", grade: 1 }],
+          notes: []
+        },
+        {
+          id: "cholera",
+          name: "Cholera",
+          remedies: [{ abbr: "Bism", grade: 1 }],
+          notes: []
+        },
+        {
+          id: "chlorosis",
+          name: "Chlorosis",
+          remedies: [{ abbr: "ferr", grade: 1 }],
+          notes: []
+        },
+        {
+          id: "croup",
+          name: "Croup",
           remedies: [
-            { abbr: "testing", grade: 3 },
-            { abbr: "phel.", grade: 1 },
-            { abbr: "plect.", grade: 1 },
+            { abbr: "acon", grade: 1 },
+            { abbr: "iod", grade: 1 }
           ],
-          meaning: "Testing",
-          notes: [
-            { type: "system", source: "HCP", text: "Testing" },
-            { type: "system", source: "HCP", text: "IX to do" },
-            { type: "system", source: "Clarke", text: "TESTING" },
-          ],
-          crossReferences: [],
+          notes: []
         },
         {
-          id: "abdomen-coldness-in-boericke",
-          name: "Abdomen; Coldness in (Boericke)",
+          id: "croup-membranous",
+          name: "Croup, membranous",
+          remedies: [{ abbr: "iod", grade: 1 }],
+          notes: []
+        },
+        {
+          id: "epilepsy",
+          name: "Epilepsy",
           remedies: [
-            { abbr: "aeth.", grade: 1 },
-            { abbr: "ambr.", grade: 1 },
-            { abbr: "bar-c.", grade: 1 },
-            { abbr: "cadm-s.", grade: 1 },
-            { abbr: "chin.", grade: 1 },
-            { abbr: "colch.", grade: 1 },
-            { abbr: "dulc.", grade: 1 },
-            { abbr: "kali-br.", grade: 1 },
-            { abbr: "kali-c.", grade: 1 },
-            { abbr: "kali-s.", grade: 1 },
-            { abbr: "meny.", grade: 1 },
-            { abbr: "onos.", grade: 1 },
-            { abbr: "phos.", grade: 1 },
-            { abbr: "sil.", grade: 1 },
-            { abbr: "staph.", grade: 1 },
-            { abbr: "tab.", grade: 1 },
-            { abbr: "verat.", grade: 1 },
+            { abbr: "bufo", grade: 1 },
+            { abbr: "cimic", grade: 1 },
+            { abbr: "Cupr", grade: 1 },
+            { abbr: "hyos", grade: 1 }
           ],
-          meaning: "Testing",
-          notes: [
-            { type: "system", source: "HCP", text: "Testing" },
-            { type: "system", source: "HCP", text: "IX to do" },
-            { type: "system", source: "Boericke", text: "TESTING" },
-          ],
-          crossReferences: [],
+          notes: []
         },
         {
-          id: "abdomen-distended-clarke",
-          name: "Abdomen; Distended (Clarke)",
+          id: "gout",
+          name: "Gout",
           remedies: [
-            { abbr: "calc.", grade: 1 },
-            { abbr: "dios.", grade: 1 },
-            { abbr: "cin.", grade: 1 },
-            { abbr: "ign.", grade: 1 },
-            { abbr: "lyc.", grade: 1 },
-            { abbr: "sil.", grade: 1 },
-            { abbr: "thuj.", grade: 1 },
+            { abbr: "Abrot", grade: 1 },
+            { abbr: "Aesc", grade: 1 }
           ],
-          meaning: "Testing",
-          notes: [
-            { type: "system", source: "HCP", text: "Testing" },
-            { type: "system", source: "HCP", text: "Testing" },
-          ],
-          crossReferences: [],
+          notes: []
         },
         {
-          id: "abdomen-distended-boericke",
-          name: "Abdomen; Distended (Boericke)",
-          remedies: [
-            { abbr: "abies-c.", grade: 1 },
-            { abbr: "abrot.", grade: 1 },
-            { abbr: "acal.", grade: 1 },
-            { abbr: "act-sp.", grade: 1 },
-            { abbr: "agar.", grade: 1 },
-            { abbr: "ambr.", grade: 1 },
-            { abbr: "anthro.", grade: 1 },
-            { abbr: "aran.", grade: 1 },
-            { abbr: "arg-n.", grade: 1 },
-            { abbr: "arn.", grade: 1 },
-            { abbr: "bapt.", grade: 1 },
-            { abbr: "bar-c.", grade: 1 },
-            { abbr: "bell.", grade: 1 },
-            { abbr: "brom.", grade: 1 },
-            { abbr: "caj.", grade: 1 },
-            { abbr: "calc.", grade: 1 },
-            { abbr: "cann-i.", grade: 1 },
-            { abbr: "carb-ac.", grade: 1 },
-            { abbr: "carb-v.", grade: 1 },
-            { abbr: "carb-s.", grade: 1 },
-            { abbr: "cham.", grade: 1 },
-            { abbr: "chel.", grade: 1 },
-            { abbr: "chin.", grade: 1 },
-            { abbr: "cic.", grade: 1 },
-            { abbr: "coca", grade: 1 },
-            { abbr: "cocc.", grade: 1 },
-            { abbr: "colch.", grade: 1 },
-            { abbr: "coloc.", grade: 1 },
-            { abbr: "corn.", grade: 1 },
-            { abbr: "crot-h.", grade: 1 },
-            { abbr: "gamb.", grade: 1 },
-            { abbr: "hedeom.", grade: 1 },
-            { abbr: "hep.", grade: 1 },
-            { abbr: "hyos.", grade: 1 },
-            { abbr: "iodof.", grade: 1 },
-            { abbr: "jal.", grade: 1 },
-            { abbr: "jatr.", grade: 1 },
-            { abbr: "jug-r.", grade: 1 },
-            { abbr: "kali-c.", grade: 1 },
-            { abbr: "kreos.", grade: 1 },
-            { abbr: "lil-t.", grade: 1 },
-            { abbr: "meny.", grade: 1 },
-            { abbr: "merc.", grade: 1 },
-            { abbr: "morph.", grade: 1 },
-            { abbr: "mosch.", grade: 1 },
-            { abbr: "nat-m.", grade: 1 },
-            { abbr: "nat-n.", grade: 1 },
-            { abbr: "nux-m.", grade: 1 },
-            { abbr: "nux-v.", grade: 1 },
-            { abbr: "onos.", grade: 1 },
-            { abbr: "ph-ac.", grade: 1 },
-            { abbr: "podo.", grade: 1 },
-            { abbr: "puls.", grade: 1 },
-            { abbr: "raph.", grade: 1 },
-            { abbr: "rhus-t.", grade: 1 },
-            { abbr: "sabin.", grade: 1 },
-            { abbr: "scut.", grade: 1 },
-            { abbr: "sil.", grade: 1 },
-            { abbr: "sumb.", grade: 1 },
-            { abbr: "tab.", grade: 1 },
-            { abbr: "ter.", grade: 1 },
-            { abbr: "thuj.", grade: 1 },
-            { abbr: "zinc.", grade: 1 },
-          ],
-          meaning:
-            "Distended abdomen can result from various factors, including gas accumulation, fluid retention, digestive disorders, and more serious medical conditions.",
-          notes: [
-            { type: "system", source: "HCP", text: "Testing" },
-          ],
-          crossReferences: [],
+          id: "haemorrhage-conjunctiva",
+          name: "Haemorrhage, Conjunctiva",
+          remedies: [{ abbr: "arn", grade: 1 }],
+          notes: []
         },
         {
-          id: "abdomen-large-clarke",
-          name: "Abdomen; Large (Clarke)",
-          remedies: [{ abbr: "calc.", grade: 1 }],
-          meaning: "Testing",
-          notes: [{ type: "system", source: "HCP", text: "Testing" }],
-          crossReferences: [],
+          id: "haemorrhage-retina",
+          name: "Haemorrhage, retina",
+          remedies: [{ abbr: "arn", grade: 1 }],
+          notes: []
         },
         {
-          id: "abdomen-large-boericke",
-          name: "Abdomen; Large (Boericke)",
-          remedies: [
-            { abbr: "mez.", grade: 1 },
-            { abbr: "phos.", grade: 1 },
-            { abbr: "urt-u.", grade: 1 },
-          ],
-          meaning: "Testing",
-          notes: [{ type: "system", source: "HCP", text: "Testing" }],
-          crossReferences: [],
+          id: "pertussis",
+          name: "Pertussis",
+          remedies: [{ abbr: "Euphr", grade: 1 }],
+          notes: []
         },
         {
-          id: "abdomen-operations-on-vomiting-after",
-          name: "Abdomen; Operations on, vomiting after",
-          remedies: [
-            { abbr: "all-c.", grade: 1 },
-            { abbr: "bism.", grade: 1 },
-          ],
-          meaning: "Testing",
-          notes: [{ type: "system", source: "HCP", text: "Testing" }],
-          crossReferences: [],
+          id: "pharyngitis",
+          name: "Pharyngitis",
+          remedies: [{ abbr: "Aesc", grade: 1 }],
+          notes: []
         },
         {
-          id: "abdomen-plethora-of-clarke",
-          name: "Abdomen; Plethora of (Clarke)",
-          remedies: [{ abbr: "aloe.", grade: 1 }],
-          meaning: "Testing",
-          notes: [{ type: "system", source: "HCP", text: "Testing" }],
-          crossReferences: [],
+          id: "laryngitis",
+          name: "Laryngitis",
+          remedies: [{ abbr: "All-c", grade: 1 }],
+          notes: []
         },
         {
-          id: "abdomen-plethora-of-boericke",
-          name: "Abdomen; Plethora of (Boericke)",
-          remedies: [{ abbr: "sulph.", grade: 1 }],
-          meaning: "Testing",
-          notes: [{ type: "system", source: "HCP", text: "Testing" }],
-          crossReferences: [],
+          id: "lienteria",
+          name: "Lienteria",
+          remedies: [{ abbr: "Abrot", grade: 1 }],
+          notes: []
         },
         {
-          id: "abdomen-swelling-of-clarke",
-          name: "Abdomen; Swelling of (Clarke)",
-          remedies: [{ abbr: "paraf.", grade: 1 }],
-          meaning: "Dropsical swelling of abdomen (ascites).",
-          notes: [{ type: "system", source: "HCP", text: "Testing" }],
-          crossReferences: [],
+          id: "rheumatism",
+          name: "Rheumatism",
+          remedies: [{ abbr: "Abrot", grade: 1 }],
+          notes: []
         },
         {
-          id: "abscess-clarke",
-          name: "Abscess (Clarke)",
-          remedies: [
-            { abbr: "anan.", grade: 1 },
-            { abbr: "apis.", grade: 1 },
-            { abbr: "arn.", grade: 1 },
-            { abbr: "ars.", grade: 1 },
-            { abbr: "bell.", grade: 1 },
-            { abbr: "calc-s.", grade: 1 },
-            { abbr: "calen.", grade: 1 },
-            { abbr: "chin.", grade: 1 },
-            { abbr: "elat.", grade: 1 },
-            { abbr: "fl-ac.", grade: 1 },
-            { abbr: "guai.", grade: 1 },
-            { abbr: "hep.", grade: 1 },
-            { abbr: "hippoz.", grade: 1 },
-            { abbr: "merc.", grade: 1 },
-            { abbr: "nat-sal.", grade: 1 },
-            { abbr: "pyrog.", grade: 1 },
-            { abbr: "sil.", grade: 1 },
-            { abbr: "symph.", grade: 1 },
-            { abbr: "syph.", grade: 1 },
-            { abbr: "thyr.", grade: 1 },
-          ],
-          meaning: "Testing",
-          notes: [
-            {
-              type: "system",
-              source: "Clarke",
-              text:
-                "Detailed clinical instructions for abscess and suppuration management; see Clarke's text for dosing and local applications.",
-            },
-          ],
-          crossReferences: [],
+          id: "tonsillitis",
+          name: "Tonsillitis",
+          remedies: [{ abbr: "Bar-c", grade: 1 }],
+          notes: []
         },
-      ],
+        {
+          id: "tuberculosis-chest",
+          name: "Tuberculosis, chest",
+          remedies: [{ abbr: "dros", grade: 1 }],
+          notes: []
+        }
+      ]
     },
-  ],
+    {
+      id: "clinical-boericke",
+      name: "Clinical (Boericke)",
+      icon: "",
+      rubrics: [
+        {
+          "id": "b_4",
+          "name": "Abdomen; Large",
+          "remedies": [
+            { "abbr": "mez.", "grade": 1 },
+            { "abbr": "Phos.", "grade": 1 },
+            { "abbr": "Urt-u.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_5",
+          "name": "Abdomen; Plethora of",
+          "remedies": [
+            { "abbr": "Sulph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_6",
+          "name": "Abdomen; Swelling of",
+          "remedies": [
+            { "abbr": "agn.", "grade": 1 },
+            { "abbr": "apis", "grade": 1 },
+            { "abbr": "ars.", "grade": 1 },
+            { "abbr": "aur.", "grade": 1 },
+            { "abbr": "bar-c.", "grade": 1 },
+            { "abbr": "bar-m.", "grade": 1 },
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "bry.", "grade": 1 },
+            { "abbr": "Calc.", "grade": 3 },
+            { "abbr": "carbn-s.", "grade": 1 },
+            { "abbr": "card-m.", "grade": 1 },
+            { "abbr": "chin.", "grade": 1 },
+            { "abbr": "con.", "grade": 1 },
+            { "abbr": "croc.", "grade": 2 },
+            { "abbr": "dol.", "grade": 1 },
+            { "abbr": "dulc.", "grade": 1 },
+            { "abbr": "gran.", "grade": 1 },
+            { "abbr": "graph.", "grade": 1 },
+            { "abbr": "grat.", "grade": 1 },
+            { "abbr": "hell.", "grade": 1 },
+            { "abbr": "kali-m.", "grade": 2 },
+            { "abbr": "kali-p.", "grade": 2 },
+            { "abbr": "mez.", "grade": 1 },
+            { "abbr": "pall.", "grade": 2 },
+            { "abbr": "ptel.", "grade": 1 },
+            { "abbr": "raph.", "grade": 1 },
+            { "abbr": "rhus-t.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "staph.", "grade": 2 },
+            { "abbr": "stel.", "grade": 1 },
+            { "abbr": "stront-c.", "grade": 2 },
+            { "abbr": "thuj.", "grade": 1 },
+            { "abbr": "verat.", "grade": 2 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_7",
+          "name": "Abdomen; Throbbing in",
+          "remedies": [
+            { "abbr": "Aesc.", "grade": 1 },
+            { "abbr": "Bar-m.", "grade": 1 },
+            { "abbr": "Ign.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_8",
+          "name": "Abortion",
+          "remedies": [
+            { "abbr": "ap-g.", "grade": 1 },
+            { "abbr": "apis", "grade": 1 },
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "canth.", "grade": 1 },
+            { "abbr": "caul.", "grade": 1 },
+            { "abbr": "croc.", "grade": 1 },
+            { "abbr": "erig.", "grade": 1 },
+            { "abbr": "helon.", "grade": 1 },
+            { "abbr": "millef.", "grade": 1 },
+            { "abbr": "sabin.", "grade": 1 },
+            { "abbr": "sec.", "grade": 1 },
+            { "abbr": "tril.", "grade": 1 },
+            { "abbr": "vib-p.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_9",
+          "name": "Abortion; After effects of",
+          "remedies": [
+            { "abbr": "caul.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_10",
+          "name": "Abortion; Hemorrhage after",
+          "remedies": [
+            { "abbr": "nit-ac.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_11",
+          "name": "Abscess",
+          "remedies": [
+            { "abbr": "anac.", "grade": 1 },
+            { "abbr": "anthrac.", "grade": 1 },
+            { "abbr": "apis", "grade": 1 },
+            { "abbr": "arn.", "grade": 1 },
+            { "abbr": "ars.", "grade": 1 },
+            { "abbr": "asaf.", "grade": 1 },
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "calc-f.", "grade": 1 },
+            { "abbr": "calc-hyp.", "grade": 1 },
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "calc-s.", "grade": 1 },
+            { "abbr": "calen.", "grade": 1 },
+            { "abbr": "chin.", "grade": 1 },
+            { "abbr": "cic.", "grade": 1 },
+            { "abbr": "cist.", "grade": 1 },
+            { "abbr": "crot-h.", "grade": 1 },
+            { "abbr": "echin.", "grade": 1 },
+            { "abbr": "euph.", "grade": 1 },
+            { "abbr": "fl-ac.", "grade": 1 },
+            { "abbr": "guai.", "grade": 1 },
+            { "abbr": "gunp.", "grade": 1 },
+            { "abbr": "hecla", "grade": 1 },
+            { "abbr": "hep.", "grade": 1 },
+            { "abbr": "hippoz.", "grade": 1 },
+            { "abbr": "iod.", "grade": 1 },
+            { "abbr": "kali-i.", "grade": 1 },
+            { "abbr": "lach.", "grade": 1 },
+            { "abbr": "lyc.", "grade": 1 },
+            { "abbr": "mang-act.", "grade": 1 },
+            { "abbr": "merc-cy.", "grade": 1 },
+            { "abbr": "merc.", "grade": 1 },
+            { "abbr": "myr.", "grade": 1 },
+            { "abbr": "ol-j.", "grade": 1 },
+            { "abbr": "paeon.", "grade": 1 },
+            { "abbr": "ph-ac.", "grade": 1 },
+            { "abbr": "phos.", "grade": 1 },
+            { "abbr": "phyt.", "grade": 1 },
+            { "abbr": "puls.", "grade": 1 },
+            { "abbr": "pyrog.", "grade": 1 },
+            { "abbr": "rhus-t.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "staph.", "grade": 1 },
+            { "abbr": "sul-ac.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 },
+            { "abbr": "tarent-c.", "grade": 1 },
+            { "abbr": "ther.", "grade": 1 },
+            { "abbr": "thuj.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_12",
+          "name": "Abscess; Acute",
+          "remedies": [
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "hep.", "grade": 1 },
+            { "abbr": "merc.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_13",
+          "name": "Abscess; Alveolar",
+          "remedies": [
+            { "abbr": "hecla", "grade": 1 },
+            { "abbr": "merc.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_14",
+          "name": "Abscess; Chronic (Cold abscess)",
+          "remedies": [
+            { "abbr": "calc-f.", "grade": 1 },
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "calen.", "grade": 1 },
+            { "abbr": "guai.", "grade": 1 },
+            { "abbr": "iod.", "grade": 1 },
+            { "abbr": "merc.", "grade": 1 },
+            { "abbr": "ol-j.", "grade": 1 },
+            { "abbr": "ph-ac.", "grade": 1 },
+            { "abbr": "phos.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_15",
+          "name": "Abscess; Psoas",
+          "remedies": [
+            { "abbr": "ph-ac.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "staph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_16",
+          "name": "Acidity (Heartburn)",
+          "remedies": [
+            { "abbr": "arg-n.", "grade": 1 },
+            { "abbr": "calc-c.", "grade": 1 },
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "carbo-v.", "grade": 1 },
+            { "abbr": "chin.", "grade": 1 },
+            { "abbr": "iris", "grade": 1 },
+            { "abbr": "lyc.", "grade": 1 },
+            { "abbr": "mag-c.", "grade": 1 },
+            { "abbr": "nat-c.", "grade": 1 },
+            { "abbr": "nat-m.", "grade": 1 },
+            { "abbr": "nat-p.", "grade": 1 },
+            { "abbr": "nux-v.", "grade": 1 },
+            { "abbr": "puls.", "grade": 1 },
+            { "abbr": "rob.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_17",
+          "name": "Acne (Pimples)",
+          "remedies": [
+            { "abbr": "ant-c.", "grade": 1 },
+            { "abbr": "ars-i.", "grade": 1 },
+            { "abbr": "aster.", "grade": 1 },
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "berb-a.", "grade": 1 },
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "calc-s.", "grade": 1 },
+            { "abbr": "carb-v.", "grade": 1 },
+            { "abbr": "cimic.", "grade": 1 },
+            { "abbr": "con.", "grade": 1 },
+            { "abbr": "eug.", "grade": 1 },
+            { "abbr": "graph.", "grade": 1 },
+            { "abbr": "hep.", "grade": 1 },
+            { "abbr": "hydrocot.", "grade": 1 },
+            { "abbr": "jug-r.", "grade": 1 },
+            { "abbr": "kali-bi.", "grade": 1 },
+            { "abbr": "kali-br.", "grade": 1 },
+            { "abbr": "kali-i.", "grade": 1 },
+            { "abbr": "led.", "grade": 1 },
+            { "abbr": "lyc.", "grade": 1 },
+            { "abbr": "nux-v.", "grade": 1 },
+            { "abbr": "ph-ac.", "grade": 1 },
+            { "abbr": "phos.", "grade": 1 },
+            { "abbr": "psor.", "grade": 1 },
+            { "abbr": "puls.", "grade": 1 },
+            { "abbr": "radium", "grade": 1 },
+            { "abbr": "rhus-t.", "grade": 1 },
+            { "abbr": "sep.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 },
+            { "abbr": "thuj.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_18",
+          "name": "Acne; Rosacea",
+          "remedies": [
+            { "abbr": "agar.", "grade": 1 },
+            { "abbr": "ant-c.", "grade": 1 },
+            { "abbr": "ars-i.", "grade": 1 },
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "carbo-v.", "grade": 1 },
+            { "abbr": "chrysar.", "grade": 1 },
+            { "abbr": "eug.", "grade": 1 },
+            { "abbr": "kali-br.", "grade": 1 },
+            { "abbr": "kali-i.", "grade": 1 },
+            { "abbr": "kreos.", "grade": 1 },
+            { "abbr": "lach.", "grade": 1 },
+            { "abbr": "nux-v.", "grade": 1 },
+            { "abbr": "psor.", "grade": 1 },
+            { "abbr": "radium", "grade": 1 },
+            { "abbr": "rhus-t.", "grade": 1 },
+            { "abbr": "sep.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_19",
+          "name": "Acne; Simplex",
+          "remedies": [
+            { "abbr": "ant-c.", "grade": 1 },
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "berb-a.", "grade": 1 },
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "kali-br.", "grade": 1 },
+            { "abbr": "nux-v.", "grade": 1 },
+            { "abbr": "ph-ac.", "grade": 1 },
+            { "abbr": "puls.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_20",
+          "name": "Acromegaly",
+          "remedies": [
+            { "abbr": "pit-a.", "grade": 1 },
+            { "abbr": "thyr.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_21",
+          "name": "Actinomycosis",
+          "remedies": [
+            { "abbr": "kali-i.", "grade": 1 },
+            { "abbr": "nit-ac.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_22",
+          "name": "Addison's disease",
+          "remedies": [
+            { "abbr": "adren.", "grade": 1 },
+            { "abbr": "arg-n.", "grade": 1 },
+            { "abbr": "ars.", "grade": 1 },
+            { "abbr": "ars-i.", "grade": 1 },
+            { "abbr": "calc-c.", "grade": 1 },
+            { "abbr": "nat-m.", "grade": 1 },
+            { "abbr": "phos.", "grade": 1 },
+            { "abbr": "sec.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 },
+            { "abbr": "thuj.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "b_23",
+          "name": "Adenitis",
+          "remedies": [
+            { "abbr": "apis", "grade": 1 },
+            { "abbr": "ars-i.", "grade": 1 },
+            { "abbr": "astac.", "grade": 1 },
+            { "abbr": "bell.", "grade": 1 },
+            { "abbr": "brom.", "grade": 1 },
+            { "abbr": "calc-c.", "grade": 1 },
+            { "abbr": "calc-f.", "grade": 1 },
+            { "abbr": "calc-i.", "grade": 1 },
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "calc-s.", "grade": 1 },
+            { "abbr": "carbo-v.", "grade": 1 },
+            { "abbr": "cist.", "grade": 1 },
+            { "abbr": "clem.", "grade": 1 },
+            { "abbr": "con.", "grade": 1 },
+            { "abbr": "dulc.", "grade": 1 },
+            { "abbr": "graph.", "grade": 1 },
+            { "abbr": "hep.", "grade": 1 },
+            { "abbr": "iod.", "grade": 1 },
+            { "abbr": "kali-i.", "grade": 1 },
+            { "abbr": "lap-a.", "grade": 1 },
+            { "abbr": "lyc.", "grade": 1 },
+            { "abbr": "merc-i-f.", "grade": 1 },
+            { "abbr": "merc-i-r.", "grade": 1 },
+            { "abbr": "merc.", "grade": 1 },
+            { "abbr": "nit-ac.", "grade": 1 },
+            { "abbr": "ph-ac.", "grade": 1 },
+            { "abbr": "phos.", "grade": 1 },
+            { "abbr": "phyt.", "grade": 1 },
+            { "abbr": "psor.", "grade": 1 },
+            { "abbr": "puls.", "grade": 1 },
+            { "abbr": "rhus-t.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "spong.", "grade": 1 },
+            { "abbr": "sulph.", "grade": 1 },
+            { "abbr": "thuj.", "grade": 1 }
+          ],
+          "notes": []
+        }
+      ]
+    },
+    {
+      "id": "clarke-clarke",
+      "name": "Clinical (Clarke)",
+      "icon": "",
+      "description": "Clinical rubrics from Clarke's Dictionary",
+      "rubrics": [
+        {
+          "id": "cl_1",
+          "name": "Abscess",
+          "remedies": [
+            { "abbr": "anthrac.", "grade": 1 },
+            { "abbr": "calen.", "grade": 1 },
+            { "abbr": "guai.", "grade": 1 },
+            { "abbr": "hep.", "grade": 1 },
+            { "abbr": "hippoz.", "grade": 1 },
+            { "abbr": "merc.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "tarent-c.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_2",
+          "name": "Abscess; Psoas",
+          "remedies": [
+            { "abbr": "sil.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_3",
+          "name": "Acidity",
+          "remedies": [
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "mag-c.", "grade": 1 },
+            { "abbr": "nat-p.", "grade": 1 },
+            { "abbr": "rob.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_4",
+          "name": "Acne",
+          "remedies": [
+            { "abbr": "aster.", "grade": 1 },
+            { "abbr": "berb-a.", "grade": 1 },
+            { "abbr": "eug.", "grade": 1 },
+            { "abbr": "kali-br.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_5",
+          "name": "Acne; Rosacea",
+          "remedies": [
+            { "abbr": "chrysar.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_6",
+          "name": "Actinomycosis",
+          "remedies": [
+            { "abbr": "kali-i.", "grade": 1 },
+            { "abbr": "nit-ac.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_7",
+          "name": "Addison's disease",
+          "remedies": [
+            { "abbr": "adren.", "grade": 1 },
+            { "abbr": "ant-c.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_8",
+          "name": "Adenoids",
+          "remedies": [
+            { "abbr": "agn.", "grade": 1 },
+            { "abbr": "psor.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_9",
+          "name": "Ague-cake (Spleen enlargement)",
+          "remedies": [
+            { "abbr": "aran.", "grade": 1 },
+            { "abbr": "cean.", "grade": 1 },
+            { "abbr": "quas.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_10",
+          "name": "Albuminuria",
+          "remedies": [
+            { "abbr": "aur-m-n.", "grade": 1 },
+            { "abbr": "euphrb.", "grade": 1 },
+            { "abbr": "fuchs.", "grade": 1 },
+            { "abbr": "helon.", "grade": 1 },
+            { "abbr": "kali-chl.", "grade": 1 },
+            { "abbr": "merc-c.", "grade": 1 },
+            { "abbr": "osmium.", "grade": 1 },
+            { "abbr": "plb.", "grade": 1 },
+            { "abbr": "uran-n.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_11",
+          "name": "Alcoholism",
+          "remedies": [
+            { "abbr": "angel.", "grade": 1 },
+            { "abbr": "ant-t.", "grade": 1 },
+            { "abbr": "avena", "grade": 1 },
+            { "abbr": "caps.", "grade": 1 },
+            { "abbr": "chrys-ac.", "grade": 1 },
+            { "abbr": "querc.", "grade": 1 },
+            { "abbr": "ran-b.", "grade": 1 },
+            { "abbr": "stroph.", "grade": 1 },
+            { "abbr": "sul-ac.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_12",
+          "name": "Alopecia (Hair loss)",
+          "remedies": [
+            { "abbr": "manc.", "grade": 1 },
+            { "abbr": "sphing.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_13",
+          "name": "Amblyopia (Weak sight)",
+          "remedies": [
+            { "abbr": "benz-n.", "grade": 1 },
+            { "abbr": "methyl.", "grade": 1 },
+            { "abbr": "tab.", "grade": 1 },
+            { "abbr": "zinc-s.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_14",
+          "name": "Amenorrhoea",
+          "remedies": [
+            { "abbr": "pinus-s.", "grade": 1 },
+            { "abbr": "polygon.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_15",
+          "name": "Anaemia",
+          "remedies": [
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "ferr-p.", "grade": 1 },
+            { "abbr": "nat-m.", "grade": 1 },
+            { "abbr": "pic-ac.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_16",
+          "name": "Anaemia; Pernicious",
+          "remedies": [
+            { "abbr": "ars-h.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_17",
+          "name": "Anasarca (General dropsy)",
+          "remedies": [
+            { "abbr": "apis", "grade": 1 },
+            { "abbr": "ars.", "grade": 1 },
+            { "abbr": "dig.", "grade": 1 },
+            { "abbr": "zinc-s.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_18",
+          "name": "Aneurism",
+          "remedies": [
+            { "abbr": "bar-m.", "grade": 1 },
+            { "abbr": "lycopus.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_19",
+          "name": "Angina pectoris",
+          "remedies": [
+            { "abbr": "aml-n.", "grade": 1 },
+            { "abbr": "arg-n.", "grade": 1 },
+            { "abbr": "crat.", "grade": 1 },
+            { "abbr": "glon.", "grade": 1 },
+            { "abbr": "lat-m.", "grade": 1 },
+            { "abbr": "ox-ac.", "grade": 1 },
+            { "abbr": "spig.", "grade": 1 },
+            { "abbr": "tab.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cl_20",
+          "name": "Anus; Fissure of",
+          "remedies": [
+            { "abbr": "nit-ac.", "grade": 1 },
+            { "abbr": "paeon.", "grade": 1 },
+            { "abbr": "rat.", "grade": 1 }
+          ],
+          "notes": []
+        }
+      ]
+    }
+  ]
+}
+
+export const HOMEOSETU_ALLEN: KentRepertory = {
+  bookName: "Homeosetu Repertory To Keynotes and Characteristics of MM By Allen",
+  chapters: [
+    {
+      "id": "ch_cause",
+      "name": "Cause",
+      "icon": "",
+      "description": "Causes for the clinical condition",
+      "rubrics": [
+        {
+          "id": "cause_1",
+          "name": "Air; in open",
+          "remedies": [
+            { "abbr": "Zinc.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_2",
+          "name": "Acids; abse of; or after taking",
+          "remedies": [
+            { "abbr": "Lach.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_3",
+          "name": "Alcohol; abuse of",
+          "remedies": [
+            { "abbr": "Crot-h.", "grade": 1 },
+            { "abbr": "Led.", "grade": 1 },
+            { "abbr": "nux-v.", "grade": 2 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_4",
+          "name": "Anger",
+          "remedies": [
+            { "abbr": "Bry.", "grade": 1 },
+            { "abbr": "Cham.", "grade": 1 },
+            { "abbr": "Cocc.", "grade": 1 },
+            { "abbr": "nux-v.", "grade": 3 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_5",
+          "name": "Animal; heat; want of",
+          "remedies": [
+            { "abbr": "Led.", "grade": 1 },
+            { "abbr": "Teucr.", "grade": 1 },
+            { "abbr": "Sep.", "grade": 1 },
+            { "abbr": "Sil.", "grade": 1 },
+            { "abbr": "Tub.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_6",
+          "name": "Animal; heat; want of; tissue; decayed",
+          "remedies": [
+            { "abbr": "Anthr.", "grade": 1 },
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "pyrog.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_7",
+          "name": "Anthrax",
+          "remedies": [
+            { "abbr": "Anthr.", "grade": 1 },
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "Carb-ac.", "grade": 1 },
+            { "abbr": "Crot-h.", "grade": 1 },
+            { "abbr": "Lach.", "grade": 1 },
+            { "abbr": "pyrog.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_8",
+          "name": "Anxiety",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "Gels.", "grade": 2 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_9",
+          "name": "Arsenic; abuse of",
+          "remedies": [
+            { "abbr": "Ip.", "grade": 2 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_10",
+          "name": "Choleraic; occuring during cholera epidemics",
+          "remedies": [
+            { "abbr": "Elat.", "grade": 1 },
+            { "abbr": "Verat.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_11",
+          "name": "Coffee; abuse of",
+          "remedies": [
+            { "abbr": "Cham.", "grade": 1 },
+            { "abbr": "nux-v.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_12",
+          "name": "Diet; indiscretions in",
+          "remedies": [
+            { "abbr": "Ant-c.", "grade": 1 },
+            { "abbr": "Cycl.", "grade": 1 },
+            { "abbr": "Ip.", "grade": 2 },
+            { "abbr": "Puls.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_13",
+          "name": "Diet; indiscretions in; may produce relapse",
+          "remedies": [
+            { "abbr": "Ant-c.", "grade": 1 },
+            { "abbr": "Ip.", "grade": 2 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_14",
+          "name": "Diet; indiscretions in; eating pork; rich fat food",
+          "remedies": [
+            { "abbr": "Puls.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_15",
+          "name": "Diet; indiscretions in; eating pastry; sweets",
+          "remedies": [
+            { "abbr": "Cina.", "grade": 1 },
+            { "abbr": "Ip.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_16",
+          "name": "Diet; indiscretons in eating late suppers; irregular; unseasonal",
+          "remedies": [
+            { "abbr": "nux-v.", "grade": 2 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_17",
+          "name": "Dissecting wounds",
+          "remedies": [
+            { "abbr": "Anthr.", "grade": 2 },
+            { "abbr": "Ars.", "grade": 3 },
+            { "abbr": "Carb-ac.", "grade": 1 },
+            { "abbr": "Lach.", "grade": 3 },
+            { "abbr": "pyrog.", "grade": 3 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_18",
+          "name": "Drinking; after",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "Asar.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_19",
+          "name": "Eating; after",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "Asar.", "grade": 1 },
+            { "abbr": "Bell.", "grade": 1 },
+            { "abbr": "Carb-an.", "grade": 1 },
+            { "abbr": "Kali-c.", "grade": 1 },
+            { "abbr": "Nux-v.", "grade": 1 },
+            { "abbr": "Tarax.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "cause_20",
+          "name": "Eating; after; and drinking",
+          "remedies": [
+            { "abbr": "Asar.", "grade": 1 },
+            { "abbr": "Tarax.", "grade": 1 }
+          ],
+          "notes": []
+        }
+      ]
+    },
+    {
+      "id": "ch_prodrome",
+      "name": "Prodrome",
+      "icon": "",
+      "description": "Symptoms occurring before the main fever stage",
+      "rubrics": [
+        {
+          "id": "prod_1",
+          "name": "Abdomen; distention of",
+          "remedies": [
+            { "abbr": "Ars-h.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_2",
+          "name": "Anguish",
+          "remedies": [
+            { "abbr": "Chin.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_3",
+          "name": "Anticipation of any unusual ordeal may hasten chill",
+          "remedies": [
+            { "abbr": "Gels.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_4",
+          "name": "Anxiety",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "Ars-h.", "grade": 1 },
+            { "abbr": "Chin.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_5",
+          "name": "Appetite; loss of",
+          "remedies": [
+            { "abbr": "Hydr.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_6",
+          "name": "Back; aching in",
+          "remedies": [
+            { "abbr": "Aran.", "grade": 1 },
+            { "abbr": "Carb-v.", "grade": 1 },
+            { "abbr": "Eup-per.", "grade": 2 },
+            { "abbr": "Ip.", "grade": 1 },
+            { "abbr": "Podo.", "grade": 1 },
+            { "abbr": "Rhus-t.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_7",
+          "name": "Back; pain in; above right ilium",
+          "remedies": [
+            { "abbr": "Eup-per.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_8",
+          "name": "Back; pain severe in lumbar region",
+          "remedies": [
+            { "abbr": "Aesc.", "grade": 2 },
+            { "abbr": "Podo.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_9",
+          "name": "Back; pain in lumbar region",
+          "remedies": [
+            { "abbr": "Lac. c.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_10",
+          "name": "Bilious; symptoms strongly marked",
+          "remedies": [
+            { "abbr": "Podo.", "grade": 3 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_11",
+          "name": "Bones; pain in",
+          "remedies": [
+            { "abbr": "Chin.", "grade": 1 },
+            { "abbr": "Eup-per.", "grade": 2 },
+            { "abbr": "Eup-per.ur.", "grade": 1 },
+            { "abbr": "nat-m.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_12",
+          "name": "Bones; pain in; of extremities",
+          "remedies": [
+            { "abbr": "Eup-per.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_13",
+          "name": "Bones; pains in; of extremities; as if broken",
+          "remedies": [
+            { "abbr": "Eup-per.", "grade": 3 },
+            { "abbr": "Tub.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_14",
+          "name": "Bowels; pain in",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "Elat.", "grade": 1 },
+            { "abbr": "Eup-per.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_15",
+          "name": "Bowels; pain in; cutting like knifes",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_16",
+          "name": "Chest; pain in",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 },
+            { "abbr": "Plant.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_17",
+          "name": "Chest; pain in; cutting",
+          "remedies": [
+            { "abbr": "Ars.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_18",
+          "name": "Chest; pain in; erratic",
+          "remedies": [
+            { "abbr": "Plant.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_19",
+          "name": "Chest; oppression of",
+          "remedies": [
+            { "abbr": "Ars-h.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "prod_20",
+          "name": "Chilliness",
+          "remedies": [
+            { "abbr": "Elat.", "grade": 1 },
+            { "abbr": "thuj.", "grade": 1 }
+          ],
+          "notes": []
+        }
+      ]
+
+
+    }
+  ]
+}
+
+export const Allen_Fever_Repertory: KentRepertory = {
+  "bookName": "Allen Fever Repertory",
+  "chapters": [
+    {
+      "id": "bn_a_to_z",
+      "name": "A to Z",
+      "icon": "",
+      "description": "Alphabetical listing of bowel nosode rubrics",
+      "rubrics": [
+        { "id": "bn_21", "name": "Circulation; Palpitation; Fear of", "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }], "notes": [] },
+        { "id": "bn_22", "name": "Circulation; Palpitation; Nervousness", "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }], "notes": [] },
+        { "id": "bn_23", "name": "Circulation; Palpitation; Excitement before", "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }], "notes": [] },
+        { "id": "bn_24", "name": "Ears; Otorrhoea; Chronic", "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_25", "name": "Eyes; Conjunctivitis; Phlyctenular", "remedies": [{ "abbr": "Bac-Gaert.", "grade": 1 }], "notes": [] },
+        { "id": "bn_26", "name": "Face; Acne; Rosacea", "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }], "notes": [] },
+        { "id": "bn_27", "name": "Female; Leucorrhoea", "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_28", "name": "Female; Menstruation; Painful", "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_29", "name": "Female; Menstruation; Profuse", "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_30", "name": "Female; Ovaries; Pain", "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_31", "name": "Gastrointestinal; Appetite; Ravenous", "remedies": [{ "abbr": "Bac-Gaert.", "grade": 1 }], "notes": [] },
+        { "id": "bn_32", "name": "Gastrointestinal; Constipation", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }, { "abbr": "Bac-Faec.", "grade": 1 }], "notes": [] },
+        { "id": "bn_33", "name": "Gastrointestinal; Diarrhoea; Morning", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_34", "name": "Gastrointestinal; Diarrhoea; Nervous", "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }], "notes": [] },
+        { "id": "bn_35", "name": "Gastrointestinal; Flatus; Offensive", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_36", "name": "Gastrointestinal; Gastritis; Chronic", "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_37", "name": "Gastrointestinal; Haemorrhoids", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }, { "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_38", "name": "Gastrointestinal; Liver; Congestion", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_39", "name": "Generalities; Activity; Hyperactive", "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }], "notes": [] },
+        { "id": "bn_40", "name": "Generalities; Anaemia", "remedies": [{ "abbr": "Bac-Gaert.", "grade": 1 }], "notes": [] },
+        { "id": "bn_41", "name": "Generalities; Chilly", "remedies": [{ "abbr": "Bac-Gaert.", "grade": 1 }, { "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_42", "name": "Generalities; Fatigue", "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }, { "abbr": "Bac-sev.", "grade": 1 }], "notes": [] },
+        { "id": "bn_43", "name": "Generalities; Hydrogenoid Constitution", "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }], "notes": [] },
+        { "id": "bn_44", "name": "Generalities; Malnutrition", "remedies": [{ "abbr": "Bac-Gaert.", "grade": 1 }], "notes": [] },
+        { "id": "bn_45", "name": "Generalities; Obesity", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_46", "name": "Head; Headache; Bilious", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_47", "name": "Head; Headache; Congestive", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_48", "name": "Head; Headache; Periodic", "remedies": [{ "abbr": "Bac-Morg.", "grade": 1 }], "notes": [] },
+        { "id": "bn_49", "name": "Head; Headache; Sudden onset", "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }], "notes": [] },
+        { "id": "bn_50", "name": "Mind; Anxiety; Anticipatory", "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }], "notes": [] },
+
+      ]
+    }
+  ]
+}
+
+export const Homeosetu_Bowel_Nosode_repertory: KentRepertory = {
+  "bookName": "Homeosetu Bowel Nosode repertory",
+  "chapters": [
+    {
+      "id": "ak_ch_mind",
+      "name": "Mind",
+      "icon": "",
+      "description": "Mind rubrics from Allen's Keynotes",
+      "rubrics": [
+        {
+          "id": "ak_mind_1",
+          "name": "Clairvoyant",
+          "remedies": [{ "abbr": "lac-v.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_2",
+          "name": "Clairvoyant; As though about to hear bad news",
+          "remedies": [{ "abbr": "lac-v.", "grade": 1 }],
+          "notes": []
+        },
+
+
+
+
+        {
+          "id": "ak_mind_12",
+          "name": "Hysteria",
+          "remedies": [
+            { "abbr": "Hyos.", "grade": 1 },
+            { "abbr": "ust.", "grade": 1 },
+            { "abbr": "gels.", "grade": 1 },
+            { "abbr": "plat.", "grade": 1 },
+            { "abbr": "nux-m.", "grade": 1 },
+            { "abbr": "electr.", "grade": 1 },
+            { "abbr": "mag-m.", "grade": 1 },
+            { "abbr": "Valer.", "grade": 1 },
+            { "abbr": "thyr.", "grade": 1 },
+            { "abbr": "croc.", "grade": 1 },
+            { "abbr": "cimic.", "grade": 1 },
+            { "abbr": "caul.", "grade": 1 },
+            { "abbr": "bar-c.", "grade": 1 },
+            { "abbr": "puls.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_13",
+          "name": "Hysteria; Intellectual Persons; in",
+          "remedies": [{ "abbr": "Valer.", "grade": 1 }],
+          "notes": []
+        },
+
+
+        {
+          "id": "ak_mind_17",
+          "name": "Hysteria; Menses; during",
+          "remedies": [{ "abbr": "cimic.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_18",
+          "name": "Hysteria; Great Hilarity and dancing with",
+          "remedies": [{ "abbr": "Croc.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_19",
+          "name": "Hysteria; Metrorrhagia from; Night bed in",
+          "remedies": [{ "abbr": "Mag-m.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_20",
+          "name": "Hysteria; Women; in",
+          "remedies": [
+            { "abbr": "Mag-m.", "grade": 1 },
+            { "abbr": "sep.", "grade": 1 },
+            { "abbr": "Bar-c.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_23",
+          "name": "Hysteria; laughter; involuntary",
+          "remedies": [{ "abbr": "electr.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_24",
+          "name": "Hysteria; Spasms; with",
+          "remedies": [{ "abbr": "cimic.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_25",
+          "name": "Hysteria; Women; Uterine Disorders with",
+          "remedies": [
+            { "abbr": "mag-m.", "grade": 1 },
+            { "abbr": "ust.", "grade": 1 },
+            { "abbr": "plat.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_26",
+          "name": "Hysteria; Women; Uterine Disorders; Headache with",
+          "remedies": [{ "abbr": "plat.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_27",
+          "name": "Hysteria; Children",
+          "remedies": [{ "abbr": "Nux-m.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_28",
+          "name": "Irritability alternating Laughing",
+          "remedies": [{ "abbr": "Sanic.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_29",
+          "name": "Love; Disappointed; ailments from",
+          "remedies": [
+            { "abbr": "Ant-c.", "grade": 1 },
+            { "abbr": "Calc-p.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_30",
+          "name": "Ailments; Anger from",
+          "remedies": [{ "abbr": "Lyc.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_31",
+          "name": "Ailments; Care",
+          "remedies": [{ "abbr": "Ph-ac.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_32",
+          "name": "Ailments; Chagrin",
+          "remedies": [
+            { "abbr": "Bry.", "grade": 1 },
+            { "abbr": "Staph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_33",
+          "name": "Ailments; Envy",
+          "remedies": [{ "abbr": "Staph.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_34",
+          "name": "Ailments; Fright",
+          "remedies": [
+            { "abbr": "apis.", "grade": 1 },
+            { "abbr": "lyc.", "grade": 1 },
+            { "abbr": "op.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_35",
+          "name": "Ailments; Fright; fear still remaining",
+          "remedies": [
+            { "abbr": "acon.", "grade": 1 },
+            { "abbr": "hyos.", "grade": 1 },
+            { "abbr": "op.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_36",
+          "name": "Ailments; News bad from",
+          "remedies": [
+            { "abbr": "ign.", "grade": 1 },
+            { "abbr": "Apis.", "grade": 1 },
+            { "abbr": "gels.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_37",
+          "name": "Ailments; Motifying news from",
+          "remedies": [{ "abbr": "Lyss.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_38",
+          "name": "Ailments; Grief from",
+          "remedies": [
+            { "abbr": "aur.", "grade": 1 },
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "ign.", "grade": 1 },
+            { "abbr": "ph-ac.", "grade": 1 },
+            { "abbr": "caust.", "grade": 1 },
+            { "abbr": "cocc.", "grade": 1 },
+            { "abbr": "colch.", "grade": 1 },
+            { "abbr": "coloc.", "grade": 1 },
+            { "abbr": "cycl.", "grade": 1 },
+            { "abbr": "kali-br.", "grade": 1 },
+            { "abbr": "Lach.", "grade": 1 },
+            { "abbr": "nat.m.", "grade": 1 },
+            { "abbr": "pic-ac.", "grade": 1 },
+            { "abbr": "plat.", "grade": 1 },
+            { "abbr": "samb.", "grade": 1 },
+            { "abbr": "staph.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_39",
+          "name": "Ailments; Grief; Long Lasting",
+          "remedies": [{ "abbr": "Lach.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_40",
+          "name": "Ailments; Love; Disappointed",
+          "remedies": [
+            { "abbr": "calc-p.", "grade": 1 },
+            { "abbr": "ign.", "grade": 1 },
+            { "abbr": "Ph-ac.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_41",
+          "name": "Ailments; Pride",
+          "remedies": [{ "abbr": "Staph.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_mind_42",
+          "name": "Ailments; Rage",
+          "remedies": [{ "abbr": "apis.", "grade": 1 }],
+          "notes": []
+        },
+      ]
+    },
+    {
+
+      "id": "ak_ch_cough",
+      "name": "Cough",
+      "icon": "",
+      "description": "Cough rubrics from Allen's Keynotes",
+      "rubrics": [
+        {
+          "id": "ak_cough_1",
+          "name": "Cough",
+          "remedies": [{ "abbr": "Lyss.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_4",
+          "name": "Cough; Associated Symptom; Eructations; with",
+          "remedies": [{ "abbr": "Ambr.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_5",
+          "name": "Cough; Associated Symptoms; Head; with",
+          "remedies": [{ "abbr": "Caps.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_8",
+          "name": "Cough; Associated Symptom; Urinary",
+          "remedies": [
+            { "abbr": "caust.", "grade": 1 },
+            { "abbr": "puls.", "grade": 1 },
+            { "abbr": "squil.", "grade": 1 },
+            { "abbr": "verat.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_10",
+          "name": "Cough; Air; Cold; Agg",
+          "remedies": [{ "abbr": "Acon.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_12",
+          "name": "Cough; Night",
+          "remedies": [
+            { "abbr": "bac-b.", "grade": 1 },
+            { "abbr": "con.", "grade": 1 },
+            { "abbr": "dros.", "grade": 1 },
+            { "abbr": "eup-per.", "grade": 1 },
+            { "abbr": "hyos.", "grade": 1 },
+            { "abbr": "Mag-p-a.", "grade": 1 },
+            { "abbr": "Mag-arct.", "grade": 1 },
+            { "abbr": "Med.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_15",
+          "name": "Cough; Midnight",
+          "remedies": [{ "abbr": "dros.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_19",
+          "name": "Cough; Asthmatic",
+          "remedies": [{ "abbr": "Ip.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_21",
+          "name": "Cough; Barking",
+          "remedies": [
+            { "abbr": "dros.", "grade": 1 },
+            { "abbr": "verb.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_24",
+          "name": "Cough; Compels; Larynx grasp; to",
+          "remedies": [{ "abbr": "all-c.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_25",
+          "name": "Cough; Daytime; only",
+          "remedies": [
+            { "abbr": "euphr.", "grade": 1 },
+            { "abbr": "Ferr.", "grade": 1 },
+            { "abbr": "Nat-m.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_31",
+          "name": "Cough; Coughing agg",
+          "remedies": [{ "abbr": "ign.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_33",
+          "name": "Cough; Croaking",
+          "remedies": [{ "abbr": "acon.", "grade": 1 }],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_36",
+          "name": "Cough; Deep",
+          "remedies": [
+            { "abbr": "Apoc.", "grade": 1 },
+            { "abbr": "lyc.", "grade": 1 },
+            { "abbr": "Med.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_39",
+          "name": "Cough; Drinking; Amel",
+          "remedies": [
+            { "abbr": "Caust.", "grade": 1 },
+            { "abbr": "Cupr.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_41",
+          "name": "Cough; Dry",
+          "remedies": [
+            { "abbr": "acon.", "grade": 1 },
+            { "abbr": "am-c.", "grade": 1 },
+            { "abbr": "apoc.", "grade": 1 },
+            { "abbr": "Iod.", "grade": 1 },
+            { "abbr": "con.", "grade": 1 },
+            { "abbr": "bry.", "grade": 1 },
+            { "abbr": "cina.", "grade": 1 },
+            { "abbr": "hyos.", "grade": 1 },
+            { "abbr": "Ip.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_43",
+          "name": "Cough; Dry; Spasmodic",
+          "remedies": [
+            { "abbr": "Bry.", "grade": 1 },
+            { "abbr": "Cina.", "grade": 1 },
+            { "abbr": "hyos.", "grade": 1 },
+            { "abbr": "Ip.", "grade": 1 },
+            { "abbr": "kali-c.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_47",
+          "name": "Cough; Expectoration; Easy; with",
+          "remedies": [
+            { "abbr": "Arg-m.", "grade": 1 },
+            { "abbr": "bac-b.", "grade": 1 }
+          ],
+          "notes": []
+        },
+        {
+          "id": "ak_cough_50",
+          "name": "Cough; Expiration; on",
+          "remedies": [
+            { "abbr": "acon.", "grade": 1 },
+            { "abbr": "caust.", "grade": 1 }
+          ],
+          "notes": []
+        }
+      ]
+
+
+    }
+  ]
 }
 
 
+
 // Unified library of all books for navigation
-REPERTORY_BOOKS.push(KENT_REPERTORY, CLINICAL_REPERTORY)
+REPERTORY_BOOKS.push(KENT_REPERTORY, Homeosetu_Clinical_Repertory, HOMEOSETU_ALLEN, Allen_Fever_Repertory, Homeosetu_Bowel_Nosode_repertory)
 
 export function getRemedyFullName(
   abbr: string,
