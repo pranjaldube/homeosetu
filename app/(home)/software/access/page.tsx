@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useKentAccessStore } from '@/hooks/acess';
+import toast from 'react-hot-toast';
 
 export default function AccessPage() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function AccessPage() {
   const handleSubmit = () => {
     if (code === CORRECT_CODE) {
         setKentAccess(true)
+        toast.success("Success")
         router.push('/software/kent-repertory'); // redirect to main page
     } else {
       setError('Invalid access code');

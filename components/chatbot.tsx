@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './chatbot.css';
-import { KENT_REPERTORY } from "@/app/kent-repertory/data";
+import { KENT_REPERTORY } from "@/app/(home)/software/kent-repertory/data";
 
 // Type definitions
 type OptionNode = {
