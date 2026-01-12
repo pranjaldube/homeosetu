@@ -162,7 +162,6 @@ const KentRepertoryPage: React.FC = () => {
         }
     }>({})
 
-
     const [remedyPanel, setRemedyPanel] = useState<{
         open: boolean
         abbr?: string
@@ -288,7 +287,7 @@ const KentRepertoryPage: React.FC = () => {
             return next
         })
     }
-
+    
     const handleSaveNote = async (rubricId: string) => {
         if (!currentChapter) return
         const key = `${currentChapter.id}_${rubricId}`

@@ -22,8 +22,8 @@ const MAIN_LINKS = [
   { title: "Study Courses", href: "/explore" },
   { title: "Software", 
     children: [
-      {title:"ChatBot", href:"/software"},
-      { title: "Survey and WebApp", href: "/kent-repertory" },
+      {title:"Survey", href:"/software/survey"},
+      { title: "WebApp", href: "/software/kent-repertory" },
     ],
     external: true,
    },
