@@ -1,8 +1,7 @@
 .chatbot-container {
   max-width: 600px;
   max-height: 520px;
-  margin: 20px auto;
-  border: 1px solid #ddd;
+  margin-bottom: 20px;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -122,7 +121,7 @@
 }
 
 .chatbot-options {
-  padding: 12px 20px 16px;
+  padding: 12px 20px 24px;
   background: white;
   border-top: 1px solid #e0e0e0;
   display: flex;

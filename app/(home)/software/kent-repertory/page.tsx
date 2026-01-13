@@ -425,7 +425,7 @@ const KentRepertoryPage: React.FC = () => {
             </Head>
 
             <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50">
-                <header className="sticky top-0 z-20 border-b border-slate-700 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950">
+                <header className="top-0 border-b border-slate-700 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950">
                     <div className="mx-auto flex items-center justify-between gap-6 px-5 py-3">
                         <div className="flex items-center gap-3">
                             <div className="h-12 w-12 text-emerald-400">
@@ -1005,7 +1005,7 @@ const KentRepertoryPage: React.FC = () => {
                 <button
                     type="button"
                     className="fixed bottom-16 right-6 z-50 grid h-14 w-14 place-items-center rounded-full border-0 bg-gradient-to-tr from-indigo-600 to-violet-600 text-2xl shadow-xl shadow-indigo-900/60 transition hover:translate-y-[-1px] hover:shadow-2xl"
-                    onClick={() => setIsChatbotOpen(true)}
+                    onClick={() => setIsChatbotOpen(!isChatbotOpen)}
                     aria-label="Open chatbot"
                 >
                     💬
@@ -1030,8 +1030,9 @@ const KentRepertoryPage: React.FC = () => {
                             className="fixed inset-0 z-60 bg-black/40"
                             onClick={() => setIsChatbotOpen(false)}
                         />
-                        <div className="fixed bottom-20 right-5 z-70 flex w-80 max-w-[calc(100%-32px)] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-                            <div className="flex items-center justify-between bg-indigo-50 px-3.5 py-2.5 text-xs font-semibold text-slate-800">
+                        <div
+                         className="fixed bottom-20 right-5 z-70 flex w-88 max-w-[calc(100%-32px)] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+                            {/* <div className="flex items-center justify-between bg-indigo-50 px-3.5 py-2.5 text-xs font-semibold text-slate-800">
                                 <span>Ask Homeosetu</span>
                                 <button
                                     type="button"
@@ -1041,8 +1042,8 @@ const KentRepertoryPage: React.FC = () => {
                                 >
                                     ×
                                 </button>
-                            </div>
-                            <div className="h-[420px] bg-white">
+                            </div> */}
+                            <div className="bg-white z-50">
                                 <Chatbot onKentRequested={handleKentRedirect} />
                             </div>
                         </div>

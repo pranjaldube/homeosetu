@@ -2823,7 +2823,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
 }
 
 export const HOMEOSETU_ALLEN: KentRepertory = {
-  bookName: "Homeosetu Repertory To Keynotes and Characteristics of MM By Allen",
+  bookName: "Allen Fever Repertory",
   chapters: [
     {
       "id": "ch_cause",
@@ -3219,7 +3219,7 @@ export const HOMEOSETU_ALLEN: KentRepertory = {
 }
 
 export const Allen_Fever_Repertory: KentRepertory = {
-  "bookName": "Allen Fever Repertory",
+  "bookName": "Homeosetu Bowel Nosode repertory",
   "chapters": [
     {
       "id": "bn_a_to_z",
@@ -3264,7 +3264,7 @@ export const Allen_Fever_Repertory: KentRepertory = {
 }
 
 export const Homeosetu_Bowel_Nosode_repertory: KentRepertory = {
-  "bookName": "Homeosetu Bowel Nosode repertory",
+  "bookName": "Homeosetu Repertory To Keynotes and Characteristics of MM By Allen",
   "chapters": [
     {
       "id": "ak_ch_mind",
