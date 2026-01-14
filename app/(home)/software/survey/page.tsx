@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -13,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
-import { Rocket } from "lucide-react";
+import Chatbot from "@/components/chatbot";
 
 // -----------------------------------------------------
 //  TYPESCRIPT TYPES
@@ -69,6 +70,8 @@ interface SurveyErrors {
 }
 
 export default function SoftwarePage() {
+  const router = useRouter();
+  const KENT_CHAT_QUERY_KEY = "kentChatQuery";
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -397,6 +400,14 @@ export default function SoftwarePage() {
 
   return (
     <div className="min-h-[80vh] relative overflow-hidden bg-gradient-to-b from-purple-50 to-white">
+      {/* <Chatbot
+        onKentRequested={(payload) => {
+          if (typeof window !== "undefined" && payload) {
+            sessionStorage.setItem(KENT_CHAT_QUERY_KEY, JSON.stringify(payload));
+          }
+          router.push("/kent-repertory");
+        }}
+      /> */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply opacity-10 animate-blob"></div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-2000"></div>
       <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-4000"></div>

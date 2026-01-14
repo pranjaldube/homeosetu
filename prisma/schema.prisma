@@ -101,6 +101,20 @@ model UserProgress {
   @@index([chapterId])
 }
 
+model KentNote {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String
+  chapterId String
+  rubricId  String
+  text      String
+  userName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, chapterId])
+  @@index([userId, rubricId])
+}
+
 model Purchase {
   id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId String
