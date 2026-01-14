@@ -400,14 +400,14 @@ export default function SoftwarePage() {
 
   return (
     <div className="min-h-[80vh] relative overflow-hidden bg-gradient-to-b from-purple-50 to-white">
-      <Chatbot
+      {/* <Chatbot
         onKentRequested={(payload) => {
           if (typeof window !== "undefined" && payload) {
             sessionStorage.setItem(KENT_CHAT_QUERY_KEY, JSON.stringify(payload));
           }
           router.push("/kent-repertory");
         }}
-      />
+      /> */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply opacity-10 animate-blob"></div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-2000"></div>
       <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-4000"></div>

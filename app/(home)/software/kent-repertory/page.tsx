@@ -204,37 +204,37 @@ const KentRepertoryPage: React.FC = () => {
         }
     }, [currentBook, currentChapterId])
 
-    useEffect(() => {
-        if (!isLoaded || !user?.id) return
-        if (currentChapterId !== MIND_CHAPTER_ID) return
+    // useEffect(() => {
+    //     if (!isLoaded || !user?.id) return
+    //     if (currentChapterId !== MIND_CHAPTER_ID) return
 
-        const load = async () => {
-            try {
-                const res = await fetch(`/api/kent-notes?chapterId=${MIND_CHAPTER_ID}`)
-                if (!res.ok) return
-                const data = (await res.json()) as { notes: MindNotePayload[] }
-                setUserNotes((prev) => {
-                    const updated: UserNoteCache = { ...prev }
-                    Object.keys(updated).forEach((key) => {
-                        if (key.startsWith(`${MIND_CHAPTER_ID}_`)) delete updated[key]
-                    })
-                    data.notes.forEach((note) => {
-                        const key = `${note.chapterId}_${note.rubricId}`
-                        if (!updated[key]) updated[key] = []
-                        updated[key].push({
-                            text: note.text,
-                            timestamp: new Date(note.createdAt).getTime(),
-                            userName: note.userName,
-                        })
-                    })
-                    return updated
-                })
-            } catch (e) {
-                console.error("Failed to load Mind notes:", e)
-            }
-        }
-        void load()
-    }, [isLoaded, user?.id, currentChapterId])
+    //     const load = async () => {
+    //         try {
+    //             const res = await fetch(`/api/kent-notes?chapterId=${MIND_CHAPTER_ID}`)
+    //             if (!res.ok) return
+    //             const data = (await res.json()) as { notes: MindNotePayload[] }
+    //             setUserNotes((prev) => {
+    //                 const updated: UserNoteCache = { ...prev }
+    //                 Object.keys(updated).forEach((key) => {
+    //                     if (key.startsWith(`${MIND_CHAPTER_ID}_`)) delete updated[key]
+    //                 })
+    //                 data.notes.forEach((note) => {
+    //                     const key = `${note.chapterId}_${note.rubricId}`
+    //                     if (!updated[key]) updated[key] = []
+    //                     updated[key].push({
+    //                         text: note.text,
+    //                         timestamp: new Date(note.createdAt).getTime(),
+    //                         userName: note.userName,
+    //                     })
+    //                 })
+    //                 return updated
+    //             })
+    //         } catch (e) {
+    //             console.error("Failed to load Mind notes:", e)
+    //         }
+    //     }
+    //     void load()
+    // }, [isLoaded, user?.id, currentChapterId])
 
     const handleSelectChapter = (chapterId: string) => {
         setCurrentChapterId(chapterId)
@@ -753,7 +753,8 @@ const KentRepertoryPage: React.FC = () => {
                                                                         : "bg-sky-500/20 text-sky-200"
                                                                         }`}
                                                                 >
-                                                                    {note.type === "system" ? "System" : "My Note"}
+                                                                    {/* {note.type === "system" ? "System" : "My Note"} */}
+                                                                    {note.type}
                                                                 </span>
                                                                 {note.source && (
                                                                     <span className="text-[9px] italic text-slate-400">
@@ -813,12 +814,13 @@ const KentRepertoryPage: React.FC = () => {
                                                             ? "Enter your note here..."
                                                             : "Sign in to save personal notes."
                                                     }
-                                                    disabled={!user?.id}
+                                                    disabled={!user?.id || true}
                                                     className="mt-1 w-full min-h-[70px] rounded-md border border-slate-700 bg-slate-950 px-2.5 py-1.5 text-[11px] text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-70"
                                                 />
                                                 <div className="mt-2 flex justify-end gap-2">
                                                     <button
                                                         type="button"
+                                                        disabled={true}
                                                         className="rounded-md border border-slate-600 bg-slate-900 px-2 py-1 text-[11px] text-slate-200 hover:border-slate-400"
                                                         onClick={() =>
                                                             setNoteDrafts((prev) => {
@@ -832,7 +834,7 @@ const KentRepertoryPage: React.FC = () => {
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        disabled={!user?.id}
+                                                        disabled={!user?.id || true}
                                                         className="rounded-md bg-emerald-500 px-3 py-1 text-[11px] font-medium text-emerald-950 shadow-sm hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
                                                         onClick={() => handleSaveNote(rubric.id)}
                                                     >
@@ -977,7 +979,7 @@ const KentRepertoryPage: React.FC = () => {
                                         const maxGrade = Math.max(
                                             ...rem.occurrences.map((o) => o.grade)
                                         )
-                                        handleShowRemedyPanel(rem.abbr, maxGrade)
+                                        // handleShowRemedyPanel(rem.abbr, maxGrade)
                                     }}
                                 >
                                     <div className="mb-1 flex items-center justify-between">

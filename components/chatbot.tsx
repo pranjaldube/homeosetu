@@ -361,7 +361,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onKentRequested }) => {
   return (
     <div className="chatbot-container">
       <div className="chatbot-header">
-        <h2>Chatbot</h2>
+        <h2>Homeosetu Intelligence Clinic Assistant</h2>
         <button onClick={handleReset} className="reset-btn">Reset</button>
       </div>
 
