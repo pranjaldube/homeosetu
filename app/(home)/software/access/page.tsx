@@ -11,7 +11,7 @@ export default function AccessPage() {
   const [error, setError] = useState('');
   const { setKentAccess } = useKentAccessStore();
 
-  const CORRECT_CODE = 'KENT'; // ⚠️ visible in frontend
+  const CORRECT_CODE = 'KENT1401#$'; // ⚠️ visible in frontend
 
   // Auto-focus input on mount
   useEffect(() => {
