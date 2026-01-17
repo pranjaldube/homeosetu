@@ -47,17 +47,17 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
 
   "abies-c.": [{ name: "Abies canadensis", description: "Abies canadensis" }],
   "abies-n.": [{ name: "Abies nigra", description: "Abies nigra" }],
-  "abrot.": [{ name: "Abrotanum", description: "Abrotanum" }],
+  "abrot.": [{ name: "Abrotanum", description: "Gout; joints stiff, swollen, with pricking sensation; wrists and ankle - joints painful and inflamed" }],
   "absin.": [{ name: "Absinthium", description: "Absinthium" }],
   "acal.": [{ name: "Acalypha indica", description: "Acalypha indica" }],
   "acet-ac.": [{ name: "Acetic acid", description: "Acetic acid" }],
   "acon-c.": [{ name: "Aconitum cammarum", description: "Aconitum cammarum" }],
-  "acon.": [{ name: "Aconitum napellus", description: "Aconitum napellus" }],
+  "acon.": [{ name: "Aconitum napellus", description: "Cough, croup: dry, hoarse, suffocating; Loud, rough. croaking; hard, ringing, whistling; on expiration (caust.)"}],
   "acon-f.": [{ name: "Aconitum ferox", description: "Aconitum ferox" }],
   "acon-l.": [{ name: "Aconitum lycotonum", description: "Aconitum lycotonum" }],
   "act-sp.": [{ name: "Actaea spicata", description: "Actaea spicata" }],
   "adren.": [{ name: "Adrenalin", description: "Adrenalin" }],
-  "aesc.": [{ name: "Aesculus hippocastanum", description: "Aesculus hippocastanum" }],
+  "aesc.": [{ name: "Aesculus hippocastanum", description: "Follicular pharyngitis: violent burning, raw sensation in throat; dryness and roughness of throat" }],
   "aesc-g.": [{ name: "Aesculus glabra", description: "Aesculus glabra" }],
   "aeth.": [{ name: "Aethusa cynapium", description: "Aethusa cynapium" }],
   "agar-em.": [{ name: "Agaricus emeticus", description: "Agaricus emeticus" }],
@@ -68,7 +68,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   "ail.": [{ name: "Ailanthus", description: "Ailanthus" }],
   "alco.": [{ name: "Alcohol", description: "Alcohol" }],
   "alet.": [{ name: "Aletris farinosa", description: "Aletris farinosa" }],
-  "all-c.": [{ name: "Allium сера", description: "Allium сера" }],
+  "all-c.": [{ name: "Allium сера", description: "Catarrhal laryngitis; cough compels patient to grasp the larynx; seems as if cough would tear it" }],
   "all-s.": [{ name: "Allium sativum", description: "Allium sativum" }],
   "aloe.": [{ name: "Aloe socotrina", description: "Aloe socotrina" }],
   "alst.": [{ name: "Alstonia constricta", description: "Alstonia constricta" }],
@@ -113,7 +113,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   "arg.": [{ name: "Argentum metallicum", description: "Argentum metallicum" }],
   "arg-mur.": [{ name: "Argentum muriaticum", description: "Argentum muriaticum" }],
   "arg-n.": [{ name: "Argentum nitricum", description: "Argentum nitricum" }],
-  "arn.": [{ name: "Arnica montana", description: "Arnica montana" }],
+  "arn.": [{ name: "Arnica montana", description: "Conjunctival or retinal hemorrhage, with extravasation, from injuries or cough (Led., Nux-v,)" }],
   "ars.": [{ name: "Arsenicum album", description: "Arsenicum album" }],
   "ars-h.": [{ name: "Arsenicum hydrogenisatum", description: "Arsenicum hydrogenisatum" }],
   "ars-i.": [{ name: "Arsenicum iodatum", description: "Arsenicum iodatum" }],
@@ -146,14 +146,14 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   "aur-s.": [{ name: "Aurum sulphuratum", description: "Aurum sulphuratum" }],
 
   "bac-b.": [{ name: "Bacillinum Burnett", description: "Bacillinum Burnett" }],
-  "bac-dys.": [{ name: "Bacillus Dysentrico, Dysentery Bacillus, Shigella Dysentriae", description: "Bacillus Dysentrico, Dysentery Bacillus, Shigella Dysentriae" }],
+  "bac-dys.": [{ name: "Bacillus Dysentrico, Dysentery Bacillus, Shigella Dysentriae", description: " In some children, diagnosed as suffering from congenital pyloric stenosis considerable success has followed the use of Bacillus Dysentrico Bach , which would suggest that in these cases the condition had been due to pyloric spasm rather than to congenital malformation, of the pylorus." }],
   "bac-faec.": [{ name: "Bacillus Faecalis", description: "Bacillus Faecalis" }],
   "bac-morg.": [{ name: "Morgan Pure, Morgan bacillus, Morgan pure, Proteus morgani", description: "Morgan Pure, Morgan bacillus, Morgan pure, Proteus morgani" }],
-  "bac-morg-b.": [{ name: "Morgan Bach", description: "Morgan Bach" }],
-  "bac-morg-g.": [{ name: "Morgan Gaertner", description: "Morgan Gaertner" }],
+  "bac-morg-b.": [{ name: "Morgan Bach", description: "Chronic congestion around the joints causes arthritic conditions, usually affecting the phalangeal or knee joint regions." }],
+  "bac-morg-g.": [{ name: "Morgan Gaertner", description: "Vertigo from High Blood Pressure" }],
   "bac-mut.": [{ name: "Bacillus Mutabile. Mutabile Bach", description: "Bacillus Mutabile. Mutabile Bach" }],
-  "bac-prot.": [{ name: "Bacillus Proteus", description: "Bacillus Proteus" }],
-  "bac-sev.": [{ name: "Bacillus Seven", description: "Bacillus Seven" }],
+  "bac-prot.": [{ name: "Bacillus Proteus", description: "Further indication for the use of this nosode is disturbance of the peripheral nervous system, evidenced by spasm of the peripheral circulation, e. g. \"dead fingers intermittent claudication in the circulation of the lower limbs ; anginal attacks due to spasm of the coronary capillaries." }],
+  "bac-sev.": [{ name: "Bacillus Seven", description: "Relaxed fibrous tissue, with tendency to the formation of rheumatic nodules" }],
   "bac-syco.": [{ name: "Sycotic co. bacillus. Sycotic bacillus. Bowel nosode", description: "Sycotic co. bacillus. Sycotic bacillus. Bowel nosode" }],
   "bac-ten.": [{ name: "Bacillus ten", description: "Bacillus ten" }],
 
@@ -163,7 +163,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   "bart.": [{ name: "Bartfelder (acid spring)", description: "Bartfelder (acid spring)" }],
 
   "bar-ac.": [{ name: "Baryta acetica", description: "Baryta acetica" }],
-  "bar-c.": [{ name: "Baryta carbonica", description: "Baryta carbonica" }],
+  "bar-c.": [{ name: "Baryta carbonica", description: "Chronic cough in psoric children; enlarged tonsils or elongated uvula; agg. after cold (Alum.)" }],
   "bar-i.": [{ name: "Baryta iodata", description: "Baryta iodata" }],
   "bar-m.": [{ name: "Baryta muriatica", description: "Baryta muriatica" }],
 
@@ -176,7 +176,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
 
   "berb.": [{ name: "Berberis vulgaris", description: "Berberis vulgaris" }],
   "berb-aq.": [{ name: "Berberis Aquifolium", description: "Berberis Aquifolium" }],
-  "bism.": [{ name: "Bismuthum oxidum", description: "Bismuthum oxidum" }],
+  "bism.": [{ name: "Bismuthum oxidum", description: "Cholera morbus and summer complaints, when vomiting predominates" }],
 
   "blatta-a.": [{ name: "Blatta americana", description: "Blatta americana" }],
   "blatta.": [{ name: "Blatta orientalis", description: "Blatta orientalis" }],
@@ -272,10 +272,11 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
 
   "cic.": [{ name: "Cicuta virosa", description: "Cicuta virosa" }],
   "cimx.": [{ name: "Cimex", description: "Cimex" }],
-  "cimic.": [{ name: "Cimicifuga racemosa (Actaea Racemosa)", description: "Cimicifuga racemosa (Actaea Racemosa)" }],
+  "cimic.": [{ name: "Cimicifuga racemosa (Actaea Racemosa)", description: "Spasms: hysterical of epileptic; reflex from uterine disease; worse during menses; chorea agg. left side" }],
 
-  "cin.": [{ name: "Cin. -Abdomen, DISTENDED: When due to worms, Cina 3, 6h.", description: "Cin. -Abdomen, DISTENDED: When due to worms, Cina 3, 6h." }],
+ 
   "cina": [{ name: "Cina", description: "Cina" }],
+  "ham.":[{name:"Traumatic conjunctivitis; suggillations, or extravasations into chambers of eye; from severe coughing intense soreness (Arn., Calen, Led.)",description:"Traumatic conjunctivitis; suggillations, or extravasations into chambers of eye; from severe coughing intense soreness (Arn., Calen, Led.)"}],
   "cinch.": [{ name: "Cinchonium sulphuricum", description: "Cinchonium sulphuricum" }],
   "cinch-b.": [{ name: "Cinchona boliviana", description: "Cinchona boliviana" }],
   "cinnb.": [{ name: "Cinnabaris", description: "Cinnabaris" }],
@@ -328,7 +329,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   "culx.": [{ name: "Culex muscæ", description: "Culex muscæ" }],
   "cund.": [{ name: "Cundurango", description: "Cundurango" }],
 
-  "cupr.": [{ name: "Cuprum metallicum", description: "Cuprum metallicum" }],
+  "cupr.": [{ name: "Cuprum metallicum", description: "Epilepsy: aura begins in knees and ascends; agg. at night during sleep (Bufo); about new moon, at regular intervals (menses); from a fall or blow upon the head; from getting wet" }],
   "cupr-a.": [{ name: "Cuprum aceticum", description: "Cuprum aceticum" }],
   "cupr-ar.": [{ name: "Cuprum arsenicosum", description: "Cuprum arsenicosum" }],
   "cupr-n.": [{ name: "Cuprum nitricum", description: "Cuprum nitricum" }],
@@ -342,12 +343,6 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'daph.': [{ name: 'Daphne indica', description: 'Daphne indica' }],
   'der.': [{ name: 'Derris pinnata', description: 'Derris pinnata' }],
   'dig.': [{ name: 'Digitalis purpurea', description: 'Digitalis purpurea' }],
-  'dios.': [
-    {
-      name: 'Dios. -Abdomen, DISTENDED: If from flatulence, with great pain, the bowels being open or loose, Dios. 12, 6h.',
-      description: 'Dios. -Abdomen, DISTENDED: If from flatulence, with great pain, the bowels being open or loose, Dios. 12, 6h.'
-    }
-  ],
   'diph.': [{ name: 'Diptherinum', description: 'Diptherinum' }],
   'dirc.': [{ name: 'Dirca palustris', description: 'Dirca palustris' }],
   'dol.': [{ name: 'Dolichos pruriens', description: 'Dolichos pruriens' }],
@@ -355,7 +350,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'dros.': [
     {
       name: 'Drosera rotundifolia',
-      description: 'Drosera rotundifolia'
+      description: 'Nocturnal cough of young persons in phthisis; bloody or purulent sputa'
     }
   ],
   'dub.': [{ name: 'Duboisinum', description: 'Duboisinum' }],
@@ -413,13 +408,13 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'euphr.': [
     {
       name: 'Euphrasia officinalis',
-      description: 'Euphrasia officinalis'
+      description: 'Pertussis: excessive lachrymation during cough; cough only in day time (Ferr., Nat-m.)'
     }
   ],
   'eupi.': [{ name: 'Eupion', description: 'Eupion' }],
   'fago.': [{ name: 'Fagopyrum', description: 'Fagopyrum' }],
   'ferr-ar.': [{ name: 'Ferrum arsenicosum', description: 'Ferrum arsenicosum' }],
-  'ferr.': [{ name: 'Ferrum metallicum', description: 'Ferrum metallicum' }],
+  'ferr.': [{ name: 'Ferrum metallicum', description: 'Erethitic chlorosis, worse in winter Red parts become white; face, lips, tongue and mucous membrane of mouth' }],
   'ferr-ac.': [{ name: 'Ferrum aceticum', description: 'Ferrum aceticum' }],
   'ferr-i.': [{ name: 'Ferrum iodatum', description: 'Ferrum iodatum' }],
   'ferr-ma.': [{ name: 'Ferrum magneticum', description: 'Ferrum magneticum' }],
@@ -478,8 +473,8 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'gunp.': [{ name: 'Gunpowder', description: 'Gunpowder' }],
   'gymn.': [{ name: 'Gymnocladus', description: 'Gymnocladus' }],
   'haem.': [{ name: 'Hæmatoxylon', description: 'Hæmatoxylon' }],
-  'ham.': [
-    { name: 'Hamamelis virginica', description: 'Hamamelis virginica' }
+  'ham': [
+    { name: 'Hamamelis virginica', description: 'Traumatic conjunctivitis; suggillations, or extravasations into chambers of eye; from severe coughing intense soreness (Arn., Calen, Led.)' }
   ],
   'hecla.': [{ name: 'Hecla lava', description: 'Hecla lava' }],
   'hedeom.': [
@@ -491,7 +486,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'hep.': [
     {
       name: 'Hepar sulphuris calcareum',
-      description: 'Hepar sulphuris calcareum'
+      description: 'breathing, anxious, wheezing, rattling; short, deep breathing threatens suffocation; must bend head back and sit up; after suppressed eruption (Psor.)'
     }
   ],
   'hipp.': [{ name: 'Hippomanes', description: 'Hippomanes' }],
@@ -523,7 +518,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
     }
   ],
   'hydr-ac.': [{ name: 'Hydrocyanic acid', description: 'Hydrocyanic acid' }],
-  'hyos.': [{ name: 'Hyoscyamus niger', description: 'Hyoscyamus niger' }],
+  'hyos.': [{ name: 'Hyoscyamus niger', description: 'Bad effects of unfortunate love; with jealousy, rage, incoherent speech or inclination to laugh at everything; often followed by epilepsy' }],
   'hyper.': [
     {
       name: 'Hypericum perforatum',
@@ -532,19 +527,14 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   ],
   'iber.': [{ name: 'Iberís amara', description: 'Iberís amara' }],
   'ictod.': [{ name: 'Ictodes fœtida', description: 'Ictodes fœtida' }],
-  'ign.': [
-    {
-      name: 'Ign., Asaf., -Abdomen, DISTENDED:Hysterical distension, (1) Ign. 12, 2h. (2) Asaf. 12, 2h.',
-      description: 'Ign., Asaf., -Abdomen, DISTENDED:Hysterical distension, (1) Ign. 12, 2h. (2) Asaf. 12, 2h.'
-    }
-  ],
+  
   'iii.': [{ name: 'Illicium anisatum', description: 'Illicium anisatum' }],
   'indg.': [{ name: 'Indigo', description: 'Indigo' }],
   'ind.': [{ name: 'Indium metallicum', description: 'Indium metallicum' }],
   'ing.': [{ name: 'Ingluvin', description: 'Ingluvin' }],
   'inul.': [{ name: 'Inula helenium', description: 'Inula helenium' }],
   'iodof.': [{ name: 'Iodoformum', description: 'Iodoformum' }],
-  'iod.': [{ name: 'Iodium', description: 'Iodium' }],
+  'iod.': [{ name: 'Iodium', description: 'Croup: membranous, hoarse, dry cough, worse in warm, wet weather; with wheezing and sawing respiration (Spong.)' }],
   'ip.': [{ name: 'Ipecacuanha', description: 'Ipecacuanha' }],
   'ipom.': [{ name: 'Ipomia purpurea', description: 'Ipomia purpurea' }],
   'irid.': [{ name: 'Iridium metallicum', description: 'Iridium metallicum' }],
@@ -572,7 +562,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'kali-a.': [{ name: 'Kali aceticum', description: 'Kali aceticum' }],
   'kali-ar.': [{ name: 'Kali arsenicosum', description: 'Kali arsenicosum' }],
   'kali-bi.': [{ name: 'Kali bichromicum', description: 'Kali bichromicum' }],
-  'kali-br.': [{ name: 'Kali bromatum', description: 'Kali bromatum' }],
+  'kali-br.': [{ name: 'Kali bromatum', description: `Spasms: from fright, anger or emotional causes in nervous plethoric persons; during parturition, teething, whooping - cough, Bright's disease.` }],
   'kali-c.': [{ name: 'Kali carbonicum', description: 'Kali carbonicum' }],
   'kali-chl.': [{ name: 'Kali chloricum', description: 'Kali chloricum' }],
   'kali-cit.': [{ name: 'kali citricum', description: 'kali citricum' }],
@@ -633,12 +623,7 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
     { name: 'Lobelia syphilitica', description: 'Lobelia syphilitica' }
   ],
   'lup.': [{ name: 'Lupulus', description: 'Lupulus' }],
-  'lyc.': [
-    {
-      name: 'Lyc., -Abdomen, DISTENDED: If due to flatulence with or without constipation, Lyc. 6, 6hrly',
-      description: 'Lyc., -Abdomen, DISTENDED: If due to flatulence with or without constipation, Lyc. 6, 6hrly'
-    }
-  ],
+  
   'lycpr.': [{ name: 'Lycopersicum', description: 'Lycopersicum' }],
   'lycps.': [{ name: 'Lycopus virginicus', description: 'Lycopus virginicus' }],
   'lyss.': [
@@ -944,6 +929,9 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
       description: 'Sanguinaria canadensis'
     }
   ],
+  
+  
+  "Bac-Gaert.":[{name:"dsafas",description:"The keynote for this nosode is malnutrition and as this would imply, it is the nosode applicable to the treatment of many diseases of childhood, but it is also found to be of value in the other extreme of life associated with malignancy."}],
   'sang-n.': [
     { name: 'Sanguinaria nitrica', description: 'Sanguinaria nitrica' }
   ],
@@ -967,12 +955,6 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'senn.': [{ name: 'Senna', description: 'Senna' }],
   'sep.': [{ name: 'Sepia', description: 'Sepia' }],
   'serp.': [{ name: 'Serpentaria', description: 'Serpentaria' }],
-  'sil.': [
-    {
-      name: 'Sil.,Bac., -Abdomen, DISTENDED:In thin, rickety children, Sil. 6, 6h. Intercurrently, Bac. 30, once a week.',
-      description: 'Sil.,Bac., -Abdomen, DISTENDED:In thin, rickety children, Sil. 6, 6h. Intercurrently, Bac. 30, once a week.'
-    }
-  ],
   'sin-a.': [{ name: 'Sinapis alba', description: 'Sinapis alba' }],
   'sin-n.': [{ name: 'Sinapis nigra', description: 'Sinapis nigra' }],
   'sol-m.': [{ name: 'Solanum mammosum', description: 'Solanum mammosum' }],
@@ -1078,12 +1060,6 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
     }
   ],
   'thy.': [{ name: 'thyroidinum', description: 'thyroidinum' }],
-  'thuj.': [
-    {
-      name: ' thuj., -Abdomen, DISTENDED:As if a living animal were there, Thuj. 12, 2h.',
-      description: ' thuj., -Abdomen, DISTENDED:As if a living animal were there, Thuj. 12, 2h.'
-    }
-  ],
   'til.': [{ name: 'Tilia curopea', description: 'Tilia curopea' }],
   'tong.': [{ name: 'Tongo', description: 'Tongo' }],
   'trif-p.': [{ name: 'Trifolium pratense', description: 'Trifolium pratense' }],
@@ -1148,7 +1124,16 @@ export const REMEDY_DICTIONARY: Record<string, RemedyInfo[]> = {
   'zinc-pic.': [{ name: 'Zincum Picricum', description: 'Zincum Picricum' }],
   'zinc-s.': [{ name: 'Zincum sulphuricum', description: 'Zincum sulphuricum' }],
   'zing.': [{ name: 'Zingiber', description: 'Zingiber' }],
-  'ziz.': [{ name: 'Zizia aurea', description: 'Zizia aurea' }]
+  'ziz.': [{ name: 'Zizia aurea', description: 'Zizia aurea' }],
+  'bac.':[{name:'In fat scrofulous children, Calc. 6, 6h. Intercurrently, Bac 30, once a week.',description:'In fat scrofulous children, Calc. 6, 6h. Intercurrently, Bac 30, once a week.'}],
+  'sil.':[{name:'In thin, rickety children, Sil. 6, 6h. Intercurrently, Bac. 30, once a week.',description:'In thin, rickety children, Sil. 6, 6h. Intercurrently, Bac. 30, once a week.'}],
+  'cin.':[{name:'When due to worms, Cina 3, 6h.',description:'When due to worms, Cina 3, 6h.'}],
+  'lyc.':[{name:'If due to flatulence with or without constipation, Lyc. 6, 6hrly ',description:'If due to flatulence with or without constipation, Lyc. 6, 6hrly '}],
+  'dios.':[{name:'If from flatulence, with great pain, the bowels being open or loose, Dios. 12, 6h.',description:'If from flatulence, with great pain, the bowels being open or loose, Dios. 12, 6h.'}],
+  'ign.':[{name:'Hysterical distension, (1) Ign. 12, 2h. (2) Asaf. 12, 2h.',description:'Hysterical distension, (1) Ign. 12, 2h. (2) Asaf. 12, 2h.'}],
+  'thuj.':[{name:'As if a living animal were there, Thuj. 12, 2h.',description:'As if a living animal were there, Thuj. 12, 2h.'}],
+
+
 }
 
 export const KENT_REPERTORY: KentRepertory = {
@@ -1416,7 +1401,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 3
           },
           {
-            "abbr": "hep",
+            "abbr": "hep.",
             "grade": 1
           },
           {
@@ -1632,11 +1617,11 @@ export const KENT_REPERTORY: KentRepertory = {
         "notes": [
           {
             "type": "system",
-            "text": "[KR,Whntouse, -It may not be clearly evident in Case taking if patient is well aware of his speech and actions or in compensated cases. Hence it is best to understand the absentmindedness from examples given by patient about daily life to life activities or examples from relatives.]"
+            "text": "It may not be clearly evident in Case taking if patient is well aware of his speech and actions or in compensated cases. Hence it is best to understand the absentmindedness from examples given by patient about daily life to life activities or examples from relatives."
           },
           {
             "type": "system",
-            "text": "[KR,WhntoUseMetaphor, - Absentmindedness is often a picture of someone who is lost in thought or is away from the present moment. any act showing patient is occupied in something else rather than the current conversation or the present moment, shall be a guide to take this rubric for analysis]"
+            "text": "Absentmindedness is often a picture of someone who is lost in thought or is away from the present moment. any act showing patient is occupied in something else rather than the current conversation or the present moment, shall be a guide to take this rubric for analysis"
           }
         ],
         "crossReferences": [
@@ -1667,7 +1652,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1679,7 +1664,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1691,7 +1676,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1703,7 +1688,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1719,7 +1704,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 2
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1743,7 +1728,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1755,7 +1740,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1767,7 +1752,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absentmindedness simply means having or showing forgetful or inattentive behaviour.]",
+        "meaning": "Absentmindedness simply means having or showing forgetful or inattentive behaviour.",
         "notes": []
       },
       {
@@ -1967,7 +1952,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 3
           }
         ],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": [
           {
             "type": "system",
@@ -1985,7 +1970,7 @@ export const KENT_REPERTORY: KentRepertory = {
         "id": "absorbed;-daytime--:",
         "name": "ABSORBED; daytime  :",
         "remedies": [],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": []
       },
       {
@@ -2001,7 +1986,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": []
       },
       {
@@ -2013,7 +1998,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": []
       },
       {
@@ -2025,7 +2010,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": []
       },
       {
@@ -2037,7 +2022,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally, Frivolity means taking for granted or not serious in doing something]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally, Frivolity means taking for granted or not serious in doing something",
         "notes": []
       },
       {
@@ -2049,14 +2034,14 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": []
       },
       {
         "id": "absorbed;-eating,-after--:",
         "name": "ABSORBED; eating, after  :",
         "remedies": [],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": []
       },
       {
@@ -2068,7 +2053,7 @@ export const KENT_REPERTORY: KentRepertory = {
             "grade": 1
           }
         ],
-        "meaning": "[KR,RbMean,-Absorbed means something or someone that is taking the attention totally]",
+        "meaning": "Absorbed means something or someone that is taking the attention totally",
         "notes": []
       },],
     },
@@ -2086,56 +2071,56 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
         {
           id: "asthma",
           name: "Asthma",
-          remedies: [{ abbr: "hep", grade: 1 }],
+          remedies: [{ abbr: "hep.", grade: 1 }],
           notes: []
         },
         {
           id: "brights-disease",
           name: "Brights Disease",
-          remedies: [{ abbr: "Kali-br", grade: 1 }],
+          remedies: [{ abbr: "Kali-br.", grade: 1 }],
           notes: []
         },
         {
           id: "conjunctivitis",
           name: "Conjunctivitis",
-          remedies: [{ abbr: "Ham", grade: 1 }],
+          remedies: [{ abbr: "Ham.", grade: 1 }],
           notes: []
         },
         {
           id: "cholera",
           name: "Cholera",
-          remedies: [{ abbr: "Bism", grade: 1 }],
+          remedies: [{ abbr: "Bism.", grade: 1 }],
           notes: []
         },
         {
           id: "chlorosis",
           name: "Chlorosis",
-          remedies: [{ abbr: "ferr", grade: 1 }],
+          remedies: [{ abbr: "ferr.", grade: 1 }],
           notes: []
         },
         {
           id: "croup",
           name: "Croup",
           remedies: [
-            { abbr: "acon", grade: 1 },
-            { abbr: "iod", grade: 1 }
+            { abbr: "acon.", grade: 1 },
+            { abbr: "iod.", grade: 1 }
           ],
           notes: []
         },
         {
           id: "croup-membranous",
           name: "Croup, membranous",
-          remedies: [{ abbr: "iod", grade: 1 }],
+          remedies: [{ abbr: "iod.", grade: 1 }],
           notes: []
         },
         {
           id: "epilepsy",
           name: "Epilepsy",
           remedies: [
-            { abbr: "bufo", grade: 1 },
-            { abbr: "cimic", grade: 1 },
-            { abbr: "Cupr", grade: 1 },
-            { abbr: "hyos", grade: 1 }
+            { abbr: "bufo.", grade: 1 },
+            { abbr: "cimic.", grade: 1 },
+            { abbr: "Cupr.", grade: 1 },
+            { abbr: "hyos.", grade: 1 }
           ],
           notes: []
         },
@@ -2143,63 +2128,63 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           id: "gout",
           name: "Gout",
           remedies: [
-            { abbr: "Abrot", grade: 1 },
-            { abbr: "Aesc", grade: 1 }
+            { abbr: "Abrot.", grade: 1 },
+            { abbr: "Aesc.", grade: 1 }
           ],
           notes: []
         },
         {
           id: "haemorrhage-conjunctiva",
           name: "Haemorrhage, Conjunctiva",
-          remedies: [{ abbr: "arn", grade: 1 }],
+          remedies: [{ abbr: "arn.", grade: 1 }],
           notes: []
         },
         {
           id: "haemorrhage-retina",
           name: "Haemorrhage, retina",
-          remedies: [{ abbr: "arn", grade: 1 }],
+          remedies: [{ abbr: "arn.", grade: 1 }],
           notes: []
         },
         {
           id: "pertussis",
           name: "Pertussis",
-          remedies: [{ abbr: "Euphr", grade: 1 }],
+          remedies: [{ abbr: "Euphr.", grade: 1 }],
           notes: []
         },
         {
           id: "pharyngitis",
           name: "Pharyngitis",
-          remedies: [{ abbr: "Aesc", grade: 1 }],
+          remedies: [{ abbr: "Aesc.", grade: 1 }],
           notes: []
         },
         {
           id: "laryngitis",
           name: "Laryngitis",
-          remedies: [{ abbr: "All-c", grade: 1 }],
+          remedies: [{ abbr: "All-c.", grade: 1 }],
           notes: []
         },
         {
           id: "lienteria",
           name: "Lienteria",
-          remedies: [{ abbr: "Abrot", grade: 1 }],
+          remedies: [{ abbr: "Abrot.", grade: 1 }],
           notes: []
         },
         {
           id: "rheumatism",
           name: "Rheumatism",
-          remedies: [{ abbr: "Abrot", grade: 1 }],
+          remedies: [{ abbr: "Abrot.", grade: 1 }],
           notes: []
         },
         {
           id: "tonsillitis",
           name: "Tonsillitis",
-          remedies: [{ abbr: "Bar-c", grade: 1 }],
+          remedies: [{ abbr: "Bar-c.", grade: 1 }],
           notes: []
         },
         {
           id: "tuberculosis-chest",
           name: "Tuberculosis, chest",
-          remedies: [{ abbr: "dros", grade: 1 }],
+          remedies: [{ abbr: "dros.", grade: 1 }],
           notes: []
         }
       ]
@@ -2213,23 +2198,23 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "id": "rubric_0",
           "name": "Clinical;Boericke;Abdomen;Coldness in (17)",
           "remedies": [
-            { "abbr": "aeth", "grade": 1 },
-            { "abbr": "ambr", "grade": 1 },
-            { "abbr": "bar-c", "grade": 1 },
-            { "abbr": "cadm-s", "grade": 1 },
-            { "abbr": "chin", "grade": 1 },
-            { "abbr": "colch", "grade": 1 },
-            { "abbr": "dulc", "grade": 1 },
-            { "abbr": "kali-br", "grade": 1 },
-            { "abbr": "kali-c", "grade": 1 },
-            { "abbr": "kali-s", "grade": 1 },
-            { "abbr": "meny", "grade": 1 },
-            { "abbr": "onos", "grade": 1 },
-            { "abbr": "phos", "grade": 1 },
-            { "abbr": "sil", "grade": 1 },
-            { "abbr": "staph", "grade": 1 },
-            { "abbr": "tab", "grade": 1 },
-            { "abbr": "verat", "grade": 1 }
+            { "abbr": "aeth.", "grade": 1 },
+            { "abbr": "ambr.", "grade": 1 },
+            { "abbr": "bar-c.", "grade": 1 },
+            { "abbr": "cadm-s.", "grade": 1 },
+            { "abbr": "chin.", "grade": 1 },
+            { "abbr": "colch.", "grade": 1 },
+            { "abbr": "dulc.", "grade": 1 },
+            { "abbr": "kali-br.", "grade": 1 },
+            { "abbr": "kali-c.", "grade": 1 },
+            { "abbr": "kali-s.", "grade": 1 },
+            { "abbr": "meny.", "grade": 1 },
+            { "abbr": "onos.", "grade": 1 },
+            { "abbr": "phos.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "staph.", "grade": 1 },
+            { "abbr": "tab.", "grade": 1 },
+            { "abbr": "verat.", "grade": 1 }
           ],
           "notes": []
         },
@@ -2294,7 +2279,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
             { "abbr": "crot-h", "grade": 1 },
             { "abbr": "gamb", "grade": 1 },
             { "abbr": "hedeo", "grade": 1 },
-            { "abbr": "hep", "grade": 1 },
+            { "abbr": "hep.", "grade": 1 },
             { "abbr": "hyos", "grade": 1 },
             { "abbr": "iodof", "grade": 1 },
             { "abbr": "jal", "grade": 1 },
@@ -3139,13 +3124,13 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "id": "r-3",
           "name": "Clinical;Clarke; Abdomen; Distended (7)",
           "remedies": [
-            { "abbr": "cina", "grade": 1 },
-            { "abbr": "dios", "grade": 1 },
-            { "abbr": "fil", "grade": 1 },
-            { "abbr": "ign", "grade": 1 },
-            { "abbr": "lyc", "grade": 1 },
-            { "abbr": "sil", "grade": 1 },
-            { "abbr": "thuj", "grade": 1 }
+            { "abbr": "cin.", "grade": 1 },
+            { "abbr": "dios.", "grade": 1 },
+            { "abbr": "fil.", "grade": 1 },
+            { "abbr": "ign.", "grade": 1 },
+            { "abbr": "lyc.", "grade": 1 },
+            { "abbr": "sil.", "grade": 1 },
+            { "abbr": "thuj.", "grade": 1 }
           ],
           "notes": [
             {
@@ -3281,7 +3266,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*,Bell., - Abscess or Suppuration THREATENING:Redness, pain and throbbing...]"
+              "text": "Abscess or Suppuration THREATENING:Redness, pain and throbbing..."
             }
           ]
         },
@@ -3305,7 +3290,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, sul-ac., - Acidity. Acid Sulph 3, 4hrly.] [ClarkP*,arg-n., - Acidity With gastralgia...]"
+              "text": "Acidity. Acid Sulph 3, 4hrly.] [ClarkP*,arg-n., - Acidity With gastralgia..."
             }
           ]
         },
@@ -3353,7 +3338,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP* , Carb-v., bell., puls., - Acne Simple and recent in young persons...]"
+              "text": "Carb-v., bell., puls., - Acne Simple and recent in young persons..."
             }
           ]
         },
@@ -3371,7 +3356,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Sulph., - Alcohol Habit: A single dose of Sulph. 30 or 200 every two or three weeks...]"
+              "text": "Alcohol Habit: A single dose of Sulph. 30 or 200 every two or three weeks..."
             }
           ]
         },
@@ -3382,7 +3367,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Nux-v., - Alchoholism CHRONIC : Total abstinence Morning vomiting, tremulousness, Nux. v. 3, 4h.]"
+              "text": "Alchoholism CHRONIC : Total abstinence Morning vomiting, tremulousness, Nux. v. 3, 4h."
             }
           ]
         },
@@ -3393,7 +3378,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Acon., - Amaurosis:Recent; sudden blindness from cold bathing in hot weather, Aco. 3, 2h.] [ClarkP*, Gels., -Amurosis:Sudden blindness, Gels. 3, 2h.]"
+              "text": "Amaurosis:Recent; sudden blindness from cold bathing in hot weather, Aco. 3, 2h.] [ClarkP*, Gels., -Amurosis:Sudden blindness, Gels. 3, 2h."
             }
           ]
         },
@@ -3404,7 +3389,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Chin., - Anaemia : From exhausting diseases, discharges, or haemorrhages, China off 3, 4h. Simple iron deficiency anaemias...]"
+              "text": "Anaemia : From exhausting diseases, discharges, or haemorrhages, China off 3, 4h. Simple iron deficiency anaemias..."
             }
           ]
         },
@@ -3415,7 +3400,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Bar-c.,lyc., -Aneurism : Failing specific indications, begin in general with Baryta c 3x, gr. v. 8h. If that fails, Lycopodium 6, 4h]"
+              "text": "Failing specific indications, begin in general with Baryta c 3x, gr. v. 8h. If that fails, Lycopodium 6, 4h"
             }
           ]
         },
@@ -3426,7 +3411,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, hydr-ac., - Angina Pectoris: PAROXYSM.-Palpitation, anxiety, small pulse; associated with epilepsy, hydr-ac. 3x, th.] [ClarkP*, glon., - Angina Pectoris:PAROXYSM Violent beating...]"
+              "text": "PAROXYSM.-Palpitation, anxiety, small pulse; associated with epilepsy, hydr-ac. 3x, th.] [ClarkP*, glon., - Angina Pectoris:PAROXYSM Violent beating..."
             }
           ]
         },
@@ -3437,7 +3422,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Aeth., - Anhidrosis : Dry, white, leathery skin, Aeth c 3, 4h.] [ClarkP*, Nat-c., - Anhidrosis :Skin of whole body becomes dry and cracked, Nat c 6, 4h.]"
+              "text": "Dry, white, leathery skin, Aeth c 3, 4h.] [ClarkP*, Nat-c., - Anhidrosis :Skin of whole body becomes dry and cracked, Nat c 6, 4h."
             }
           ]
         },
@@ -3455,7 +3440,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Ign.,mag-c., - Anxiety, Care, Grief, Worry, EFFECTS OF. (1) Ign. 3, 2h.; (2) Mag-c. 200, 4h.] [ClarkP*,Note.,- Grief. See Anxiety.]"
+              "text": "Anxiety, Care, Grief, Worry, EFFECTS OF. (1) Ign. 3, 2h.; (2) Mag-c. 200, 4h.] [ClarkP*,Note.,- Grief. See Anxiety."
             }
           ]
         },
@@ -3466,7 +3451,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Chen-a., -Aphasia: Chen anth 30, 4h.] [ClarkP*, Anac., -Aphasia: In paralysis with imbecility...]"
+              "text": "Aphasia: Chen anth 30, 4h.In paralysis with imbecility..."
             }
           ]
         },
@@ -3477,7 +3462,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Borx., -Aphthae or Thrush:Simple, in children or adults, Borax, 3x (gr. ii. or gtt. i.), 2h...]"
+              "text": "Borx., -Aphthae or Thrush:Simple, in children or adults, Borax, 3x (gr. ii. or gtt. i.), 2h..."
             }
           ]
         },
@@ -3488,7 +3473,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Nux-v., - Apoplexy, THREATENED : Giddiness, headache, fullness in the head in plethoric subjects...]"
+              "text": "Giddiness, headache, fullness in the head in plethoric subjects..."
             }
           ]
         },
@@ -3499,7 +3484,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Iris-t., -Appendicitis: Fearful pain in ileo-caecal region, great tenderness to pressure on one spot; deathly sensation in stomachpit...]"
+              "text": "Fearful pain in ileo-caecal region, great tenderness to pressure on one spot; deathly sensation in stomachpit..."
             }
           ]
         },
@@ -3510,7 +3495,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, calc., - Appetite Depraved : For salt things, Calc carb 6, 6h. [ClarkP*, Sil., - For cold raw food, Sil. 6, 6h.]"
+              "text": "For salt things, Calc carb 6, 6h. [ClarkP*, Sil., - For cold raw food, Sil. 6, 6h."
             }
           ]
         },
@@ -3532,7 +3517,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Phos., Vanad.,Arteries, DISEASES OF. Suspected atheroma, (1) Phos. 3, 6h. (2) Vanad. 6, 6h.]"
+              "text": " Phos., Vanad.,Arteries, DISEASES OF. Suspected atheroma, (1) Phos. 3, 6h. (2) Vanad. 6, 6h."
             }
           ]
         },
@@ -3543,7 +3528,7 @@ export const Homeosetu_Clinical_Repertory: KentRepertory = {
           "notes": [
             {
               "type": "Homeopathic Pointers",
-              "text": "[ClarkP*, Apoc., - Ascites: Whenever the ascites is the principal trouble, if the symptoms indicate no other remedy, Apocy. Q, gtt. i. 3h.]"
+              "text": "Whenever the ascites is the principal trouble, if the symptoms indicate no other remedy, Apocy. Q, gtt. i. 3h."
             }
           ]
         },
@@ -3973,27 +3958,27 @@ export const Allen_Fever_Repertory: KentRepertory = {
         {
           "id": "r-1",
           "name": "Homeosetu Bowel Nosode Repertory,Age Suited ,Children",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-2",
           "name": "Homeosetu Bowel Nosode Repertory,Age Suited ,Adolescents",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-3",
           "name": "Homeosetu Bowel Nosode Repertory,Age Suited ,Adults",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-4",
           "name": "Homeosetu Bowel Nosode Repertory,Age Suited ,Infants",
           "remedies": [
-            { "abbr": "Bac-Gaert", "grade": 1 },
-            { "abbr": "Bac-Morg", "grade": 1 }
+            { "abbr": "Bac-Gaert.", "grade": 1 },
+            { "abbr": "Bac-Morg.", "grade": 1 }
           ],
           "notes": []
         },
@@ -4001,340 +3986,340 @@ export const Allen_Fever_Repertory: KentRepertory = {
           "id": "r-5",
           "name": "Homeosetu Bowel Nosode Repertory,Age Suited ,Preschool Children",
           "remedies": [
-            { "abbr": "Bac-Gaert", "grade": 1 },
-            { "abbr": "Bac-Morg", "grade": 1 }
+            { "abbr": "Bac-Gaert.", "grade": 1 },
+            { "abbr": "Bac-Morg.", "grade": 1 }
           ],
           "notes": []
         },
         {
           "id": "r-6",
           "name": "Homeosetu Bowel Nosode Repertory,Age Suited ,Women",
-          "remedies": [{ "abbr": "Bac-Faec", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Faec.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-7",
           "name": "Back, Pain, standing Long",
-          "remedies": [{ "abbr": "Bac-sev", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-sev.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-8",
           "name": "Children, Adenoids",
-          "remedies": [{ "abbr": "Bac-syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-9",
           "name": "Children, Headache, Chronic",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-10",
           "name": "Children, Headache, Persistent",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-11",
           "name": "Children, Headache, meningitis tubercular from",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-12",
           "name": "Children, Gastroenterities",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-13",
           "name": "Children, Gastroenterities,Acute",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-14",
           "name": "Children, Gastroenterities,Chronic",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-15",
           "name": "Children, Tonsillitis",
-          "remedies": [{ "abbr": "Bac-syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-16",
           "name": "Circulation, Pulse, Slow",
-          "remedies": [{ "abbr": "Bac-sev", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-sev.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-17",
           "name": "Circulation, Angina Attacks",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Prot., - Further indication for the use of this nosode is disturbance of the peripheral nervous system, evidenced by spasm of the peripheral circulation, e. g. \"dead fingers intermittent claudication in the circulation of the lower limbs ; anginal attacks due to spasm of the coronary capillaries.]"
+              "text": " Further indication for the use of this nosode is disturbance of the peripheral nervous system, evidenced by spasm of the peripheral circulation, e. g. \"dead fingers intermittent claudication in the circulation of the lower limbs ; anginal attacks due to spasm of the coronary capillaries."
             }
           ]
         },
         {
           "id": "r-18",
           "name": "Circulation, Palpitation",
-          "remedies": [{ "abbr": "Bac-Dys", "grade": 1 }],
+          "remedies": [{ "abbr": "bac-dys.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-19",
           "name": "Circulation, Palpitation,Events Before",
-          "remedies": [{ "abbr": "Bac-Dys", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-20",
           "name": "Circulation, Palpitation,Anxiety anticipatory",
-          "remedies": [{ "abbr": "Bac-Dys", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-21",
           "name": "Circulation,Peripheral Disturbed",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Prot., - Further indication for the use of this nosode is disturbance of the peripheral nervous system, evidenced by spasm of the peripheral circulation, e. g. \"dead fingers intermittent claudication in the circulation of the lower limbs ; anginal attacks due to spasm of the coronary capillaries.]"
+              "text": "Further indication for the use of this nosode is disturbance of the peripheral nervous system, evidenced by spasm of the peripheral circulation, e. g. \"dead fingers intermittent claudication in the circulation of the lower limbs ; anginal attacks due to spasm of the coronary capillaries."
             }
           ]
         },
         {
           "id": "r-22",
           "name": "Circulation, Spasms, Circulation Brain",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Prot., - Meniere's Disease where spasm of the brain circulation results in vertigo attacks.]"
+              "text": " Meniere's Disease where spasm of the brain circulation results in vertigo attacks."
             }
           ]
         },
         {
           "id": "r-23",
           "name": "Clinical, Adenoids",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-24",
           "name": "Clinical, Albumubinuria",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-25",
           "name": "Clinical, Anaemia",
-          "remedies": [{ "abbr": "Bac-syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-26",
           "name": "Clinical, Angioneurotic Oedema",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Prot., - Angio-neurotic oedema, which one associates with the remedy Apis mellifica is found in the proving of the B. Proteus preparation and also a tendency for the production of herpetic eruption at the mucocutaneous margins.]"
+              "text": "Angio-neurotic oedema, which one associates with the remedy Apis mellifica is found in the proving of the B. Proteus preparation and also a tendency for the production of herpetic eruption at the mucocutaneous margins."
             }
           ]
         },
         {
           "id": "r-27",
           "name": "Clinical, arthiritis",
-          "remedies": [{ "abbr": "Bac-Morg-b", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Morg-b.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Morg-b., - Chronic congestion around the joints causes arthritic conditions, usually affecting the phalangeal or knee joint regions.]"
+              "text": "Chronic congestion around the joints causes arthritic conditions, usually affecting the phalangeal or knee joint regions."
             }
           ]
         },
         {
           "id": "r-28",
           "name": "Clinical, Asthma",
-          "remedies": [{ "abbr": "Bac-sev", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-sev.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-29",
           "name": "Clinical, Balanitis",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-30",
           "name": "Clinical, Bilious Attacks",
-          "remedies": [{ "abbr": "Bac-Morg-b", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Morg-b.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PATBN*,Bac-Morg-b., - Congestion of liver ; bilious attacks with severe headache which is finally relieved by vomiting large quantities of bile stained mucus.]"
+              "text": "Congestion of liver ; bilious attacks with severe headache which is finally relieved by vomiting large quantities of bile stained mucus."
             }
           ]
         },
         {
           "id": "r-31",
           "name": "Clinical, Bilious Attacks,menopause during",
-          "remedies": [{ "abbr": "Bac-Morg-b", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Morg-b.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*,Bac-Morg-b., -A history of bilious attacks, especially occurring at the menopause in women should lead one to consider the use of the nosode]"
+              "text": "A history of bilious attacks, especially occurring at the menopause in women should lead one to consider the use of the nosode"
             }
           ]
         },
         {
           "id": "r-32",
           "name": "Clinical, Blood Pressure Low",
-          "remedies": [{ "abbr": "Bac-sev", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-sev.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-33",
           "name": "Clinical, Bronchial Catarrh",
           "remedies": [
-            { "abbr": "Bac-sev", "grade": 1 },
-            { "abbr": "Bac-Syco", "grade": 1 }
+            { "abbr": "Bac-sev.", "grade": 1 },
+            { "abbr": "Bac-Syco.", "grade": 1 }
           ],
           "notes": []
         },
         {
           "id": "r-34",
           "name": "Clinical, Bronchial Catarrh,acute",
-          "remedies": [{ "abbr": "Bac-syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-35",
           "name": "Clinical, Bronchial Catarrh,Sub-acute",
-          "remedies": [{ "abbr": "Bac-syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-36",
           "name": "Clinical, Coeliac Disease",
-          "remedies": [{ "abbr": "Bac-Gaert", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Gaert.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-37",
           "name": "Clinical, Cholecystitis",
-          "remedies": [{ "abbr": "Bac-Morg-b", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Morg-b.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-38",
           "name": "Clinical, Cholecystitis,attack acute",
-          "remedies": [{ "abbr": "Bac-Morg-g", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Morg-g.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-39",
           "name": "Clinical, Cholelithiasis",
-          "remedies": [{ "abbr": "Bac-Morg-b", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Morg-b.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-40",
           "name": "Clinical, Chorea",
-          "remedies": [{ "abbr": "Bac-Dys", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-41",
           "name": "Clinical, Convulsions",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Prot., - convulsive and epileptiform seizures and meningismus in children during febrile attacks often responds to the action of the nosode Proteus (Bach)]"
+              "text": "convulsive and epileptiform seizures and meningismus in children during febrile attacks often responds to the action of the nosode Proteus (Bach)"
             }
           ]
         },
         {
           "id": "r-42",
           "name": "Clinical, Congenital,Pyloric Stenosis",
-          "remedies": [{ "abbr": "Bac-Dys", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Dys.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Dys., - In some children, diagnosed as suffering from congenital pyloric stenosis considerable success has followed the use of Bacillus Dysentrico Bach , which would suggest that in these cases the condition had been due to pyloric spasm rather than to congenital malformation, of the pylorus.]"
+              "text": "In some children, diagnosed as suffering from congenital pyloric stenosis considerable success has followed the use of Bacillus Dysentrico Bach , which would suggest that in these cases the condition had been due to pyloric spasm rather than to congenital malformation, of the pylorus."
             }
           ]
         },
         {
           "id": "r-43",
           "name": "Clinical, Cystitis",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-44",
           "name": "Clinical, Diarrhoea",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-45",
           "name": "Clinical, Duodenal Ulcer",
           "remedies": [
-            { "abbr": "Bac-Prot", "grade": 1 },
-            { "abbr": "Bac-Dys", "grade": 1 }
+            { "abbr": "Bac-Prot.", "grade": 1 },
+            { "abbr": "Bac-Dys.", "grade": 1 }
           ],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Prot.,-  It is now being realised that prolonged nerve strain is a factor in the production of duodenal ulcer, and in the' Proteus proving, this is also to be found]"
+              "text": "It is now being realised that prolonged nerve strain is a factor in the production of duodenal ulcer, and in the' Proteus proving, this is also to be found"
             }
           ]
         },
         {
           "id": "r-46",
           "name": "Clinical , Dysmenorrhoea",
-          "remedies": [{ "abbr": "Bac-Morg-b", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Morg-b.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-47",
           "name": "Clinical, Enteroptosis",
-          "remedies": [{ "abbr": "Bac-sev", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-sev.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-48",
           "name": "Clinical, Epilepsy",
-          "remedies": [{ "abbr": "Bac-Prot", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Prot.", "grade": 1 }],
           "notes": [
             {
               "type": "Source symptom",
-              "text": "[PatBN*, Bac-Prot., - convulsive and epileptiform seizures and meningismus in children during febrile attacks often responds to the action of the nosode Proteus (Bach)]"
+              "text": "convulsive and epileptiform seizures and meningismus in children during febrile attacks often responds to the action of the nosode Proteus (Bach)]"
             }
           ]
         },
         {
           "id": "r-49",
           "name": "Clinical, Fibrositis, rheumatic",
-          "remedies": [{ "abbr": "Bac-Syco", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Syco.", "grade": 1 }],
           "notes": []
         },
         {
           "id": "r-50",
           "name": "Clinical, Gastroenteritis , Chronic",
-          "remedies": [{ "abbr": "Bac-Gaert", "grade": 1 }],
+          "remedies": [{ "abbr": "Bac-Gaert.", "grade": 1 }],
           "notes": []
         }
       ]

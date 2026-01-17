@@ -754,7 +754,7 @@ const KentRepertoryPage: React.FC = () => {
                                                                         }`}
                                                                 >
                                                                     {/* {note.type === "system" ? "System" : "My Note"} */}
-                                                                    {note.type}
+                                                                    {idx === 0 ? "When to USE" : idx === 1 ? "WHEN TO USE METAPHORICALLY" : note.type}
                                                                 </span>
                                                                 {note.source && (
                                                                     <span className="text-[9px] italic text-slate-400">
