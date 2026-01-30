@@ -1,6 +1,8 @@
 export type Remedy = {
   abbr: string
   grade: number
+  fullForm?: string
+  description?: string
 }
 
 export type Note = {

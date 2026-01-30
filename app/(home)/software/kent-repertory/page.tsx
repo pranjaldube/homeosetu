@@ -6,7 +6,6 @@ import { useUser } from "@clerk/nextjs"
 import Chatbot from "@/components/chatbot"
 
 import {
-    REPERTORY_BOOKS,
     getRemedyFullName,
     Rubric,
     Note,
@@ -15,6 +14,131 @@ import {
 } from "./data"
 import { useKentAccessStore } from "@/hooks/acess"
 import { useRouter } from "next/navigation"
+
+// Book metadata type (from database)
+type BookMetadata = {
+    id: string
+    bookName: string
+    createdAt: string | Date
+}
+
+// API Response Types
+type ApiBookResponse = {
+    book: {
+        id: string
+        bookName: string
+        createdAt: string
+    }
+    contents: Array<{
+        id: string
+        name: string
+        icon: string
+        description?: string
+        bookId: string
+        rubrics: Array<{
+            id: string
+            name: string
+            meaning?: string
+            chapterId: string
+            remedies: Array<{
+                id: string
+                abbr: string
+                grade: number
+                rubricId: string
+                fullForm?: string
+                description?: string
+            }>
+            notes: Array<{
+                id: string
+                type: string
+                source?: string
+                text: string
+                rubricId: string
+            }>
+            crossReferences: Array<{
+                id: string
+                chapterTarget: string
+                rubricTarget: string
+                rubricId: string
+            }>
+        }>
+    }>
+}
+
+// Transform API response to KentRepertory format
+function transformApiBookToKentRepertory(apiData: ApiBookResponse): KentRepertory {
+    return {
+        bookName: apiData.book.bookName,
+        chapters: (apiData.contents || []).map((content) => ({
+            id: content.id,
+            name: content.name,
+            icon: content.icon || "📖",
+            description: content.description || undefined,
+            rubrics: (content.rubrics || []).map((rubric) => ({
+                id: rubric.id,
+                name: rubric.name,
+                meaning: rubric.meaning || undefined,
+                remedies: (rubric.remedies || []).map((remedy) => ({
+                    abbr: remedy.abbr,
+                    grade: remedy.grade,
+                    fullForm: remedy.fullForm || undefined,
+                    description: remedy.description || undefined,
+                })),
+                notes: (rubric.notes || []).map((note) => ({
+                    type: note.type,
+                    source: note.source || undefined,
+                    text: note.text,
+                })),
+                crossReferences: (rubric.crossReferences || []).map((crossRef) => ({
+                    chapter: crossRef.chapterTarget,
+                    rubric: crossRef.rubricTarget,
+                })),
+            })),
+        })),
+    }
+}
+
+// Fetch book from API
+async function fetchBookFromAPI(bookId?: string, bookName?: string): Promise<{ book: KentRepertory | null; error: string | null }> {
+    try {
+        const params = new URLSearchParams()
+        if (bookId) params.append("bookId", bookId)
+        if (bookName) params.append("bookName", bookName)
+        
+        if (!bookId && !bookName) {
+            return { book: null, error: "Either bookId or bookName must be provided" }
+        }
+
+        const response = await fetch(`/api/books/contents?${params.toString()}`)
+        
+        if (!response.ok) {
+            let errorMessage = `Failed to fetch book: ${response.statusText}`
+            try {
+                const errorData = await response.json()
+                if (errorData.error) {
+                    errorMessage = errorData.error
+                }
+            } catch {
+                // If JSON parsing fails, use the default error message
+            }
+            return { book: null, error: errorMessage }
+        }
+
+        const data: ApiBookResponse = await response.json()
+        
+        // Validate the response structure
+        if (!data || !data.book || !data.contents) {
+            return { book: null, error: "Invalid response format from API" }
+        }
+
+        const transformedBook = transformApiBookToKentRepertory(data)
+        return { book: transformedBook, error: null }
+    } catch (error) {
+        console.error("Error fetching book from API:", error)
+        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
+        return { book: null, error: `Network error: ${errorMessage}` }
+    }
+}
 
 const MIND_CHAPTER_ID = "mind"
 
@@ -36,13 +160,14 @@ type UserNoteCache = Record<
     }[]
 >
 
-type SelectedRubric = { rubricId: string; chapterId: string; bookIndex: number }
+type SelectedRubric = { rubricId: string; chapterId: string }
 
 type SelectedRemedy = { abbr: string; fullName: string, grade: number }
 
 type CommonRemedy = {
     abbr: string
     fullName: string
+    description?: string
     occurrences: {
         rubricId: string
         rubricName: string
@@ -83,7 +208,7 @@ function getFilteredRubrics(chapter: Chapter | undefined, query: string): Rubric
             return true
         if (
             rubric.remedies.some((r) =>
-                getRemedyFullName(r.abbr).toLowerCase().includes(normalized)
+                (r.fullForm || getRemedyFullName(r.abbr)).toLowerCase().includes(normalized)
             )
         )
             return true
@@ -91,14 +216,12 @@ function getFilteredRubrics(chapter: Chapter | undefined, query: string): Rubric
     })
 }
 
-function findCommonRemedies(selected: SelectedRubric[]): CommonRemedy[] {
-    if (selected.length < 2) return []
+function findCommonRemedies(selected: SelectedRubric[], book: KentRepertory | null): CommonRemedy[] {
+    if (selected.length < 2 || !book) return []
 
     const data: { rubric: Rubric; chapter: Chapter; book: KentRepertory }[] = []
 
     selected.forEach((sel) => {
-        const book = REPERTORY_BOOKS[sel.bookIndex]
-        if (!book) return
         const chapter = book.chapters.find((c) => c.id === sel.chapterId)
         if (!chapter) return
         const rubric = chapter.rubrics.find((r) => r.id === sel.rubricId)
@@ -116,7 +239,8 @@ function findCommonRemedies(selected: SelectedRubric[]): CommonRemedy[] {
             if (!map.has(key)) {
                 map.set(key, {
                     abbr: remedy.abbr,
-                    fullName: getRemedyFullName(remedy.abbr),
+                    fullName: remedy.fullForm || getRemedyFullName(remedy.abbr),
+                    description: remedy.description,
                     occurrences: [],
                 })
             }
@@ -148,9 +272,32 @@ const KentRepertoryPage: React.FC = () => {
     const router = useRouter();
     const [isChatbotOpen, setIsChatbotOpen] = useState(false)
 
-    const [currentBookIndex, setCurrentBookIndex] = useState(0)
+    // Book list from database (metadata only)
+    const [availableBooks, setAvailableBooks] = useState<BookMetadata[]>([
+        
+        {id: "87bf3a14-9328-4580-af6f-e133010db2c0",
+        bookName: "Kent Repertory",
+        createdAt: new Date("2026-01-24T11:31:54Z"),
+      },
+        {
+          id: "7fb7939c-be8a-4744-9077-7bcef408bd92",
+          bookName: "Homeosetu Clinical repertory",
+          createdAt: new Date("2026-01-24T11:32:28Z"),
+        },
+        
+      ]
+      )
+    const [loadingBooksList, setLoadingBooksList] = useState(false)
+    
+    // Currently selected book and its contents
+    const [selectedBookId, setSelectedBookId] = useState<string | null>(null)
+    const [currentBook, setCurrentBook] = useState<KentRepertory | null>(null)
     const [currentChapterId, setCurrentChapterId] = useState<string | undefined>()
     const [searchQuery, setSearchQuery] = useState("")
+    
+    // Loading and error states
+    const [loadingBook, setLoadingBook] = useState(false)
+    const [bookError, setBookError] = useState<string | null>(null)
 
     const [compareMode, setCompareMode] = useState(false)
     const [selectedRubrics, setSelectedRubrics] = useState<SelectedRubric[]>([])
@@ -163,6 +310,8 @@ const KentRepertoryPage: React.FC = () => {
         [rubricId: string]: {
             abbr: string
             grade: number
+            fullForm?: string
+            description?: string
         }
     }>({})
 
@@ -171,6 +320,7 @@ const KentRepertoryPage: React.FC = () => {
         abbr?: string
         fullName?: string
         grade?: number
+        description?: string
     }>({ open: false })
 
     const [comparisonOpen, setComparisonOpen] = useState(false)
@@ -180,11 +330,9 @@ const KentRepertoryPage: React.FC = () => {
         user?.username ||
         user?.primaryEmailAddress?.emailAddress ||
         undefined
-
-    const currentBook = REPERTORY_BOOKS[currentBookIndex]
     const currentChapter: Chapter | undefined = useMemo(() => {
-        if (!currentChapterId) return undefined
-        return currentBook.chapters.find((c) => c.id === currentChapterId)
+        if (!currentChapterId || !currentBook) return undefined
+        return currentBook?.chapters.find((c) => c.id === currentChapterId)
     }, [currentBook, currentChapterId])
 
     const filteredRubrics = useMemo(
@@ -193,16 +341,86 @@ const KentRepertoryPage: React.FC = () => {
     )
 
     const commonRemedies = useMemo(
-        () => findCommonRemedies(selectedRubrics),
-        [selectedRubrics]
+        () => findCommonRemedies(selectedRubrics, currentBook),
+        [selectedRubrics, currentBook]
     )
 
     useEffect(() => {
-        if (!currentChapterId) {
-            const first = currentBook.chapters.find((c) => c.rubrics.length > 0)
+        if (!currentChapterId && currentBook) {
+            const first = currentBook?.chapters.find((c) => c.rubrics.length > 0)
             if (first) setCurrentChapterId(first.id)
         }
     }, [currentBook, currentChapterId])
+
+    // Clear error message after 5 seconds
+    useEffect(() => {
+        if (bookError) {
+            const timer = setTimeout(() => setBookError(null), 5000)
+            return () => clearTimeout(timer)
+        }
+    }, [bookError])
+
+    // Fetch list of available books on mount
+    // useEffect(() => {
+    //     const fetchBooksList = async () => {
+    //         try {
+    //             setLoadingBooksList(true)
+    //             const response = await fetch("/api/books")
+    //             if (!response.ok) {
+    //                 console.error("Failed to fetch books list")
+    //                 return
+    //             }
+    //             const books: BookMetadata[] = await response.json()
+    //             setAvailableBooks(books)
+                
+    //             // Auto-select first book if available
+    //             if (books.length > 0 && !selectedBookId) {
+    //                 setSelectedBookId(books[0].id)
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching books list:", error)
+    //         } finally {
+    //             setLoadingBooksList(false)
+    //         }
+    //     }
+        
+    //     fetchBooksList()
+    // }, [])
+
+    // Load book contents when a book is selected
+    useEffect(() => {
+        if (!selectedBookId) return
+
+        const loadBookContents = async () => {
+            setLoadingBook(true)
+            setBookError(null)
+            
+            const { book, error } = await fetchBookFromAPI(selectedBookId, undefined)
+            
+            if (error) {
+                setBookError(error)
+                setLoadingBook(false)
+                return
+            }
+            
+            if (book) {
+                setCurrentBook(book)
+                // Reset chapter selection when book changes
+                setCurrentChapterId(undefined)
+            } else {
+                setBookError("Failed to load book contents")
+            }
+            
+            setLoadingBook(false)
+        }
+        
+        loadBookContents()
+    }, [selectedBookId])
+
+    // Handle book selection change
+    const handleBookChange = (bookId: string) => {
+        setSelectedBookId(bookId)
+    }
 
     // useEffect(() => {
     //     if (!isLoaded || !user?.id) return
@@ -247,16 +465,14 @@ const KentRepertoryPage: React.FC = () => {
             const exists = prev.find(
                 (r) =>
                     r.rubricId === rubricId &&
-                    r.chapterId === currentChapter.id &&
-                    r.bookIndex === currentBookIndex
+                    r.chapterId === currentChapter.id
             )
             if (exists) {
                 return prev.filter(
                     (r) =>
                         !(
                             r.rubricId === rubricId &&
-                            r.chapterId === currentChapter.id &&
-                            r.bookIndex === currentBookIndex
+                            r.chapterId === currentChapter.id
                         )
                 )
             }
@@ -265,7 +481,6 @@ const KentRepertoryPage: React.FC = () => {
                 {
                     rubricId,
                     chapterId: currentChapter.id,
-                    bookIndex: currentBookIndex,
                 },
             ]
         })
@@ -276,8 +491,7 @@ const KentRepertoryPage: React.FC = () => {
         return selectedRubrics.some(
             (r) =>
                 r.rubricId === rubricId &&
-                r.chapterId === currentChapter.id &&
-                r.bookIndex === currentBookIndex
+                r.chapterId === currentChapter.id
         )
     }
 
@@ -338,9 +552,9 @@ const KentRepertoryPage: React.FC = () => {
         }
     }
 
-    const handleShowRemedyPanel = (abbr: string, grade: number) => {
-        const fullName = getRemedyFullName(abbr)
-        setRemedyPanel({ open: true, abbr, fullName, grade })
+    const handleShowRemedyPanel = (abbr: string, grade: number, fullForm?: string, description?: string) => {
+        const fullName = fullForm || getRemedyFullName(abbr)
+        setRemedyPanel({ open: true, abbr, fullName, grade, description })
     }
 
     const handleApplyChatQuery = (
@@ -353,12 +567,11 @@ const KentRepertoryPage: React.FC = () => {
         if (chapterId) {
             setCurrentChapterId(chapterId)
             if (!query) setSearchQuery("")
-        } else if (!currentChapterId) {
-            const first = REPERTORY_BOOKS[0].chapters.find(
+        } else if (!currentChapterId && currentBook) {
+            const first = currentBook.chapters.find(
                 (ch: Chapter) => ch.rubrics.length > 0
             )
             if (first) {
-                setCurrentBookIndex(0)
                 setCurrentChapterId(first.id)
             }
         }
@@ -446,29 +659,49 @@ const KentRepertoryPage: React.FC = () => {
                             <h2 className="mb-1 text-sm font-semibold text-slate-100">
                                 Books &amp; Chapters
                             </h2>
-                            <select
-                                value={currentBookIndex}
-                                onChange={(e) => {
-                                    const idx = Number(e.target.value)
-                                    setCurrentBookIndex(idx)
-                                    const first = REPERTORY_BOOKS[idx].chapters.find(
-                                        (c) => c.rubrics.length > 0
-                                    )
-                                    setCurrentChapterId(first ? first.id : undefined)
-                                    // setSelectedRubrics([])
-                                    setSearchQuery("")
-                                }}
-                                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-2.5 py-2 text-xs font-medium text-slate-100 shadow-sm outline-none ring-0 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                            >
-                                {REPERTORY_BOOKS.map((book, idx) => (
-                                    <option key={book.bookName} value={idx}>
-                                        {book.bookName}
-                                    </option>
-                                ))}
-                            </select>
+                            
+                                <select
+                                    value={selectedBookId || ""}
+                                    onChange={(e) => {
+                                        if (e.target.value) {
+                                            handleBookChange(e.target.value)
+                                            setSearchQuery("")
+                                        }
+                                    }}
+                                    disabled={loadingBook}
+                                    className="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-2.5 py-2 text-xs font-medium text-slate-100 shadow-sm outline-none ring-0 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
+                                >
+                                    {availableBooks.length === 0 ? (
+                                        <option value="">No books available</option>
+                                    ) : (
+                                        <>
+                                            <option value="">Select a book</option>
+                                            {availableBooks.map((book) => (
+                                                <option key={book.id} value={book.id}>
+                                                    {book.bookName}
+                                                </option>
+                                            ))}
+                                        </>
+                                    )}
+                                </select>
+                            {bookError && (
+                                <div className="mt-2 rounded-md border border-red-500/60 bg-red-500/10 px-2 py-1 text-[10px] text-red-200">
+                                    {bookError}
+                                </div>
+                            )}
                         </div>
                         <div className="flex-1 space-y-1 overflow-y-auto px-2 py-2">
-                            {currentBook.chapters.map((chapter) => {
+                            {!currentBook && !loadingBook && (
+                                <div className="px-3 py-4 text-center text-xs text-slate-400">
+                                    Select a book to view chapters
+                                </div>
+                            )}
+                            {loadingBook && (
+                                <div className="px-3 py-4 text-center text-xs text-slate-400">
+                                    Loading book contents...
+                                </div>
+                            )}
+                            {currentBook?.chapters.map((chapter) => {
                                 const active = chapter.id === currentChapterId
                                 return (
                                     <div
@@ -487,7 +720,7 @@ const KentRepertoryPage: React.FC = () => {
                                                 {chapter.name}
                                             </div>
                                             <div className="text-[10px] text-slate-400">
-                                                {chapter.rubrics.length} rubrics
+                                                {chapter.description} 
                                             </div>
                                         </div>
                                     </div>
@@ -499,7 +732,7 @@ const KentRepertoryPage: React.FC = () => {
                     <section className="flex-1 px-5 py-5">
                         <div className="mb-4 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-2 text-xs text-slate-400">
-                                <span>{currentBook.bookName}</span>
+                                <span>{currentBook?.bookName || "No book selected"}</span>
                                 <span className="text-slate-500">›</span>
                                 <span className="font-medium text-emerald-300">
                                     {currentChapter ? currentChapter.name : "Select a chapter"}
@@ -687,6 +920,8 @@ const KentRepertoryPage: React.FC = () => {
                                                                     [rubric.id]: {
                                                                         abbr: rem.abbr,
                                                                         grade: rem.grade,
+                                                                        fullForm: rem.fullForm,
+                                                                        description: rem.description,
                                                                     },
                                                                 }))
                                                             }
@@ -729,9 +964,14 @@ const KentRepertoryPage: React.FC = () => {
                                                         <p className="inline-block mt-1 mb-2 py-1 px-2 rounded bg-slate-800">
                                                             {selectedRemedies[rubric.id].abbr}
                                                         </p>
-                                                        <p className="px-1.5 py-0.5">
-                                                            {getRemedyFullName(selectedRemedies[rubric.id].abbr, rubric.id)}
+                                                        <p className="px-1.5 py-0.5 text-sm font-medium">
+                                                            {selectedRemedies[rubric.id].fullForm || getRemedyFullName(selectedRemedies[rubric.id].abbr, rubric.id)}
                                                         </p>
+                                                        {selectedRemedies[rubric.id].description && (
+                                                            <p className="mt-1 text-xs text-slate-400 italic px-1.5">
+                                                                {selectedRemedies[rubric.id].description}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                 </div>
                                             )}
@@ -904,6 +1144,16 @@ const KentRepertoryPage: React.FC = () => {
                                         </div>
                                     </div>
                                 )}
+                                {remedyPanel.description && (
+                                    <div className="mb-3">
+                                        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                            Description
+                                        </div>
+                                        <div className="mt-1 text-[11px] text-slate-100 leading-relaxed">
+                                            {remedyPanel.description}
+                                        </div>
+                                    </div>
+                                )}
                             </>
                         )}
                         {!remedyPanel.abbr && (
@@ -939,18 +1189,18 @@ const KentRepertoryPage: React.FC = () => {
                                 </div>
                             )}
                             {selectedRubrics.map((sel, idx) => {
-                                const book = REPERTORY_BOOKS[sel.bookIndex]
-                                const chapter = book.chapters.find((c) => c.id === sel.chapterId)
-                                const rubric = chapter?.rubrics.find((r) => r.id === sel.rubricId)
+                                if (!currentBook) return null
+                                const chapter = currentBook.chapters.find((c: Chapter) => c.id === sel.chapterId)
+                                const rubric = chapter?.rubrics.find((r: Rubric) => r.id === sel.rubricId)
                                 if (!chapter || !rubric) return null
                                 return (
                                     <div
-                                        key={`${sel.bookIndex}-${sel.chapterId}-${sel.rubricId}-${idx}`}
+                                        key={`${sel.chapterId}-${sel.rubricId}-${idx}`}
                                         className="mb-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px]"
                                     >
                                         <div className="text-slate-100">{rubric.name}</div>
                                         <div className="text-[10px] text-slate-400">
-                                            {book.bookName} › {chapter.name}
+                                            {currentBook.bookName} › {chapter.name}
                                         </div>
                                     </div>
                                 )
@@ -979,7 +1229,7 @@ const KentRepertoryPage: React.FC = () => {
                                         const maxGrade = Math.max(
                                             ...rem.occurrences.map((o) => o.grade)
                                         )
-                                        // handleShowRemedyPanel(rem.abbr, maxGrade)
+                                        handleShowRemedyPanel(rem.abbr, maxGrade, rem.fullName, rem.description)
                                     }}
                                 >
                                     <div className="mb-1 flex items-center justify-between">

@@ -6,6 +6,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 model Course {
@@ -283,4 +284,74 @@ model LoyaltyPoints {
   points    Int      @default(0)
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+}
+
+// KENT DATABASE APPROACh
+
+model Book {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookName  String    @unique
+  chapters  Content[]
+  createdAt DateTime  @default(now())
+}
+
+model Content {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  icon        String?
+  description String?
+  book        Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId      String   @db.Uuid
+  rubrics     Rubric[]
+
+  @@index([bookId])
+}
+
+model Rubric {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  meaning         String?
+  chapter         Content          @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId       String           @db.Uuid
+  remedies        Remedy[]
+  notes           Note[]
+  crossReferences CrossReference[]
+
+  // Essential for fast sorting and pagination by name
+  @@index([chapterId, name]) 
+  // Essential for searching rubrics by name
+  @@index([name])
+}
+
+model Remedy {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  abbr     String
+  grade    Int
+  fullForm String?
+  description String? @db.Text
+  rubric   Rubric @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  rubricId String @db.Uuid
+
+  @@index([rubricId])
+}
+
+model Note {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type     String
+  source   String?
+  text     String  @db.Text // Use Text for long notes
+  rubric   Rubric  @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  rubricId String  @db.Uuid
+
+  @@index([rubricId])
+}
+
+model CrossReference {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chapterTarget String // target chapter name or ID
+  rubricTarget  String // target rubric name
+  rubric        Rubric @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  rubricId      String @db.Uuid
+
+  @@index([rubricId])
 }
