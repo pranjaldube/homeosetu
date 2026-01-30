@@ -6,7 +6,7 @@ export default function Disclaimer() {
     <div className="container mx-auto py-12 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="space-y-6 text-lg">
-          <h2 className="flex justify-center text-4xl font-semibold mt-8 mb-4">Legal Disclaimer</h2>
+          <h2 className="flex justify-center text-4xl font-semibold mt-8 mb-4">Educational and Legal Disclaimer</h2>
           <p>
            The content, courses, workshops, and case discussions on www.homeosetu.com are intended solely for academic learning and professional development of registered Homoeopathy practitioners and students. All material is presented for educational discussion and must not be interpreted as medical advice, treatment guidance, or a substitute for consultation with a qualified practitioner.
           </p>
