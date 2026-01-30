@@ -69,6 +69,11 @@ export const Footer: React.FC = () => {
                     <Link href="/faq">FAQ</Link>
                   </Button>
                 </li>
+                <li>
+                  <Button asChild variant="link" className="h-auto p-0 text-sm">
+                    <Link href="/legal">Educational & Legal Disclaimer</Link>
+                  </Button>
+                </li>
               </ul>
             </div>
             <div className="space-y-2">
