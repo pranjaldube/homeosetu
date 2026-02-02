@@ -339,34 +339,6 @@ export default function SoftwarePage() {
   };
 
   useEffect(() => {
-    const target = new Date("2026-01-14T00:00:00").getTime();
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const diff = target - now;
-
-      if (diff <= 0) {
-        clearInterval(interval);
-        setTimeLeft({
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        });
-        return;
-      }
-
-      setTimeLeft({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     if (typeof window === "undefined") return;
 
     const saved = localStorage.getItem("surveyFormData");
@@ -415,26 +387,8 @@ export default function SoftwarePage() {
       <div className="container mx-auto px-4 py-10 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           {/* <Rocket className="h-12 w-12 text-purple-600 animate-bounce" /> */}
-          <div className="font-bold text-4xl bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
-            Phase 1 Launch
-          </div>
-          <div className="flex gap-4 justify-center py-4 mb-20">
-            {[
-              { label: "Days", value: timeLeft.days },
-              { label: "Hours", value: timeLeft.hours },
-              { label: "Minutes", value: timeLeft.minutes },
-              { label: "Seconds", value: timeLeft.seconds },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="flex flex-col items-center bg-white/10 backdrop-blur-lg rounded-xl px-5 py-4 shadow-lg border border-white/20"
-              >
-                <p className={`text-2xl font-semibold`}>{item.value}</p>
-                <span className="text-xs uppercase tracking-wider">
-                  {item.label}
-                </span>
-              </div>
-            ))}
+          <div className="font-bold mb-16 text-4xl bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
+            Phase 1 (beta) Launched for Surveyors. Sale begins soon for all homeopaths.
           </div>
 
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
