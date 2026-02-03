@@ -275,13 +275,13 @@ const KentRepertoryPage: React.FC = () => {
     // Book list from database (metadata only)
     const [availableBooks, setAvailableBooks] = useState<BookMetadata[]>([
         
-        {id: "87bf3a14-9328-4580-af6f-e133010db2c0",
+        {id: "03b1c6ba-3002-4db6-830e-b42132ad8976",
         bookName: "Kent Repertory",
         createdAt: new Date("2026-01-24T11:31:54Z"),
       },
         {
-          id: "7fb7939c-be8a-4744-9077-7bcef408bd92",
-          bookName: "Homeosetu Clinical repertory",
+          id: "7849d943-6a0c-4534-b77a-26c3a4da0abe",
+          bookName: "Homeosetu Clinical Repertory",
           createdAt: new Date("2026-01-24T11:32:28Z"),
         },
         
