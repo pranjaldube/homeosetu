@@ -103,7 +103,7 @@ function transformApiBookToKentRepertory(
   };
 }
 
-// Fetch book from API
+// Fetch book from API (Metadata + Chapters list only)
 async function fetchBookFromAPI(
   bookId?: string,
   bookName?: string,
@@ -149,6 +149,64 @@ async function fetchBookFromAPI(
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error occurred";
     return { book: null, error: `Network error: ${errorMessage}` };
+  }
+}
+
+// Fetch specific chapter contents (Rubrics)
+async function fetchChapterContents(
+  chapterId: string,
+): Promise<{ chapter: Chapter | null; error: string | null }> {
+  try {
+    const response = await fetch(`/api/books/contents?chapterId=${chapterId}`);
+
+    if (!response.ok) {
+      return { chapter: null, error: "Failed to fetch chapter contents" };
+    }
+
+    const data = await response.json();
+    if (!data || !data.chapter) {
+      return { chapter: null, error: "Invalid chapter data" };
+    }
+
+    // Transform single chapter response to match our internal `Chapter` type
+    // We can reuse the logic from `transformApiBookToKentRepertory` but for a single item
+    // Or just manually map it here since it's one item.
+    const apiChapter = data.chapter; // Type matches part of ApiBookResponse['contents'][0]
+
+    const transformedChapter: Chapter = {
+      id: apiChapter.id,
+      name: apiChapter.name,
+      icon: apiChapter.icon || "📖",
+      description: apiChapter.description || undefined,
+      rubrics: (apiChapter.rubrics || []).map((rubric: any) => ({
+        id: rubric.id,
+        name: rubric.name,
+        meaning: rubric.meaning || undefined,
+        remedies: (rubric.remedies || []).map((remedy: any) => ({
+          abbr: remedy.abbr,
+          grade: remedy.grade,
+          fullForm: remedy.fullForm || undefined,
+          description: remedy.description || undefined,
+        })),
+        notes: (rubric.notes || []).map((note: any) => ({
+          type: note.type,
+          source: note.source || undefined,
+          text: note.text,
+        })),
+        crossReferences: (rubric.crossReferences || []).map(
+          (crossRef: any) => ({
+            chapter: crossRef.chapterTarget,
+            rubric: crossRef.rubricTarget,
+            rubricId: crossRef.rubricId,
+          }),
+        ),
+      })),
+    };
+
+    return { chapter: transformedChapter, error: null };
+  } catch (error) {
+    console.error("Error fetching chapter:", error);
+    return { chapter: null, error: "Network error fetching chapter" };
   }
 }
 
@@ -318,6 +376,7 @@ const KentRepertoryPage: React.FC = () => {
   // Loading and error states
   const [loadingBook, setLoadingBook] = useState(false);
   const [bookError, setBookError] = useState<string | null>(null);
+  const [loadingChapter, setLoadingChapter] = useState(false); // New loading state for simple chapter fetch
 
   const [compareMode, setCompareMode] = useState(false);
   const [selectedRubrics, setSelectedRubrics] = useState<SelectedRubric[]>([]);
@@ -372,12 +431,16 @@ const KentRepertoryPage: React.FC = () => {
     [selectedRubrics, currentBook],
   );
 
-  useEffect(() => {
-    if (!currentChapterId && currentBook) {
-      const first = currentBook?.chapters.find((c) => c.rubrics.length > 0);
-      if (first) setCurrentChapterId(first.id);
-    }
-  }, [currentBook, currentChapterId]);
+  // useEffect(() => {
+  //   if (!currentChapterId && currentBook) {
+  //     // Don't auto-select initially to avoid implicit fetch?
+  //     // Or auto-select first one and fetch its contents
+  //     const first = currentBook?.chapters.find((c: Chapter) => true); // Just pick first
+  //     if (first) {
+  //       handleSelectChapter(first.id); // Use handler to trigger fetch
+  //     }
+  //   }
+  // }, [currentBook, currentChapterId]);
 
   // Clear error message after 5 seconds
   useEffect(() => {
@@ -433,7 +496,7 @@ const KentRepertoryPage: React.FC = () => {
       if (book) {
         setCurrentBook(book);
         // Reset chapter selection when book changes
-        setCurrentChapterId(undefined);
+        setCurrentChapterId(undefined); // Let the other useEffect pick the first one
       } else {
         setBookError("Failed to load book contents");
       }
@@ -481,9 +544,36 @@ const KentRepertoryPage: React.FC = () => {
   //     void load()
   // }, [isLoaded, user?.id, currentChapterId])
 
-  const handleSelectChapter = (chapterId: string) => {
+  const handleSelectChapter = async (chapterId: string) => {
     setCurrentChapterId(chapterId);
     setSearchQuery("");
+
+    // Check if we need to fetch rubrics
+    if (!currentBook) return;
+
+    const chapter = currentBook.chapters.find((c) => c.id === chapterId);
+    if (chapter && (!chapter.rubrics || chapter.rubrics.length === 0)) {
+      // Fetch rubrics
+      setLoadingChapter(true);
+      const { chapter: fetchedChapter, error } =
+        await fetchChapterContents(chapterId);
+      setLoadingChapter(false);
+
+      if (fetchedChapter) {
+        // Update currentBook with the new chapter details including rubrics
+        setCurrentBook((prev) => {
+          if (!prev) return null;
+          return {
+            ...prev,
+            chapters: prev.chapters.map((c) =>
+              c.id === chapterId ? fetchedChapter : c,
+            ),
+          };
+        });
+      } else {
+        console.error("Failed to fetch rubrics for chapter", error);
+      }
+    }
   };
 
   const handleToggleRubricSelection = (rubricId: string) => {
@@ -871,13 +961,21 @@ const KentRepertoryPage: React.FC = () => {
               </div>
             </div>
 
-            {(!currentChapter || filteredRubrics.length === 0) && (
-              <div className="mt-10 rounded-xl border border-dashed border-slate-700 bg-slate-900/60 px-6 py-10 text-center text-sm text-slate-400">
-                {currentChapter
-                  ? "No rubrics match your search in this chapter."
-                  : "Select a chapter from the left to view its rubrics."}
+            {loadingChapter && (
+              <div className="mt-10 flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-900/60 px-6 py-10 text-center text-sm text-slate-400">
+                <div className="mb-2 h-6 w-6 animate-spin rounded-full border-2 border-slate-600 border-t-emerald-500"></div>
+                Loading rubrics...
               </div>
             )}
+
+            {!loadingChapter &&
+              (!currentChapter || filteredRubrics.length === 0) && (
+                <div className="mt-10 rounded-xl border border-dashed border-slate-700 bg-slate-900/60 px-6 py-10 text-center text-sm text-slate-400">
+                  {currentChapter
+                    ? "No rubrics match your search in this chapter."
+                    : "Select a chapter from the left to view its rubrics."}
+                </div>
+              )}
 
             <div className="pb-10">
               <Virtuoso
