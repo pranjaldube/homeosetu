@@ -332,11 +332,14 @@ function findCommonRemedies(
     });
   });
 
-  const result = Array.from(map.values()).filter(
-    (rem) => rem.occurrences.length === data.length,
-  );
+  const result = Array.from(map.values());
 
   result.sort((a, b) => {
+    // Primary sort: Occurrence count (Descending)
+    if (a.occurrences.length !== b.occurrences.length) {
+      return b.occurrences.length - a.occurrences.length;
+    }
+    // Secondary sort: Total Score (Descending)
     const scoreA = a.occurrences.reduce((sum, o) => sum + o.grade, 0);
     const scoreB = b.occurrences.reduce((sum, o) => sum + o.grade, 0);
     return scoreB - scoreA;
@@ -927,7 +930,7 @@ const KentRepertoryPage: React.FC = () => {
                     }`}
                     onClick={() => setComparisonOpen(true)}
                   >
-                    View Common Remedies
+                    View Remedy Analysis
                   </button>
                   <button
                     type="button"
@@ -1116,7 +1119,7 @@ const KentRepertoryPage: React.FC = () => {
         </div>
 
         <div
-          className={`fixed top-0 z-40 flex h-screen w-80 max-w-[90vw] flex-col border-l border-slate-800 bg-slate-900/95 shadow-2xl transition-transform ${
+          className={`fixed py-1 z-40 flex h-screen w-80 max-w-[90vw] flex-col border-l border-slate-800 bg-slate-900/95 shadow-2xl transition-transform ${
             comparisonOpen
               ? remedyPanel.open
                 ? "right-80"
@@ -1126,7 +1129,7 @@ const KentRepertoryPage: React.FC = () => {
         >
           <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
             <h3 className="text-sm font-semibold text-slate-50">
-              Common Remedies
+              Remedy Analysis
             </h3>
             <button
               type="button"
@@ -1172,7 +1175,7 @@ const KentRepertoryPage: React.FC = () => {
             <div>
               <div className="mb-1 flex items-center justify-between">
                 <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Common Remedies
+                  Remedies
                 </div>
                 <div className="inline-flex items-center rounded-full bg-slate-800 px-2 py-0.5 text-[11px] text-slate-100">
                   {commonRemedies.length} found
@@ -1180,30 +1183,30 @@ const KentRepertoryPage: React.FC = () => {
               </div>
               {commonRemedies.length === 0 && (
                 <div className="text-[11px] text-slate-400">
-                  No remedies are common to all selected rubrics.
+                  No remedies found.
                 </div>
               )}
               {commonRemedies.map((rem) => (
                 <div
                   key={rem.abbr}
                   className="mb-2 cursor-pointer rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-[11px] hover:border-sky-400/80"
-                  onClick={() => {
-                    const maxGrade = Math.max(
-                      ...rem.occurrences.map((o) => o.grade),
-                    );
-                    handleShowRemedyPanel(
-                      rem.abbr,
-                      maxGrade,
-                      rem.fullName,
-                      rem.description,
-                    );
-                  }}
+                  // onClick={() => {
+                  //   const maxGrade = Math.max(
+                  //     ...rem.occurrences.map((o) => o.grade),
+                  //   );
+                  //   handleShowRemedyPanel(
+                  //     rem.abbr,
+                  //     maxGrade,
+                  //     rem.fullName,
+                  //     rem.description,
+                  //   );
+                  // }}
                 >
                   <div className="mb-1 flex items-center justify-between">
                     <span className="font-semibold text-slate-100">
                       {rem.abbr}
                     </span>
-                    <span className="text-[10px] text-slate-400">
+                    <span className="text-[12px] font-semibold text-slate-400">
                       {rem.occurrences.length} rubrics
                     </span>
                   </div>
