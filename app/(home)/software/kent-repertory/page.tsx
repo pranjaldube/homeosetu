@@ -295,7 +295,7 @@ function findCommonRemedies(
   selected: SelectedRubric[],
   book: KentRepertory | null,
 ): CommonRemedy[] {
-  if (selected.length < 2 || !book) return [];
+  if (selected.length < 1 || !book) return [];
 
   const data: { rubric: Rubric; chapter: Chapter; book: KentRepertory }[] = [];
 
@@ -307,7 +307,7 @@ function findCommonRemedies(
     data.push({ rubric, chapter, book });
   });
 
-  if (data.length < 2) return [];
+  if (data.length < 1) return [];
 
   const map = new Map<string, CommonRemedy>();
 
@@ -577,6 +577,15 @@ const KentRepertoryPage: React.FC = () => {
         console.error("Failed to fetch rubrics for chapter", error);
       }
     }
+  };
+
+  /* New function to remove specific rubric from selection */
+  const handleRemoveRubric = (rubricId: string, chapterId: string) => {
+    setSelectedRubrics((prev) =>
+      prev.filter(
+        (r) => !(r.rubricId === rubricId && r.chapterId === chapterId),
+      ),
+    );
   };
 
   const handleToggleRubricSelection = (rubricId: string) => {
@@ -881,7 +890,7 @@ const KentRepertoryPage: React.FC = () => {
                   </svg>
                   <span>Compare Rubrics</span>
                 </button>
-                <div className="relative w-64">
+                <div className="relative w-96">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -894,10 +903,10 @@ const KentRepertoryPage: React.FC = () => {
                   </svg>
                   <input
                     type="text"
-                    placeholder="Search rubrics..."
+                    placeholder="Search Remedy, Rubric ,meanings"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-md border border-slate-700 bg-slate-950 py-1.5 pl-8 pr-2 text-xs text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-md border border-slate-700 bg-slate-950 py-3 pl-8 pr-2 text-xs text-slate-100 outline-none ring-0 placeholder:text-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
               </div>
@@ -922,9 +931,9 @@ const KentRepertoryPage: React.FC = () => {
                   </button>
                   <button
                     type="button"
-                    disabled={selectedCount < 2}
+                    disabled={selectedCount < 1}
                     className={`rounded-md px-2 py-1 text-[11px] font-medium text-white transition-colors ${
-                      selectedCount < 2
+                      selectedCount < 1
                         ? "cursor-not-allowed bg-sky-500/30"
                         : "bg-sky-500 hover:bg-sky-600"
                     }`}
@@ -1144,9 +1153,9 @@ const KentRepertoryPage: React.FC = () => {
               <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Comparing Rubrics
               </div>
-              {selectedRubrics.length === 0 && (
-                <div className="text-[11px] text-slate-400">
-                  Select at least two rubrics in compare mode.
+              {selectedRubrics.length < 2 && (
+                <div className="text-[11px] pb-2 text-slate-400">
+                  Select at least two rubric in compare mode.
                 </div>
               )}
               {selectedRubrics.map((sel, idx) => {
@@ -1161,12 +1170,25 @@ const KentRepertoryPage: React.FC = () => {
                 return (
                   <div
                     key={`${sel.chapterId}-${sel.rubricId}-${idx}`}
-                    className="mb-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px]"
+                    className="mb-1 flex items-start justify-between gap-2 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px]"
                   >
-                    <div className="text-slate-100">{rubric.name}</div>
-                    <div className="text-[10px] text-slate-400">
-                      {currentBook.bookName} › {chapter.name}
+                    <div>
+                      <div className="text-slate-100">{rubric.name}</div>
+                      <div className="text-[10px] text-slate-400">
+                        {currentBook.bookName} › {chapter.name}
+                      </div>
                     </div>
+                    <button
+                      type="button"
+                      className="ml-1 text-slate-500 transition-colors hover:text-red-400"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveRubric(sel.rubricId, sel.chapterId);
+                      }}
+                      title="Remove rubric"
+                    >
+                      ✕
+                    </button>
                   </div>
                 );
               })}
