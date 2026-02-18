@@ -75,7 +75,7 @@ const baseChatbotGraph: ChatbotGraph = {
     id: "level1C",
     question: "You selected Homeosetu Diagnostic Map. Please choose from the following options:",
     options: {
-      a: { label: "Coming Soon", next: "level3" },
+      a: { label: "Vertigo", next: "level3A" },
       b: { label: "Go Back", next: "level1" }
 
     }
@@ -210,6 +210,115 @@ const baseChatbotGraph: ChatbotGraph = {
     question: "the selected content will be coming soon as it is getting refined and want to make sure that correct and accurate content reaches to our users",
     options: {
       a: { label: "Done", next: 'level1' }
+    }
+  },
+  level3A: {
+    id: "level3A",
+    question: "Causes",
+    options: {
+      a: {label:'Inner Ear (Vestibular) Causes' , next:'level3A_1'},
+      b: {label:'Physiological / Systemic Causes' , next:'level3A_2'},
+      c: {label:'Neurological Causes' , next:'level3A_3'},
+      d: {label:'CardioVascular causes' , next:'level3A_4'},
+      e: {label:'Psychological / Stress‑Related Causes' , next:'level3A_5'},
+      f: {label:'Environmental/ Situational Causes' , next:'level3A_6'},
+      g: {label:'Metabolic Causes' , next:'level3A_7'},
+      // a: { label: "a.Benign paroxysmal positional vertigo (BPPV)", next: '' },
+      // b: { label: "b.Vestibular neuritis or labyrinthitis", next: '' },
+      // c: { label: "c.Ménière’s‑related mechanisms (fluid imbalance)", next: '' },
+      // d: { label: "d.Motion sensitivity", next: '' },
+      // e: { label: "e.Post‑viral vestibular irritation", next: '' },
+    }
+  },
+  level3A_1:{
+    id:"level3A_1",
+    question:"Inner Ear (Vestibular) Causes",
+    options:{
+      a: { label: "a.Benign paroxysmal positional vertigo (BPPV)", next: '' },
+      b: { label: "b.Vestibular neuritis or labyrinthitis", next: '' },
+      c: { label: "c.Ménière’s‑related mechanisms (fluid imbalance)", next: '' },
+      d: { label: "d.Motion sensitivity", next: '' },
+      e: { label: "e.Post‑viral vestibular irritation", next: '' },
+      f: { label: "Go Back", next:'level3A'}
+    }
+  },
+  level3A_2:{
+    id:"level3A_2",
+    question:"Physiological / Systemic Causes",
+    options:{
+      a: { label: "a. Dehydration", next: '' },
+      b: { label: "b. Low blood pressure (postural hypotension)", next: '' },
+      c: { label: "c.Anemia or low hemoglobin", next: '' },
+      d: { label: "d.Hypoglycemia (low blood sugar)", next: '' },
+      e: { label: "e.Hormonal fluctuations (e.g., around menses)", next: '' },
+      f: { label: "f.Heat or sunlight exposure leading to fatigue or dehydration", next: '' },
+      g: { label: "g.Fatigue, lack of sleep", next: '' },
+      h: { label: "Go Back", next:'level3A'}
+
+    }
+  },
+  level3A_3:{
+    id:"level3A_3",
+    question:"Neurological Causes",
+    options:{
+      a: { label: "a.Migraine‑associated vertigo", next: '' },
+      b: { label: "b.Visual‑vestibular mismatch", next: '' },
+      c: { label: "c.Transient neurological disturbances", next: '' },
+      d: { label: "d.Medication effects on the nervous system", next: '' },
+      e: { label: "Go Back", next:'level3A'}
+
+    }
+  },
+  level3A_4:{
+    id:"level3A_3",
+    question:"CardioVascular causes",
+    options:{
+      a: { label: "a.Irregular heart rhythm", next: '' },
+      b: { label: "b.Reduced blood flow to the brain", next: '' },
+      c: { label: "c.Sudden changes in posture", next: '' },
+      d: { label: "d.Vasovagal episodes", next: '' },
+      e: { label: "Go Back", next:'level3A'}
+
+    }
+  },
+  level3A_5:{
+    id:"level3A_5",
+    question:"Psychological / Stress‑Related Causes",
+    options:{
+      a: { label: "a. Anxiety‑related dizziness", next: '' },
+      b: { label: "b. Panic episodes", next: '' },
+      c: { label: "c.Hyperventilation‑related lightheadedness", next: '' },
+      d: { label: "d.Medication / Substance‑Related Causes", next: '' },
+      e: { label: "e.Sedatives", next: '' },
+      f: { label: "f.Antihypertensives", next: '' },
+      g: { label: "g.Alcohol", next: '' },
+      h: { label: "h.Certain antibiotics affecting the inner ear", next: '' },
+      i: { label: "Go Back", next:'level3A'}
+
+    }
+  },
+  level3A_6:{
+    id:"level3A_6",
+    question:"Environmental/ Situational Causes",
+    options:{
+      a: { label: "Prolonged screen exposure", next: '' },
+      b: { label: "Sudden head movements", next: '' },
+      c: { label: "Prolonged standing", next: '' },
+      d: { label: "Overheating or sun exposure", next: '' },
+      e: { label: "Crowded or poorly ventilated spaces", next: '' },
+      f: { label: "Go Back", next:'level3A'}
+
+    }
+  },
+  level3A_7:{
+    id:"level3A_7",
+    question:"Metabolic Causes",
+    options:{
+      a: { label: "a. Thyroid imbalance", next: '' },
+      b: { label: "b.Electrolyte disturbances", next: '' },
+      c: { label: "c. Vitamin B12 deficiency", next: '' },
+      d: { label: "Go Back", next:'level3A'}
+
     }
   },
   kentChapters: {

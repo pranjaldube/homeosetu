@@ -4,50 +4,7 @@ import * as path from 'path'
 import { REMEDY_DICTIONARY } from '../app/(home)/software/kent-repertory/REMEDY_DICTIONARY'
 
 const prisma = new PrismaClient()
-
-// Helper to parse a CSV line handling quoted fields
-function parseCsvLine(line: string): string[] {
-    const result: string[] = [];
-    let current = '';
-    let inQuotes = false;
-    
-    for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        
-        if (char === '"') {
-             // Handle escaped quotes if needed, though standard CSV doubles them. e.g. "He said ""Hello"""
-             // We'll peek ahead for double quote to handle escaping
-             if (i + 1 < line.length && line[i+1] === '"') {
-                 current += '"';
-                 i++; // Skip next quote
-             } else {
-                 inQuotes = !inQuotes;
-             }
-        } else if (char === ',' && !inQuotes) {
-            result.push(current);
-            current = '';
-        } else {
-            current += char;
-        }
-    }
-    result.push(current);
-    
-    // Clean up fields
-    return result.map(s => {
-        let val = s.trim();
-        // Remove surrounding quotes if they exist (and weren't just part of the string content inside the field - though our parser handles content)
-        // Actually, our parser collected everything including the quotes.
-        // If the *original* field was quoted, we should strip them.
-        // A simple heuristic: if it starts and ends with " and contains no other " in between implies it was fully quoted? 
-        // No, simplest is: we already handled inner quotes. 
-        // Wait, my loop above KEEPS the quotes in `current`. 
-        // Let's refine: usually we DON'T add the toggle quotes to `current`.
-        
-        // Let's re-write for safety to NOT include the bounding quotes in `current`.
-        // ... Or simpler: just use the regex method which is often cleaner for standard CSV lines.
-        return val; 
-    });
-}
+const chapterName = 'Chest'
 
 // Better CSV Splitter that strips quotes
 function splitCsv(str: string): string[] {
@@ -139,7 +96,7 @@ async function main() {
     let chapter = await prisma.content.findFirst({
         where: {
             bookId: book.id,
-            name: 'Mind'
+            name: chapterName
         }
     });
     
@@ -147,12 +104,12 @@ async function main() {
         chapter = await prisma.content.create({
             data: {
                 bookId: book.id,
-                name: 'Mind',
-                description: 'Mind Chapter'
+                name: chapterName,
+                description: `${chapterName} Chapter`
             }
         });
     }
-    console.log(`Chapter 'Mind' ID: ${chapter.id}`);
+    console.log(`Chapter '${chapterName}' ID: ${chapter.id}`);
     
     let rubricCount = 0;
     
@@ -181,14 +138,15 @@ async function main() {
         // console.log(`Processing Rubric: ${rubricName}`);
         
         // Upsert Rubric
-        let rubric = await prisma.rubric.findFirst({
-            where: {
-                chapterId: chapter.id,
-                name: rubricName
-            }
-        });
+        let rubric 
+        // = await prisma.rubric.findFirst({
+        //     where: {
+        //         chapterId: chapter.id,
+        //         name: rubricName
+        //     }
+        // });
         
-        if (!rubric) {
+        // if (!rubric) {
             rubric = await prisma.rubric.create({
                 data: {
                     chapterId: chapter.id,
@@ -196,15 +154,15 @@ async function main() {
                     meaning: meaning || null
                 }
             });
-        } else {
+        // } else {
              // Update meaning if it exists and differs
-             if (meaning && rubric.meaning !== meaning) {
-                 await prisma.rubric.update({
-                     where: { id: rubric.id },
-                     data: { meaning: meaning }
-                 });
-             }
-        }
+        //      if (meaning && rubric.meaning !== meaning) {
+        //          await prisma.rubric.update({
+        //              where: { id: rubric.id },
+        //              data: { meaning: meaning }
+        //          });
+        //      }
+        // }
         
         // Parse Remedies
         if (rawRemedies) {
@@ -228,14 +186,15 @@ async function main() {
                      // Schema: Remedy has @@index([rubricId]). No unique on [rubricId, abbr].
                      // So we should check.
                      
-                     const existingRemedy = await prisma.remedy.findFirst({
-                         where: {
-                             rubricId: rubric.id,
-                             abbr: abbrRaw
-                         }
-                     });
+                     let existingRemedy 
+                    //  = await prisma.remedy.findFirst({
+                    //      where: {
+                    //          rubricId: rubric.id,
+                    //          abbr: abbrRaw
+                    //      }
+                    //  });
                      
-                     if (!existingRemedy) {
+                    //  if (!existingRemedy) {
                          await prisma.remedy.create({
                              data: {
                                  rubricId: rubric.id,
@@ -245,18 +204,18 @@ async function main() {
                                  description: details.description
                              }
                          });
-                     } else {
-                         // Update grade/details if needed?
-                         // Let's assume CSV is source of truth
-                         await prisma.remedy.update({
-                             where: { id: existingRemedy.id },
-                             data: {
-                                 grade: grade,
-                                 fullForm: details.fullForm,
-                                 description: details.description
-                             }
-                         });
-                     }
+                    //  } else {
+                    //      // Update grade/details if needed?
+                    //      // Let's assume CSV is source of truth
+                    //      await prisma.remedy.update({
+                    //          where: { id: existingRemedy.id },
+                    //          data: {
+                    //              grade: grade,
+                    //              fullForm: details.fullForm,
+                    //              description: details.description
+                    //          }
+                    //      });
+                    //  }
                  }
              }
         }
