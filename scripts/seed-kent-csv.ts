@@ -4,7 +4,8 @@ import * as path from 'path'
 import { REMEDY_DICTIONARY } from '../app/(home)/software/kent-repertory/REMEDY_DICTIONARY'
 
 const prisma = new PrismaClient()
-const chapterName = 'Chest'
+const BookName = 'Allens Fever Repertory'
+const chapterName = 'Time'
 
 // Better CSV Splitter that strips quotes
 function splitCsv(str: string): string[] {
@@ -84,9 +85,9 @@ async function main() {
     
     // 1. Create Book
     const book = await prisma.book.upsert({
-        where: { bookName: 'Kent Repertory' },
+        where: { bookName: BookName },
         update: {},
-        create: { bookName: 'Kent Repertory' },
+        create: { bookName: BookName },
     });
     console.log(`Book ID: ${book.id}`);
     

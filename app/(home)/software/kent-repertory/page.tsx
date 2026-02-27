@@ -365,6 +365,11 @@ const KentRepertoryPage: React.FC = () => {
       bookName: "Homeosetu Clinical Repertory",
       createdAt: new Date("2026-01-24T11:32:28Z"),
     },
+    {
+      id: "1d8c2480-89a7-42df-960e-cba80a8f73c9",
+      bookName: "Allen Fevers Repertory",
+      createdAt: new Date("2026-02-27T05:30:28Z")
+    }
   ]);
   const [loadingBooksList, setLoadingBooksList] = useState(false);
 
