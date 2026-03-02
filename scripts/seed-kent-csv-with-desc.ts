@@ -3,11 +3,12 @@ import * as fs from "fs";
 import * as path from "path";
 
 const prisma = new PrismaClient();
+
 const BookName =
   "Symptom in Keynotes and Characteristics of MM By Dr H C Allen";
-const chapterName = "Respiratory System";
+const chapterName = "Observation";
 
-// Better CSV Splitter that strips quotes
+// Better CSV Splitter (handles quotes and commas properly)
 function splitCsv(str: string): string[] {
   const result: string[] = [];
   let current = "";
@@ -15,6 +16,7 @@ function splitCsv(str: string): string[] {
 
   for (let i = 0; i < str.length; i++) {
     const char = str[i];
+
     if (char === '"') {
       if (inQuote && str[i + 1] === '"') {
         current += '"';
@@ -29,12 +31,13 @@ function splitCsv(str: string): string[] {
       current += char;
     }
   }
+
   result.push(current);
   return result;
 }
 
 async function main() {
-  console.log("Start seeding Repertory from CSV with Remedy Descriptions...");
+  console.log("Start seeding Repertory from CSV...");
 
   const csvPath = path.join(
     process.cwd(),
@@ -49,15 +52,16 @@ async function main() {
   const fileContent = fs.readFileSync(csvPath, "utf-8");
   const lines = fileContent.split(/\r?\n/);
 
-  // 1. Create Book
+  // 1️⃣ Create / Upsert Book
   const book = await prisma.book.upsert({
     where: { bookName: BookName },
     update: {},
     create: { bookName: BookName },
   });
+
   console.log(`Book ID: ${book.id}`);
 
-  // 2. Create Chapter
+  // 2️⃣ Create / Find Chapter
   let chapter = await prisma.content.findFirst({
     where: {
       bookId: book.id,
@@ -74,91 +78,78 @@ async function main() {
       },
     });
   }
-  console.log(`Chapter '${chapterName}' ID: ${chapter.id}`);
+
+  console.log(`Chapter ID: ${chapter.id}`);
 
   let rubricCount = 0;
 
-  // 3. Process Lines
+  // 3️⃣ Process CSV Lines
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
 
     const cols = splitCsv(line);
-    if (cols.length < 3) continue;
 
-    let rawRubric = cols[0].trim();
-    const rawRemedies = cols[1].trim();
-    const meaning = cols[2].trim();
+    if (cols.length < 1) continue;
+
+    const rawRubric = cols[0]?.trim();
+    const rawRemedyList = cols[1]?.trim();
+    const meaning = cols[2]?.trim();
+
+    if (!rawRubric) continue;
 
     let rubricName = rawRubric;
+
     if (rubricName.endsWith(":")) {
       rubricName = rubricName.slice(0, -1).trim();
     }
-    if (!rubricName) continue;
 
-    let rubric = await prisma.rubric.create({
-      data: {
+    // Remove unwanted prefix if needed
+    rubricName = rubricName
+      .replace("Homeosetu Repertory to Keynotes;", "")
+      .trim();
+
+    // 4️⃣ Upsert Rubric (avoid duplicates)
+    let rubric = await prisma.rubric.findFirst({
+      where: {
         chapterId: chapter.id,
         name: rubricName,
-        meaning: null,
       },
     });
 
-    // Parse Remedies
-    if (rawRemedies) {
-      // Extract items enclosed in square brackets: e.g. [ Caps., -Pains in distant parts on coughing... ]
+    if (!rubric) {
+      rubric = await prisma.rubric.create({
+        data: {
+          chapterId: chapter.id,
+          name: rubricName,
+          meaning: null,
+        },
+      });
+    }
+
+    // 5️⃣ Parse Meaning Column (Bracket Descriptions)
+    if (meaning) {
       const remedyRegex = /\[(.*?)\]/g;
       let match;
-      let foundBrackets = false;
 
-      while ((match = remedyRegex.exec(rawRemedies)) !== null) {
-        foundBrackets = true;
-        const inside = match[1];
-        const commaIdx = inside.indexOf(",");
+      while ((match = remedyRegex.exec(meaning)) !== null) {
+        const inside = match[1].trim();
 
-        if (commaIdx !== -1) {
-          const firstPart = inside.substring(0, commaIdx).trim();
-          let description = inside.substring(commaIdx + 1).trim();
+        const parts = inside.split(/,(.+)/); // split only first comma
+        if (parts.length >= 2) {
+          const firstPart = parts[0].trim();
+          let description = parts[1].trim();
 
-          // Remove leading hyphen if exists
-          if (description.startsWith("-")) {
-            description = description.substring(1).trim();
-          }
-
-          // Extract grade from firstPart
-          const gradeMatch = firstPart.match(/^(\d+)?(.+)$/);
-          if (gradeMatch) {
-            const gradeStr = gradeMatch[1];
-            const abbrRaw = gradeMatch[2].trim();
-            const grade = gradeStr ? parseInt(gradeStr) : 1;
-
-            await prisma.remedy.create({
-              data: {
-                rubricId: rubric.id,
-                abbr: abbrRaw,
-                grade: grade,
-                fullForm: abbrRaw, // Use abbreviation as fullForm since dictionary lookup is skipped
-                description: description,
-              },
-            });
-          }
-        }
-      }
-
-      // Fallback just in case they didn't wrap in brackets but it's just "Caps., -Desc"
-      if (!foundBrackets && rawRemedies.length > 0) {
-        const commaIdx = rawRemedies.indexOf(",");
-        if (commaIdx !== -1) {
-          const firstPart = rawRemedies.substring(0, commaIdx).trim();
-          let description = rawRemedies.substring(commaIdx + 1).trim();
           if (description.startsWith("-")) {
             description = description.substring(1).trim();
           }
 
           const gradeMatch = firstPart.match(/^(\d+)?(.+)$/);
+
           if (gradeMatch) {
             const gradeStr = gradeMatch[1];
-            const abbrRaw = gradeMatch[2].trim();
+            const abbrRaw = gradeMatch[2].replace(".", "").trim();
+
             const grade = gradeStr ? parseInt(gradeStr) : 1;
 
             await prisma.remedy.create({
@@ -175,13 +166,34 @@ async function main() {
       }
     }
 
+    // 6️⃣ Fallback: If no meaning but simple remedy list exists
+    else if (rawRemedyList) {
+      const remedies = rawRemedyList
+        .split(",")
+        .map((r) => r.replace(".", "").trim())
+        .filter(Boolean);
+
+      for (const abbr of remedies) {
+        await prisma.remedy.create({
+          data: {
+            rubricId: rubric.id,
+            abbr: abbr,
+            grade: 1,
+            fullForm: abbr,
+            description: null,
+          },
+        });
+      }
+    }
+
     rubricCount++;
+
     if (rubricCount % 50 === 0) {
       console.log(`Processed ${rubricCount} rubrics...`);
     }
   }
 
-  console.log(`Seeding finished. Processed ${rubricCount} rubrics.`);
+  console.log(`Seeding finished. Total rubrics: ${rubricCount}`);
 }
 
 main()
