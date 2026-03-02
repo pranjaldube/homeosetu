@@ -5,7 +5,7 @@ import * as path from "path";
 const prisma = new PrismaClient();
 const BookName =
   "Symptom in Keynotes and Characteristics of MM By Dr H C Allen";
-const chapterName = "Gastric";
+const chapterName = "Respiratory System";
 
 // Better CSV Splitter that strips quotes
 function splitCsv(str: string): string[] {
@@ -100,7 +100,7 @@ async function main() {
       data: {
         chapterId: chapter.id,
         name: rubricName,
-        meaning: meaning || null,
+        meaning: null,
       },
     });
 

@@ -5,7 +5,7 @@ import { REMEDY_DICTIONARY } from "../app/(home)/software/kent-repertory/REMEDY_
 
 const prisma = new PrismaClient();
 const BookName = "Allens Fever Repertory";
-const chapterName = "Gastric";
+const chapterName = "Respiratory System";
 
 // Better CSV Splitter that strips quotes
 function splitCsv(str: string): string[] {
@@ -153,7 +153,7 @@ async function main() {
       data: {
         chapterId: chapter.id,
         name: rubricName,
-        meaning: meaning || null,
+        meaning: null,
       },
     });
     // } else {
