@@ -5,8 +5,8 @@ import * as path from "path";
 const prisma = new PrismaClient();
 
 const BookName =
-  "Symptom in Keynotes and Characteristics of MM By Dr H C Allen";
-const chapterName = "Observation";
+  "Homeosetu bowel nosode repertory";
+const chapterName = "A to Z";
 
 // Better CSV Splitter (handles quotes and commas properly)
 function splitCsv(str: string): string[] {
@@ -62,22 +62,23 @@ async function main() {
   console.log(`Book ID: ${book.id}`);
 
   // 2️⃣ Create / Find Chapter
-  let chapter = await prisma.content.findFirst({
-    where: {
+  let chapter;
+  //   chapter = await prisma.content.findFirst({
+  //     where: {
+  //       bookId: book.id,
+  //       name: chapterName,
+  //     },
+  //   });
+
+  //   if (!chapter) {
+  chapter = await prisma.content.create({
+    data: {
       bookId: book.id,
       name: chapterName,
+      description: `${chapterName} Chapter`,
     },
   });
-
-  if (!chapter) {
-    chapter = await prisma.content.create({
-      data: {
-        bookId: book.id,
-        name: chapterName,
-        description: `${chapterName} Chapter`,
-      },
-    });
-  }
+  //   }
 
   console.log(`Chapter ID: ${chapter.id}`);
 
@@ -110,22 +111,23 @@ async function main() {
       .trim();
 
     // 4️⃣ Upsert Rubric (avoid duplicates)
-    let rubric = await prisma.rubric.findFirst({
-      where: {
+    let rubric;
+    // rubric = await prisma.rubric.findFirst({
+    //   where: {
+    //     chapterId: chapter.id,
+    //     name: rubricName,
+    //   },
+    // });
+
+    // if (!rubric) {
+    rubric = await prisma.rubric.create({
+      data: {
         chapterId: chapter.id,
         name: rubricName,
+        meaning: null,
       },
     });
-
-    if (!rubric) {
-      rubric = await prisma.rubric.create({
-        data: {
-          chapterId: chapter.id,
-          name: rubricName,
-          meaning: null,
-        },
-      });
-    }
+    // }
 
     // 5️⃣ Parse Meaning Column (Bracket Descriptions)
     if (meaning) {

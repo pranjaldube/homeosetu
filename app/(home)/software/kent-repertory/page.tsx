@@ -375,6 +375,11 @@ const KentRepertoryPage: React.FC = () => {
       bookName: "Symptom in Keynotes and Characteristics of MM By Dr H C Allen",
       createdAt: new Date("2026-03-02T05:30:28Z"),
     },
+    {
+      id:"c803e7ec-0866-4d9f-a052-68cf5c7f701a",
+      bookName:"Homeosetu bowel nosode repertory",
+      createdAt: new Date("2026-03-02T05:30:28Z")
+    }
   ]);
   const [loadingBooksList, setLoadingBooksList] = useState(false);
 
