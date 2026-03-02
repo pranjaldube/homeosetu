@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const bookId = searchParams.get("bookId");
-    const bookName = searchParams.get("bookName");
-    const chapterId = searchParams.get("chapterId");
+    const bookId = req.nextUrl.searchParams.get("bookId");
+  const bookName = req.nextUrl.searchParams.get("bookName");
+  const chapterId = req.nextUrl.searchParams.get("chapterId");
 
     // Case 1: Fetch specific chapter contents (with rubrics)
     if (chapterId) {

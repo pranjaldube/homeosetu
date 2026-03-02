@@ -1,14 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { bookId: string } }
 ) {
   try {
     const { bookId } = params;
-    const { searchParams } = new URL(req.url);
-    const bookName = searchParams.get("bookName");
+    const bookName = req.nextUrl.searchParams.get("bookName")
 
     // Build where condition - can search by bookId or bookName
     const whereCondition: any = {};
