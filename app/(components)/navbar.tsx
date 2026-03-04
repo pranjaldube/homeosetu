@@ -20,18 +20,19 @@ const MAIN_LINKS = [
   { title: "Home", href: "/" },
   { title: "About Us", href: "/about-us" },
   { title: "Study Courses", href: "/explore" },
-  { title: "Software", 
+  {
+    title: "Software",
     children: [
-      {title:"Survey", href:"/software/survey"},
-      { title: "WebApp", href: "/software/access" },
+      { title: "Survey", href: "/software/survey" },
+      { title: "WebApp", href: "/software/kent-repertory" },
     ],
     external: true,
-   },
+  },
   {
     title: "Support",
     children: [
       { title: "Clinical Resource", href: "/support/clinical-resource" },
-      { title: "Mentorship", href:"/support/mentorship"},
+      { title: "Mentorship", href: "/support/mentorship" },
       { title: "Blog", href: "/support/blog" },
       // { title: "Forum", href: "/support/forum" },
     ],
@@ -75,16 +76,16 @@ export const Navbar: React.FC = () => {
                     {/* Trigger */}
                     <button
                       onClick={() =>
-                        setOpenDropdown(openDropdown === link.title ? null : link.title)
+                        setOpenDropdown(
+                          openDropdown === link.title ? null : link.title,
+                        )
                       }
-                      
                       className="px-3 py-2 text-sm font-medium text-gray-950 hover:bg-accent rounded-md flex items-center gap-1"
                     >
                       {link.title}
                       <svg
                         className={`w-4 h-4 transition-transform duration-200 ${
                           openDropdown === link.title ? "rotate-180" : ""
-
                         }`}
                         fill="none"
                         stroke="currentColor"
@@ -101,9 +102,13 @@ export const Navbar: React.FC = () => {
 
                     {/* Dropdown */}
                     {openDropdown === link.title && (
-                      <div className="absolute left-1/2 -translate-x-1/2 mt-2 
+                      <div
+                        className="absolute left-1/2 -translate-x-1/2 mt-2 
   bg-white border border-gray-200 shadow-lg 
-  rounded-md z-50 min-w-[220px]">                        <ul className="flex flex-col">
+  rounded-md z-50 min-w-[220px]"
+                      >
+                        {" "}
+                        <ul className="flex flex-col">
                           {link.children.map((child) => (
                             <li key={child.title}>
                               <Link
@@ -182,7 +187,7 @@ export const Navbar: React.FC = () => {
               >
                 {link.title}
               </Link>
-            )
+            ),
           )}
 
           <button

@@ -12,10 +12,10 @@ import {
   KentRepertory,
   Chapter,
 } from "./data";
-import { useKentAccessStore } from "@/hooks/acess";
 import { useRouter } from "next/navigation";
 import { Virtuoso } from "react-virtuoso";
 import { RubricItem } from "./RubricItem";
+import toast from "react-hot-toast";
 
 // Book metadata type (from database)
 type BookMetadata = {
@@ -400,7 +400,6 @@ const KentRepertoryPage: React.FC = () => {
 
   const [userNotes, setUserNotes] = useState<UserNoteCache>({});
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
-  const { kentAccess } = useKentAccessStore();
 
   const [selectedRemedies, setSelectedRemedies] = useState<{
     [rubricId: string]: {
@@ -762,10 +761,30 @@ const KentRepertoryPage: React.FC = () => {
   const selectedCount = selectedRubrics.length;
 
   useEffect(() => {
-    if (!kentAccess) {
-      router.push("/software/access");
+    if (!isLoaded) return;
+
+    if (!user) {
+      toast.error("Please login");
+      router.push("/sign-in");
+      return;
     }
-  }, [kentAccess, router]);
+
+    const checkTrial = async () => {
+      try {
+        const res = await fetch("/api/kent-free-trial");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.isExpired) {
+            router.push("/contact-us");
+          }
+        }
+      } catch (error) {
+        console.error("Failed to check trial status", error);
+      }
+    };
+
+    checkTrial();
+  }, [isLoaded, user, router]);
 
   return (
     <>

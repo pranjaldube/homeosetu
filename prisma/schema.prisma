@@ -316,6 +316,8 @@ model Rubric {
   remedies        Remedy[]
   notes           Note[]
   crossReferences CrossReference[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
 
   // Essential for fast sorting and pagination by name
   @@index([chapterId, name]) 
@@ -354,4 +356,13 @@ model CrossReference {
   rubricId      String @db.Uuid
 
   @@index([rubricId])
+}
+
+model KentFreeTrial {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @unique
+  trialStartTime DateTime @default(now())
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
