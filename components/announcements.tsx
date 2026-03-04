@@ -21,10 +21,8 @@ export function Announcements() {
   return (
     <div className="fixed top-0 left-0 z-50 w-full bg-primary text-primary-foreground py-2">
       <div className="container mx-auto flex justify-center px-4">
-        <p className="text-xs font-medium">
-          Announcement - New Courses releasing every week🎉
-        </p>
+        <p className="text-xs font-medium"></p>
       </div>
     </div>
-  )
+  );
 }
