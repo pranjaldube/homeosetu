@@ -270,24 +270,23 @@ function getFilteredRubrics(
   query: string,
 ): Rubric[] {
   if (!chapter) return [];
-  const normalized = query.toLowerCase().trim();
-  if (!normalized) return chapter.rubrics;
+
+  const words = query
+    .toLowerCase()
+    .trim()
+    .split(/\s+/) // split by spaces
+    .filter(Boolean);
+
+  if (!words.length) return chapter.rubrics;
 
   return chapter.rubrics.filter((rubric) => {
-    if (rubric.name.toLowerCase().includes(normalized)) return true;
-    if (rubric.meaning && rubric.meaning.toLowerCase().includes(normalized))
-      return true;
-    if (rubric.remedies.some((r) => r.abbr.toLowerCase().includes(normalized)))
-      return true;
-    if (
-      rubric.remedies.some((r) =>
-        (r.fullForm || getRemedyFullName(r.abbr))
-          .toLowerCase()
-          .includes(normalized),
-      )
-    )
-      return true;
-    return false;
+    const searchableText = [rubric.name]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    console.log(words);
+    // 🔥 Every word must exist
+    return words.every((word) => searchableText.includes(word));
   });
 }
 
@@ -376,10 +375,10 @@ const KentRepertoryPage: React.FC = () => {
       createdAt: new Date("2026-03-02T05:30:28Z"),
     },
     {
-      id:"c803e7ec-0866-4d9f-a052-68cf5c7f701a",
-      bookName:"Homeosetu bowel nosode repertory",
-      createdAt: new Date("2026-03-02T05:30:28Z")
-    }
+      id: "c803e7ec-0866-4d9f-a052-68cf5c7f701a",
+      bookName: "Homeosetu bowel nosode repertory",
+      createdAt: new Date("2026-03-02T05:30:28Z"),
+    },
   ]);
   const [loadingBooksList, setLoadingBooksList] = useState(false);
 

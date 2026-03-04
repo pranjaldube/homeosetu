@@ -3,13 +3,12 @@ import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const bookId = req.nextUrl.searchParams.get("bookId");
-  const bookName = req.nextUrl.searchParams.get("bookName");
-  const chapterId = req.nextUrl.searchParams.get("chapterId");
+    const bookName = req.nextUrl.searchParams.get("bookName");
+    const chapterId = req.nextUrl.searchParams.get("chapterId");
 
     // Case 1: Fetch specific chapter contents (with rubrics)
     if (chapterId) {
@@ -18,7 +17,11 @@ export async function GET(req: NextRequest) {
         include: {
           rubrics: {
             include: {
-              remedies: true,
+              remedies: {
+                orderBy: {
+                  abbr: "asc",
+                },
+              },
               notes: true,
               crossReferences: true,
             },
