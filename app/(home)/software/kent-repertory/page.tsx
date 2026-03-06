@@ -761,14 +761,6 @@ const KentRepertoryPage: React.FC = () => {
   const selectedCount = selectedRubrics.length;
 
   useEffect(() => {
-    if (!isLoaded) return;
-
-    if (!user) {
-      toast.error("Please login");
-      router.push("/sign-in");
-      return;
-    }
-
     const checkTrial = async () => {
       try {
         const res = await fetch("/api/kent-free-trial");
@@ -783,7 +775,15 @@ const KentRepertoryPage: React.FC = () => {
       }
     };
 
-    checkTrial();
+    if (!isLoaded) return;
+
+    if (!user) {
+      toast.error("Please login");
+      router.push("/sign-in");
+      return;
+    } else {
+      checkTrial();
+    }
   }, [isLoaded, user, router]);
 
   return (
