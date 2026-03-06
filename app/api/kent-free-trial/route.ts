@@ -12,15 +12,18 @@ export async function GET(req: Request) {
     }
 
     // Check if a free trial record exists for the user
-    let trialRecord = await db.kentFreeTrial.findUnique({
+    let trialRecord = await db.kentAccess.findFirst({
       where: {
         userId: userId,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
     // If not, create one
     if (!trialRecord) {
-      trialRecord = await db.kentFreeTrial.create({
+      trialRecord = await db.kentAccess.create({
         data: {
           userId: userId,
         },
@@ -28,10 +31,16 @@ export async function GET(req: Request) {
     }
 
     const now = Date.now();
-    const startTimeStamp = new Date(trialRecord.trialStartTime).getTime();
+    const startTimeStamp = new Date(trialRecord.accessStartTime).getTime();
     const diffInDays = (now - startTimeStamp) / (1000 * 3600 * 12);
+    const kentTrialPeriod =
+      Number(process.env.NEXT_PUBLIC_KENT_TRIAL_PERIOD) || 9;
+    const kentAccessTime =
+      Number(process.env.NEXT_PUBLIC_KENT_ACCESS_TIME) || 30;
 
-    const isExpired = diffInDays > 1;
+    const isExpired =
+      (!trialRecord.isPaid && diffInDays > kentTrialPeriod) ||
+      (trialRecord.isPaid && diffInDays > kentAccessTime);
 
     return NextResponse.json({
       isExpired,

@@ -358,10 +358,12 @@ model CrossReference {
   @@index([rubricId])
 }
 
-model KentFreeTrial {
+model KentAccess {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId         String   @unique
-  trialStartTime DateTime @default(now())
+  userId         String  
+  accessStartTime DateTime @default(now())
+  isPaid         Boolean  @default(false)
+  swipeHashId String?
   
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

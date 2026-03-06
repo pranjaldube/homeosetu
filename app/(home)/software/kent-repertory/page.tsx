@@ -775,7 +775,7 @@ const KentRepertoryPage: React.FC = () => {
         if (res.ok) {
           const data = await res.json();
           if (data.isExpired) {
-            router.push("/contact-us");
+            router.push("/software/access");
           }
         }
       } catch (error) {

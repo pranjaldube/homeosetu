@@ -1,255 +1,16 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo, useRef, Suspense } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ComboBox } from "./comboBox";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { NextResponse } from "next/server";
 import { useUser } from "@clerk/nextjs";
 import { useCartStore } from "@/hooks/cart";
-
-const countries = [
-  "Afghanistan",
-  "Albania",
-  "Algeria",
-  "Andorra",
-  "Angola",
-  "Antigua and Barbuda",
-  "Argentina",
-  "Armenia",
-  "Australia",
-  "Austria",
-  "Azerbaijan",
-  "Bahamas",
-  "Bahrain",
-  "Bangladesh",
-  "Barbados",
-  "Belarus",
-  "Belgium",
-  "Belize",
-  "Benin",
-  "Bhutan",
-  "Bolivia",
-  "Bosnia and Herzegovina",
-  "Botswana",
-  "Brazil",
-  "Brunei",
-  "Bulgaria",
-  "Burkina Faso",
-  "Burundi",
-  "Cabo Verde",
-  "Cambodia",
-  "Cameroon",
-  "Canada",
-  "Central African Republic",
-  "Chad",
-  "Chile",
-  "China",
-  "Colombia",
-  "Comoros",
-  "Congo, Democratic Republic of the",
-  "Congo, Republic of the",
-  "Costa Rica",
-  "Croatia",
-  "Cuba",
-  "Cyprus",
-  "Czechia",
-  "Denmark",
-  "Djibouti",
-  "Dominica",
-  "Dominican Republic",
-  "Ecuador",
-  "Egypt",
-  "El Salvador",
-  "Equatorial Guinea",
-  "Eritrea",
-  "Estonia",
-  "Eswatini",
-  "Ethiopia",
-  "Fiji",
-  "Finland",
-  "France",
-  "Gabon",
-  "Gambia",
-  "Georgia",
-  "Germany",
-  "Ghana",
-  "Greece",
-  "Grenada",
-  "Guatemala",
-  "Guinea",
-  "Guinea-Bissau",
-  "Guyana",
-  "Haiti",
-  "Honduras",
-  "Hungary",
-  "Iceland",
-  "India",
-  "Indonesia",
-  "Iran",
-  "Iraq",
-  "Ireland",
-  "Israel",
-  "Italy",
-  "Jamaica",
-  "Japan",
-  "Jordan",
-  "Kazakhstan",
-  "Kenya",
-  "Kiribati",
-  "Korea, North",
-  "Korea, South",
-  "Kosovo",
-  "Kuwait",
-  "Kyrgyzstan",
-  "Laos",
-  "Latvia",
-  "Lebanon",
-  "Lesotho",
-  "Liberia",
-  "Libya",
-  "Liechtenstein",
-  "Lithuania",
-  "Luxembourg",
-  "Madagascar",
-  "Malawi",
-  "Malaysia",
-  "Maldives",
-  "Mali",
-  "Malta",
-  "Marshall Islands",
-  "Mauritania",
-  "Mauritius",
-  "Mexico",
-  "Micronesia",
-  "Moldova",
-  "Monaco",
-  "Mongolia",
-  "Montenegro",
-  "Morocco",
-  "Mozambique",
-  "Myanmar",
-  "Namibia",
-  "Nauru",
-  "Nepal",
-  "Netherlands",
-  "New Zealand",
-  "Nicaragua",
-  "Niger",
-  "Nigeria",
-  "North Macedonia",
-  "Norway",
-  "Oman",
-  "Pakistan",
-  "Palau",
-  "Palestine",
-  "Panama",
-  "Papua New Guinea",
-  "Paraguay",
-  "Peru",
-  "Philippines",
-  "Poland",
-  "Portugal",
-  "Qatar",
-  "Romania",
-  "Russia",
-  "Rwanda",
-  "Saint Kitts and Nevis",
-  "Saint Lucia",
-  "Saint Vincent and the Grenadines",
-  "Samoa",
-  "San Marino",
-  "Sao Tome and Principe",
-  "Saudi Arabia",
-  "Senegal",
-  "Serbia",
-  "Seychelles",
-  "Sierra Leone",
-  "Singapore",
-  "Slovakia",
-  "Slovenia",
-  "Solomon Islands",
-  "Somalia",
-  "South Africa",
-  "South Sudan",
-  "Spain",
-  "Sri Lanka",
-  "Sudan",
-  "Suriname",
-  "Sweden",
-  "Switzerland",
-  "Syria",
-  "Taiwan",
-  "Tajikistan",
-  "Tanzania",
-  "Thailand",
-  "Timor-Leste",
-  "Togo",
-  "Tonga",
-  "Trinidad and Tobago",
-  "Tunisia",
-  "Turkey",
-  "Turkmenistan",
-  "Tuvalu",
-  "Uganda",
-  "Ukraine",
-  "United Arab Emirates",
-  "United Kingdom",
-  "United States",
-  "Uruguay",
-  "Uzbekistan",
-  "Vanuatu",
-  "Vatican City",
-  "Venezuela",
-  "Vietnam",
-  "Yemen",
-  "Zambia",
-  "Zimbabwe",
-];
-
-const states = [
-  "JAMMU AND KASHMIR",
-  "HIMACHAL PRADESH",
-  "PUNJAB",
-  "CHANDIGARH",
-  "UTTARAKHAND",
-  "HARYANA",
-  "DELHI",
-  "RAJASTHAN",
-  "UTTAR PRADESH",
-  "BIHAR",
-  "SIKKIM",
-  "ARUNACHAL PRADESH",
-  "NAGALAND",
-  "MANIPUR",
-  "MIZORAM",
-  "TRIPURA",
-  "MEGHALAYA",
-  "ASSAM",
-  "WEST BENGAL",
-  "JHARKHAND",
-  "ODISHA",
-  "CHHATTISGARH",
-  "MADHYA PRADESH",
-  "GUJARAT",
-  "DADRA & NAGAR HAVELI & DAMAN & DIU",
-  "MAHARASHTRA",
-  "ANDHRAPRADESH(BEFOREADDED)",
-  "KARNATAKA",
-  "GOA",
-  "LAKSHWADEEP",
-  "KERALA",
-  "TAMIL NADU",
-  "PUDUCHERRY",
-  "ANDAMAN & NICOBAR",
-  "TELANGANA",
-  "ANDHRA PRADESH",
-  "LADAKH(NEWLYADDED)",
-  "OTHER TERRITORY",
-];
+import { countries, states } from "@/data/country-state";
 
 // Step progress component
 const StepProgress = ({ currentStep }: { currentStep: number }) => {
@@ -261,19 +22,22 @@ const StepProgress = ({ currentStep }: { currentStep: number }) => {
         <React.Fragment key={index}>
           <div className="flex items-center space-x-2">
             <div
-              className={`w-4 h-4 rounded-full border-2 ${currentStep === index + 1 ? "border-black" : "border-gray-400"
-                } flex items-center justify-center`}
+              className={`w-4 h-4 rounded-full border-2 ${
+                currentStep === index + 1 ? "border-black" : "border-gray-400"
+              } flex items-center justify-center`}
             >
               <div
-                className={`w-2 h-2 rounded-full ${currentStep === index + 1 ? "bg-black" : "bg-gray-400"
-                  }`}
+                className={`w-2 h-2 rounded-full ${
+                  currentStep === index + 1 ? "bg-black" : "bg-gray-400"
+                }`}
               />
             </div>
             <span
-              className={`text-sm ${currentStep === index + 1
+              className={`text-sm ${
+                currentStep === index + 1
                   ? "text-black font-semibold"
                   : "text-gray-500"
-                }`}
+              }`}
             >
               {step}
             </span>
@@ -287,9 +51,12 @@ const StepProgress = ({ currentStep }: { currentStep: number }) => {
   );
 };
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const { user } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+  const isKentAccess = type === "kent-access";
 
   const [courseId, setCourseId] = useState<string | null>(null);
   const [courseData, setCourseData] = useState<any>(null);
@@ -315,89 +82,38 @@ export default function CheckoutPage() {
   const [savedChanges, setSavedChanges] = useState(true);
   const [userCountry, setUserCountry] = useState("India");
   const cartItems = useCartStore((state) => state.items);
-  const hasSynced = useRef(false)
-  const hasAddressSynced = useRef(false)
-  const [paymentButtonDisable, setPaymentButtonDisable] = useState(false)
-  const setItems = useCartStore((state) => state.setItems)
-  const clearCart = useCartStore((state) => state.clearCart)
+  const hasSynced = useRef(false);
+  const hasAddressSynced = useRef(false);
+  const [paymentButtonDisable, setPaymentButtonDisable] = useState(false);
+  const setItems = useCartStore((state) => state.setItems);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   const totalPrice = useMemo(() => {
+    if (isKentAccess) {
+      if (userCountry === "India")
+        return Number(process.env.NEXT_PUBLIC_KENT_PRICE_INR) || 429;
+      return Number(process.env.NEXT_PUBLIC_KENT_PRICE_USD) || 5;
+    }
     return cartItems.reduce((sum: number, course: any) => {
       if (!course) return sum;
       const price = userCountry === "India" ? course.price : course.usdPrice;
       return sum + (price || 0);
     }, 0);
-  }, [cartItems, userCountry]);
+  }, [cartItems, userCountry, isKentAccess]);
 
   useEffect(() => {
     setOriginalPrice(totalPrice);
   }, [totalPrice]);
 
-  // useEffect(() => {
-  //   const storeCartIntoDB = async () => {
-  //     if (hasSynced.current || !user?.id) {
-  //       return;
-  //     }
-      
-  //     if (cartItems.length === 0) {
-  //       toast.error("Please select course first");
-  //       setTimeout(() => {
-  //         router.push("/explore");
-  //       }, 3000);
-  //       return;
-  //     }
-
-  //     setPaymentButtonDisable(true);
-      
-  //     try {
-  //       const results = await Promise.allSettled(
-  //         cartItems.map((course) =>
-  //           axios.post("/api/cart", {
-  //             userId: user.id,
-  //             courseId: course.id,
-  //           })
-  //         )
-  //       );
-
-  //       // Handle failed requests
-  //       const failedCourses: string[] = [];
-  //       results.forEach((result, index) => {
-  //         if (result.status === "rejected") {
-  //           const error = result.reason;
-  //           if (error.response?.status === 404) {
-  //             failedCourses.push(cartItems[index].id);
-  //             console.error(`Course ${cartItems[index].title} no longer exists`);
-  //           } else {
-  //             console.error(`Failed to add course ${cartItems[index].title}:`, error);
-  //           }
-  //         }
-  //       });
-
-  //       // Remove failed courses from cart
-  //       if (failedCourses.length > 0) {
-  //         setItems((prev) => prev.filter((c) => !failedCourses.includes(c.id)));
-  //         toast.error(`${failedCourses.length} course(s) were removed from cart as they no longer exist`);
-  //       }
-
-  //       hasSynced.current = true;
-  //     } catch (error) {
-  //       console.error("Error syncing cart:", error);
-  //       toast.error("Failed to sync cart with server");
-  //     } finally {
-  //       setPaymentButtonDisable(false);
-  //     }
-  //   };
-
-  //   storeCartIntoDB();
-  // }, [user?.id]); // Only depend on user.id, not cartItems
-
   useEffect(() => {
-    // Load cookies and set state
-    const cookies = document.cookie.split("; ").reduce((acc: any, c) => {
-      const [key, value] = c.split("=");
-      acc[key] = decodeURIComponent(value);
-      return acc;
-    }, {} as Record<string, string>);
+    const cookies = document.cookie.split("; ").reduce(
+      (acc: any, c) => {
+        const [key, value] = c.split("=");
+        acc[key] = decodeURIComponent(value);
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
 
     setCourseId(cookies["enrolledCourse"] || null);
 
@@ -410,14 +126,14 @@ export default function CheckoutPage() {
     }
 
     setCurrency(
-      cookies["preferred_currency"] ? cookies["preferred_currency"] : "INR"
+      cookies["preferred_currency"] ? cookies["preferred_currency"] : "INR",
     );
   }, []);
 
   useEffect(() => {
     if (user && !hasAddressSynced.current) {
       getUserAddress();
-      hasAddressSynced.current = true
+      hasAddressSynced.current = true;
     }
   }, [user]);
 
@@ -453,7 +169,7 @@ export default function CheckoutPage() {
     e.preventDefault();
     setSavedChanges(true);
     if (!user || !user?.id || !user.emailAddresses?.[0]?.emailAddress) {
-      toast.error("Please login")
+      toast.error("Please login");
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -554,8 +270,10 @@ export default function CheckoutPage() {
       setCouponId(res.data.couponId);
       const couponDiscount = res.data.discount;
       if (typeof couponDiscount === "number") {
-        const afterCouponDiscount = Math.round(totalPrice - (totalPrice/100)*couponDiscount)
-        console.log("adsdsad",afterCouponDiscount)
+        const afterCouponDiscount = Math.round(
+          totalPrice - (totalPrice / 100) * couponDiscount,
+        );
+        console.log("adsdsad", afterCouponDiscount);
         setDiscountAmount(couponDiscount);
         setDiscountedPrice(afterCouponDiscount);
         setCouponApplied(true);
@@ -568,32 +286,75 @@ export default function CheckoutPage() {
 
   const onClick = async () => {
     try {
-      if (cartItems.length === 0) {
-        toast.error("No items in cart");
-        return;
-      }
+      if (!isKentAccess) {
+        if (cartItems.length === 0) {
+          toast.error("No items in cart");
+          return;
+        }
 
-      // Validate all cart items have required fields
-      const invalidItems = cartItems.filter(item => !item.id || !item.title);
-      if (invalidItems.length > 0) {
-        toast.error("Some items in cart are invalid");
-        return;
+        // Validate all cart items have required fields
+        const invalidItems = cartItems.filter(
+          (item) => !item.id || !item.title,
+        );
+        if (invalidItems.length > 0) {
+          toast.error("Some items in cart are invalid");
+          return;
+        }
       }
 
       setIsLoading(true);
+
+      if (isKentAccess) {
+        const res = await loadRazorpay();
+        if (!res) {
+          toast.error("Payment system failed to load");
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await axios.post(`/api/software/access/razorpay`);
+        const { id, amount, currency } = response.data;
+
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          amount: amount,
+          currency: currency,
+          name: "Kent Repertory Access",
+          description: "Lifetime Access to Kent Repertory",
+          order_id: id,
+          handler: async function (response: any) {
+            try {
+              await axios.post(`/api/software/access/verify`, {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+              });
+              window.location.href = `/software/kent-repertory?success=1`;
+            } catch (error) {
+              console.error("Payment verification failed:", error);
+              toast.error("Payment verification failed");
+            }
+          },
+          theme: { color: "#2563eb" },
+        };
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+        setIsLoading(false);
+        return;
+      }
 
       // Handle free purchase case
       if (couponApplied && discountedPrice === 0) {
         try {
           // Create purchases for all cart items
           await Promise.all(
-            cartItems.map(course => 
+            cartItems.map((course) =>
               axios.post(`/api/purchase`, {
                 courseId: course.id,
                 userId: user?.id,
                 userEmail: user?.emailAddresses?.[0]?.emailAddress,
-              })
-            )
+              }),
+            ),
           );
           clearCart();
           window.location.href = `/explore?success=1`;
@@ -615,12 +376,15 @@ export default function CheckoutPage() {
       // For now, process only the first item (as per current API structure)
       // TODO: Update API to handle multiple items in single payment
       const firstCourse = cartItems[0];
-      const response = await axios.post(`/api/courses/${firstCourse.id}/razorpay`, {
-        couponApplied: couponApplied,
-        discountedPrice: discountedPrice,
-        cartItems: cartItems, // Pass all items for reference
-      });
-      
+      const response = await axios.post(
+        `/api/courses/${firstCourse.id}/razorpay`,
+        {
+          couponApplied: couponApplied,
+          discountedPrice: discountedPrice,
+          cartItems: cartItems, // Pass all items for reference
+        },
+      );
+
       const { id, amount, currency } = response.data;
 
       const options = {
@@ -640,13 +404,13 @@ export default function CheckoutPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
             });
-            
+
             if (couponId) {
               await axios.patch("/api/coupon", {
                 couponId: couponId,
               });
             }
-            
+
             clearCart();
             window.location.href = `/explore?success=1`;
           } catch (error) {
@@ -692,7 +456,7 @@ export default function CheckoutPage() {
         ? userCountry === "India"
           ? courseData?.price
           : courseData?.usdPrice
-        : courseData?.price
+        : courseData?.price,
     );
   }, [courseData, userCountry]);
 
@@ -848,7 +612,7 @@ export default function CheckoutPage() {
 
         {/* Right: Coupon Section */}
         <div className="shadow-lg rounded-lg border border-gray-200 bg-white p-6">
-          {userCountry === "India" && (
+          {!isKentAccess && userCountry === "India" && (
             <div>
               <h2 className="text-xl font-semibold mb-4 text-center">
                 Available Coupons
@@ -894,13 +658,35 @@ export default function CheckoutPage() {
                 <div className="text-center py-4">
                   <p className="text-gray-500">Syncing cart with server...</p>
                 </div>
+              ) : isKentAccess ? (
+                <div className="flex items-center justify-between border-b pb-3">
+                  <div className="flex items-center justify-between flex-1 ml-3">
+                    <div>
+                      <p className="font-medium text-gray-800">
+                        Kent Repertory Access
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Access:{" "}
+                        {process.env.NEXT_PUBLIC_KENT_ACCESS_TIME || "Lifetime"}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-base font-semibold text-gray-800">
+                        {userCountry === "India"
+                          ? `₹${process.env.NEXT_PUBLIC_KENT_PRICE_INR || 429}`
+                          : `$${process.env.NEXT_PUBLIC_KENT_PRICE_USD || 5}`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ) : cartItems.length === 0 ? (
                 <div className="text-center py-4">
                   <p className="text-gray-500">No items in cart</p>
                 </div>
               ) : (
                 cartItems.map((course: any) => {
-                  const price = userCountry === "India" ? course.price : course.usdPrice;
+                  const price =
+                    userCountry === "India" ? course.price : course.usdPrice;
                   return (
                     <div
                       key={course.id}
@@ -936,7 +722,9 @@ export default function CheckoutPage() {
               {couponApplied && savedChanges && userCountry === "India" && (
                 <div className="flex items-center justify-between text-green-700">
                   <p className="text-sm font-medium">Coupon Applied</p>
-                  <p className="text-sm font-semibold">−{discountAmount}% OFF</p>
+                  <p className="text-sm font-semibold">
+                    −{discountAmount}% OFF
+                  </p>
                 </div>
               )}
               {/* Total Section */}
@@ -953,10 +741,14 @@ export default function CheckoutPage() {
             <div className="mt-6">
               <Button
                 className="w-full bg-purple-700 hover:bg-purple-800 text-white"
-                disabled={paymentButtonDisable || isLoading || cartItems.length === 0}
+                disabled={
+                  paymentButtonDisable ||
+                  isLoading ||
+                  (!isKentAccess && cartItems.length === 0)
+                }
                 onClick={() => {
                   // Validate cart
-                  if (cartItems.length === 0) {
+                  if (!isKentAccess && cartItems.length === 0) {
                     toast.error("No items in cart");
                     return;
                   }
@@ -968,7 +760,13 @@ export default function CheckoutPage() {
                   }
 
                   if (form.country === "India") {
-                    if (!form.fullName || !form.address1 || !form.city || !form.pinCode || !form.state) {
+                    if (
+                      !form.fullName ||
+                      !form.address1 ||
+                      !form.city ||
+                      !form.pinCode ||
+                      !form.state
+                    ) {
                       toast.error("Please fill all required fields");
                       return;
                     }
@@ -985,10 +783,10 @@ export default function CheckoutPage() {
                   onClick();
                 }}
               >
-                {isLoading 
-                  ? "Processing..." 
-                  : paymentButtonDisable 
-                    ? "Syncing Cart..." 
+                {isLoading
+                  ? "Processing..."
+                  : paymentButtonDisable
+                    ? "Syncing Cart..."
                     : couponApplied && discountedPrice === 0
                       ? "Complete Purchase"
                       : "Proceed to Payment"}
@@ -998,5 +796,17 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center mt-20">Loading Checkout...</div>
+      }
+    >
+      <CheckoutContent />
+    </Suspense>
   );
 }
