@@ -778,8 +778,9 @@ const KentRepertoryPage: React.FC = () => {
     if (!isLoaded) return;
 
     if (!user) {
+      console.log("user not logged in");
       toast.error("Please login");
-      router.push("/sign-in");
+      window.location.href = "/sign-in";
       return;
     } else {
       checkTrial();
