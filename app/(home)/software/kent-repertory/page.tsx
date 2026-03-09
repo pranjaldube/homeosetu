@@ -360,7 +360,7 @@ const KentRepertoryPage: React.FC = () => {
       createdAt: new Date("2026-01-24T11:31:54Z"),
     },
     {
-      id: "7849d943-6a0c-4534-b77a-26c3a4da0abe",
+      id: "e6eca118-9185-4dc4-be87-f2b0aa0b7cc9",
       bookName: "Homeosetu Clinical Repertory",
       createdAt: new Date("2026-01-24T11:32:28Z"),
     },
@@ -378,7 +378,7 @@ const KentRepertoryPage: React.FC = () => {
       id: "c803e7ec-0866-4d9f-a052-68cf5c7f701a",
       bookName: "Homeosetu bowel nosode repertory",
       createdAt: new Date("2026-03-02T05:30:28Z"),
-    },
+    }
   ]);
   const [loadingBooksList, setLoadingBooksList] = useState(false);
 

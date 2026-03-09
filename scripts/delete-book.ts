@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Get book ID from command line arguments
-  const bookId = "f5c3c6cf-2c09-4e0c-bda4-b4ae995143f5";
+  const bookId = "c81e09a6-cf3c-48de-9140-7dc279f7526d";
   console.log(`Attempting to delete book with ID: ${bookId}`);
 
   try {

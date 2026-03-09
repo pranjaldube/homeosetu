@@ -4,9 +4,8 @@ import * as path from "path";
 
 const prisma = new PrismaClient();
 
-const BookName =
-  "Homeosetu bowel nosode repertory";
-const chapterName = "A to Z";
+const BookName = "Homeosetu Clinical Repertory";
+const chapterName = "Clinical Hering";
 
 // Better CSV Splitter (handles quotes and commas properly)
 function splitCsv(str: string): string[] {
@@ -137,33 +136,27 @@ async function main() {
       while ((match = remedyRegex.exec(meaning)) !== null) {
         const inside = match[1].trim();
 
-        const parts = inside.split(/,(.+)/); // split only first comma
-        if (parts.length >= 2) {
-          const firstPart = parts[0].trim();
-          let description = parts[1].trim();
+        // Split remedies and description safely
+        const parts = inside.split(/,\s*-/);
 
-          if (description.startsWith("-")) {
-            description = description.substring(1).trim();
-          }
+        const remedyPart = parts[0];
+        const description = parts[1] ? parts[1].trim() : null;
 
-          const gradeMatch = firstPart.match(/^(\d+)?(.+)$/);
+        const remedies = remedyPart
+          .split(",")
+          .map((r) => r.replace(".", "").trim())
+          .filter(Boolean);
 
-          if (gradeMatch) {
-            const gradeStr = gradeMatch[1];
-            const abbrRaw = gradeMatch[2].replace(".", "").trim();
-
-            const grade = gradeStr ? parseInt(gradeStr) : 1;
-
-            await prisma.remedy.create({
-              data: {
-                rubricId: rubric.id,
-                abbr: abbrRaw,
-                grade: grade,
-                fullForm: abbrRaw,
-                description: description,
-              },
-            });
-          }
+        for (const abbr of remedies) {
+          await prisma.remedy.create({
+            data: {
+              rubricId: rubric.id,
+              abbr: abbr,
+              grade: 1,
+              fullForm: abbr,
+              description: description,
+            },
+          });
         }
       }
     }
