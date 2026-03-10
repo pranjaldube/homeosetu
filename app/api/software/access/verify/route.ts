@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       const date = formatDate(now);
       const isIndia = !userAddress || userAddress?.country === "India";
 
-      const course_price = 429;
+      const course_price = isIndia ? Number(process.env.NEXT_PUBLIC_KENT_PRICE_INR) : Number(process.env.NEXT_PUBLIC_KENT_PRICE_USD) ;
       let tax_rate_value = 0;
       let course_price_with_tax = course_price;
 
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
         items: [
           {
             id: "kent-access",
-            name: "Kent Repertory Lifetime Access",
+            name: "Homeosetu WebApp - 1 Month Subscription",
             quantity: 1,
             unit_price: course_price,
             tax_rate: tax_rate_value,
