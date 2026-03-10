@@ -98,7 +98,7 @@ export async function GET(req: NextRequest) {
       include: {
         chapters: {
           orderBy: {
-            name: "asc",
+            createdAt: "asc",
           },
         },
       },

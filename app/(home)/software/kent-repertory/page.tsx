@@ -371,7 +371,7 @@ const KentRepertoryPage: React.FC = () => {
     },
     {
       id: "7632b05d-3bae-4444-8020-29ef2811c061",
-      bookName: "Symptom in Keynotes and Characteristics of MM By Dr H C Allen",
+      bookName: "Repertory to Keynotes and Characteristics of MM By Dr H C Allen",
       createdAt: new Date("2026-03-02T05:30:28Z"),
     },
     {

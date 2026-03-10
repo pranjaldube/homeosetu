@@ -5,7 +5,7 @@ import * as path from "path";
 const prisma = new PrismaClient();
 
 const BookName = "Homeosetu Clinical Repertory";
-const chapterName = "Clinical Hering";
+const chapterName = "Clinical Clarke";
 
 // Better CSV Splitter (handles quotes and commas properly)
 function splitCsv(str: string): string[] {
