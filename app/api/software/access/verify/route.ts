@@ -78,7 +78,7 @@ export async function POST(req: Request) {
             price_with_tax: course_price_with_tax,
             net_amount: course_price,
             total_amount: course_price_with_tax,
-            hsn_code: "999259",
+            hsn_code: "998431",
             item_type: "Product",
           },
         ],
