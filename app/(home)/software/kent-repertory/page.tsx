@@ -371,14 +371,15 @@ const KentRepertoryPage: React.FC = () => {
     },
     {
       id: "7632b05d-3bae-4444-8020-29ef2811c061",
-      bookName: "Repertory to Keynotes and Characteristics of MM By Dr H C Allen",
+      bookName:
+        "Repertory to Keynotes and Characteristics of MM By Dr H C Allen",
       createdAt: new Date("2026-03-02T05:30:28Z"),
     },
     {
       id: "c803e7ec-0866-4d9f-a052-68cf5c7f701a",
       bookName: "Homeosetu bowel nosode repertory",
       createdAt: new Date("2026-03-02T05:30:28Z"),
-    }
+    },
   ]);
   const [loadingBooksList, setLoadingBooksList] = useState(false);
 
@@ -1085,13 +1086,10 @@ const KentRepertoryPage: React.FC = () => {
 
         <div
           className={`fixed inset-0 z-30 bg-black/50 transition-opacity ${
-            remedyPanel.open || comparisonOpen
-              ? "opacity-100"
-              : "pointer-events-none opacity-0"
+            remedyPanel.open ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
           onClick={() => {
             setRemedyPanel({ open: false });
-            setComparisonOpen(false);
           }}
         />
         <div
@@ -1161,124 +1159,103 @@ const KentRepertoryPage: React.FC = () => {
           </div>
         </div>
 
-        <div
-          className={`fixed py-1 z-40 flex h-screen w-80 max-w-[90vw] flex-col border-l border-slate-800 bg-slate-900/95 shadow-2xl transition-transform ${
-            comparisonOpen
-              ? remedyPanel.open
-                ? "right-80"
-                : "right-0"
-              : "-right-80"
-          }`}
-        >
-          <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
-            <h3 className="text-sm font-semibold text-slate-50">
-              Remedy Analysis
-            </h3>
-            <button
-              type="button"
-              className="rounded-md border border-slate-600 bg-slate-900 px-2 py-1 text-xs text-slate-200 hover:border-slate-400"
+        {comparisonOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div
+              className="absolute inset-0 bg-slate-900/40"
               onClick={() => setComparisonOpen(false)}
-            >
-              ✕
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto px-4 py-3 text-xs text-slate-200">
-            <div className="mb-3">
-              <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Comparing Rubrics
-              </div>
-              {selectedRubrics.length < 2 && (
-                <div className="text-[11px] pb-2 text-slate-400">
-                  Select at least two rubric in compare mode.
-                </div>
-              )}
-              {selectedRubrics.map((sel, idx) => {
-                if (!currentBook) return null;
-                const chapter = currentBook.chapters.find(
-                  (c: Chapter) => c.id === sel.chapterId,
-                );
-                const rubric = chapter?.rubrics.find(
-                  (r: Rubric) => r.id === sel.rubricId,
-                );
-                if (!chapter || !rubric) return null;
-                return (
-                  <div
-                    key={`${sel.chapterId}-${sel.rubricId}-${idx}`}
-                    className="mb-1 flex items-start justify-between gap-2 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px]"
-                  >
-                    <div>
-                      <div className="text-slate-100">{rubric.name}</div>
-                      <div className="text-[10px] text-slate-400">
-                        {currentBook.bookName} › {chapter.name}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="ml-1 text-slate-500 transition-colors hover:text-red-400"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveRubric(sel.rubricId, sel.chapterId);
-                      }}
-                      title="Remove rubric"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div>
-              <div className="mb-1 flex items-center justify-between">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Remedies
-                </div>
-                <div className="inline-flex items-center rounded-full bg-slate-800 px-2 py-0.5 text-[11px] text-slate-100">
-                  {commonRemedies.length} found
-                </div>
-              </div>
-              {commonRemedies.length === 0 && (
-                <div className="text-[11px] text-slate-400">
-                  No remedies found.
-                </div>
-              )}
-              {commonRemedies.map((rem) => (
-                <div
-                  key={rem.abbr}
-                  className="mb-2 cursor-pointer rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-[11px] hover:border-sky-400/80"
-                  // onClick={() => {
-                  //   const maxGrade = Math.max(
-                  //     ...rem.occurrences.map((o) => o.grade),
-                  //   );
-                  //   handleShowRemedyPanel(
-                  //     rem.abbr,
-                  //     maxGrade,
-                  //     rem.fullName,
-                  //     rem.description,
-                  //   );
-                  // }}
+            />
+            <div className="relative z-10 flex max-h-[90vh] w-[95vw] max-w-6xl flex-col bg-white shadow-2xl rounded-sm">
+              <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+                <h3 className="text-lg text-slate-700">Case repertorisation</h3>
+                <button
+                  type="button"
+                  className="text-slate-400 hover:text-slate-600 focus:outline-none text-xl leading-none px-2"
+                  onClick={() => setComparisonOpen(false)}
                 >
-                  <div className="mb-1 flex items-center justify-between">
-                    <span className="font-semibold text-slate-100">
-                      {rem.abbr}
-                    </span>
-                    <span className="text-[12px] font-semibold text-slate-400">
-                      {rem.occurrences.length} rubrics
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-300">
-                    {rem.occurrences.map((o, idx) => (
-                      <span key={idx}>
-                        {idx > 0 ? " • " : ""}
-                        {o.rubricName}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                  &times;
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-auto bg-white p-4">
+                <table className="w-full min-w-max border-collapse text-sm">
+                  <thead>
+                    <tr>
+                      <th className="sticky top-0 z-20 border-b border-t border-r border-slate-200 bg-white p-2 align-bottom text-left font-medium text-sky-600 min-w-[200px]">
+                        <span className="cursor-pointer underline">Rubric</span>
+                      </th>
+                      {commonRemedies.map((rem) => {
+                        const totalScore = rem.occurrences.reduce(
+                          (sum, o) => sum + o.grade,
+                          0,
+                        );
+                        return (
+                          <th
+                            key={rem.abbr}
+                            className="sticky top-0 z-20 h-40 w-10 border-b border-t border-r border-slate-200 bg-white p-0 align-bottom"
+                          >
+                            <div className="flex h-full w-full items-center justify-center pb-2">
+                              <div
+                                className=" whitespace-nowrap font-bold text-slate-800"
+                                style={{
+                                  transformOrigin: "center top",
+                                  transform: "translateY(5px) rotate(-90deg)",
+                                }}
+                              >
+                                {rem.abbr} ({totalScore})
+                              </div>
+                            </div>
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedRubrics.map((sel, idx) => {
+                      if (!currentBook) return null;
+                      const chapter = currentBook.chapters.find(
+                        (c: Chapter) => c.id === sel.chapterId,
+                      );
+                      const rubric = chapter?.rubrics.find(
+                        (r: Rubric) => r.id === sel.rubricId,
+                      );
+                      if (!chapter || !rubric) return null;
+
+                      return (
+                        <tr
+                          key={`${sel.chapterId}-${sel.rubricId}-${idx}`}
+                          className="hover:bg-slate-50 group"
+                        >
+                          <td className="border-b border-r border-slate-200 p-2 text-slate-800 bg-white group-hover:bg-slate-50 relative z-10 w-[200px]">
+                            {chapter.name}
+                            {chapter.name !== rubric.name
+                              ? `, ${rubric.name}`
+                              : ""}
+                          </td>
+                          {commonRemedies.map((rem) => {
+                            const occurrence = rem.occurrences.find(
+                              (o) =>
+                                o.rubricId === sel.rubricId &&
+                                o.chapterName === chapter.name,
+                            );
+                            return (
+                              <td
+                                key={`${sel.chapterId}-${sel.rubricId}-${rem.abbr}`}
+                                className="border-b border-r border-slate-200 p-2 text-center text-slate-800 min-w-[40px] w-10"
+                              >
+                                {occurrence ? occurrence.grade : ""}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <button
           type="button"
