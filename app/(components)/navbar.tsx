@@ -22,15 +22,12 @@ const MAIN_LINKS = [
   { title: "Study Courses", href: "/explore" },
   {
     title: "Software",
-    children: [
-      { title: "Survey", href: "/software/survey" },
-      { title: "WebApp", href: "/software/kent-repertory" },
-    ],
-    external: true,
+    href: "/software/kent-repertory",
   },
   {
     title: "Support",
     children: [
+      { title: "Survey", href: "/software/survey" },
       { title: "Clinical Resource", href: "/support/clinical-resource" },
       { title: "Mentorship", href: "/support/mentorship" },
       { title: "Blog", href: "/support/blog" },

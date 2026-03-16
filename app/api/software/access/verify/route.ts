@@ -43,7 +43,9 @@ export async function POST(req: Request) {
       const date = formatDate(now);
       const isIndia = !userAddress || userAddress?.country === "India";
 
-      const course_price = isIndia ? Number(process.env.NEXT_PUBLIC_KENT_PRICE_INR) : Number(process.env.NEXT_PUBLIC_KENT_PRICE_USD) ;
+      const course_price = isIndia
+        ? Number(process.env.NEXT_PUBLIC_KENT_PRICE_INR)
+        : Number(process.env.NEXT_PUBLIC_KENT_PRICE_USD);
       let tax_rate_value = 0;
       let course_price_with_tax = course_price;
 
@@ -147,6 +149,7 @@ export async function POST(req: Request) {
           userId: user.id,
           isPaid: true,
           swipeHashId: swipeHashId,
+          userEmail: user.emailAddresses?.[0]?.emailAddress,
         },
       });
     }

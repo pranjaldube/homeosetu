@@ -230,7 +230,20 @@ type UserNoteCache = Record<
   }[]
 >;
 
-type SelectedRubric = { rubricId: string; chapterId: string };
+type SelectedRubric = {
+  rubricId: string;
+  rubricName: string;
+  chapterId: string;
+  chapterName: string;
+  bookId: string;
+  bookName: string;
+  remedies: {
+    abbr: string;
+    fullForm?: string;
+    description?: string;
+    grade: number;
+  }[];
+};
 
 type SelectedRemedy = { abbr: string; fullName: string; grade: number };
 
@@ -290,28 +303,13 @@ function getFilteredRubrics(
   });
 }
 
-function findCommonRemedies(
-  selected: SelectedRubric[],
-  book: KentRepertory | null,
-): CommonRemedy[] {
-  if (selected.length < 1 || !book) return [];
-
-  const data: { rubric: Rubric; chapter: Chapter; book: KentRepertory }[] = [];
-
-  selected.forEach((sel) => {
-    const chapter = book.chapters.find((c) => c.id === sel.chapterId);
-    if (!chapter) return;
-    const rubric = chapter.rubrics.find((r) => r.id === sel.rubricId);
-    if (!rubric) return;
-    data.push({ rubric, chapter, book });
-  });
-
-  if (data.length < 1) return [];
+function findCommonRemedies(selected: SelectedRubric[]): CommonRemedy[] {
+  if (selected.length < 1) return [];
 
   const map = new Map<string, CommonRemedy>();
 
-  data.forEach(({ rubric, chapter, book }) => {
-    rubric.remedies.forEach((remedy) => {
+  selected.forEach((sel) => {
+    sel.remedies.forEach((remedy) => {
       const key = remedy.abbr.toLowerCase();
       if (!map.has(key)) {
         map.set(key, {
@@ -322,10 +320,10 @@ function findCommonRemedies(
         });
       }
       map.get(key)?.occurrences.push({
-        rubricId: rubric.id,
-        rubricName: rubric.name,
-        chapterName: chapter.name,
-        bookName: book.bookName,
+        rubricId: sel.rubricId,
+        rubricName: sel.rubricName,
+        chapterName: sel.chapterName,
+        bookName: sel.bookName,
         grade: remedy.grade,
       });
     });
@@ -351,6 +349,7 @@ const KentRepertoryPage: React.FC = () => {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [isExpired, setIsExpired] = useState(true);
 
   // Book list from database (metadata only)
   const [availableBooks, setAvailableBooks] = useState<BookMetadata[]>([
@@ -444,8 +443,8 @@ const KentRepertoryPage: React.FC = () => {
   );
 
   const commonRemedies = useMemo(
-    () => findCommonRemedies(selectedRubrics, currentBook),
-    [selectedRubrics, currentBook],
+    () => findCommonRemedies(selectedRubrics),
+    [selectedRubrics],
   );
 
   // useEffect(() => {
@@ -594,40 +593,68 @@ const KentRepertoryPage: React.FC = () => {
   };
 
   /* New function to remove specific rubric from selection */
-  const handleRemoveRubric = (rubricId: string, chapterId: string) => {
+  const handleRemoveRubric = (
+    rubricId: string,
+    chapterId: string,
+    bookId: string,
+  ) => {
     setSelectedRubrics((prev) =>
       prev.filter(
-        (r) => !(r.rubricId === rubricId && r.chapterId === chapterId),
+        (r) =>
+          !(
+            r.rubricId === rubricId &&
+            r.chapterId === chapterId &&
+            r.bookId === bookId
+          ),
       ),
     );
   };
 
-  const handleToggleRubricSelection = (rubricId: string) => {
-    if (!currentChapter) return;
+  const handleToggleRubricSelection = (
+    rubricId: string,
+    rubricName: string,
+    remedies: any[],
+  ) => {
+    if (!currentChapter || !currentBook || !selectedBookId) return;
     setSelectedRubrics((prev) => {
       const exists = prev.find(
-        (r) => r.rubricId === rubricId && r.chapterId === currentChapter.id,
+        (r) =>
+          r.rubricId === rubricId &&
+          r.chapterId === currentChapter.id &&
+          r.bookId === selectedBookId,
       );
       if (exists) {
         return prev.filter(
           (r) =>
-            !(r.rubricId === rubricId && r.chapterId === currentChapter.id),
+            !(
+              r.rubricId === rubricId &&
+              r.chapterId === currentChapter.id &&
+              r.bookId === selectedBookId
+            ),
         );
       }
       return [
         ...prev,
         {
           rubricId,
+          rubricName,
           chapterId: currentChapter.id,
+          chapterName: currentChapter.name,
+          bookId: selectedBookId,
+          bookName: currentBook.bookName,
+          remedies,
         },
       ];
     });
   };
 
   const isRubricSelected = (rubricId: string) => {
-    if (!currentChapter) return false;
+    if (!currentChapter || !selectedBookId) return false;
     return selectedRubrics.some(
-      (r) => r.rubricId === rubricId && r.chapterId === currentChapter.id,
+      (r) =>
+        r.rubricId === rubricId &&
+        r.chapterId === currentChapter.id &&
+        r.bookId === selectedBookId,
     );
   };
 
@@ -948,46 +975,84 @@ const KentRepertoryPage: React.FC = () => {
             </div>
 
             {compareMode && (
-              <div className="mb-3 flex items-center justify-between rounded-lg border border-sky-500/40 bg-sky-500/10 px-3 py-2 text-[11px] text-sky-100">
-                <div>
-                  <span className="font-semibold">{selectedCount}</span> rubric
-                  {selectedCount === 1 ? "" : "s"} selected
+              <div className="mb-3 flex flex-col gap-2 rounded-lg border border-sky-500/40 bg-sky-500/10 px-3 py-2 text-[11px] text-sky-100">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-semibold">{selectedCount}</span>{" "}
+                    rubric
+                    {selectedCount === 1 ? "" : "s"} selected
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="rounded-md border border-slate-600 bg-slate-900 px-2 py-1 text-[11px] text-slate-200 hover:border-slate-400"
+                      onClick={() => {
+                        setSelectedRubrics([]);
+                        setComparisonOpen(false);
+                      }}
+                    >
+                      Clear
+                    </button>
+                    <button
+                      type="button"
+                      disabled={selectedCount < 1}
+                      className={`rounded-md px-2 py-1 text-[11px] font-medium text-white transition-colors ${
+                        selectedCount < 1
+                          ? "cursor-not-allowed bg-sky-500/30"
+                          : "bg-sky-500 hover:bg-sky-600"
+                      }`}
+                      onClick={() => setComparisonOpen(true)}
+                    >
+                      View Remedy Analysis
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-md border border-red-400/60 bg-red-500/10 px-2 py-1 text-[11px] text-red-200 hover:border-red-300"
+                      onClick={() => {
+                        setCompareMode(false);
+                        setSelectedRubrics([]);
+                        setComparisonOpen(false);
+                      }}
+                    >
+                      Exit
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="rounded-md border border-slate-600 bg-slate-900 px-2 py-1 text-[11px] text-slate-200 hover:border-slate-400"
-                    onClick={() => {
-                      setSelectedRubrics([]);
-                      setComparisonOpen(false);
-                    }}
-                  >
-                    Clear
-                  </button>
-                  <button
-                    type="button"
-                    disabled={selectedCount < 1}
-                    className={`rounded-md px-2 py-1 text-[11px] font-medium text-white transition-colors ${
-                      selectedCount < 1
-                        ? "cursor-not-allowed bg-sky-500/30"
-                        : "bg-sky-500 hover:bg-sky-600"
-                    }`}
-                    onClick={() => setComparisonOpen(true)}
-                  >
-                    View Remedy Analysis
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-md border border-red-400/60 bg-red-500/10 px-2 py-1 text-[11px] text-red-200 hover:border-red-300"
-                    onClick={() => {
-                      setCompareMode(false);
-                      setSelectedRubrics([]);
-                      setComparisonOpen(false);
-                    }}
-                  >
-                    Exit
-                  </button>
-                </div>
+
+                {selectedCount > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-1 border-t border-sky-500/20 pt-2">
+                    {selectedRubrics.map((sel) => {
+                      return (
+                        <div
+                          key={`${sel.bookId}-${sel.chapterId}-${sel.rubricId}`}
+                          className="flex items-center gap-1.5 rounded-md bg-sky-500/20 px-2 py-1 text-[10px] text-sky-100 border border-sky-500/30"
+                        >
+                          <span className="font-medium">{sel.rubricName}</span>
+                          <span className="text-sky-300/80">
+                            ({sel.bookName} › {sel.chapterName})
+                          </span>
+                          <button
+                            onClick={() =>
+                              handleRemoveRubric(sel.rubricId, sel.chapterId, sel.bookId)
+                            }
+                            className="ml-0.5 rounded-full p-0.5 hover:bg-sky-500/40 text-sky-200 hover:text-white transition-colors"
+                            title="Remove from comparison"
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              className="h-3 w-3"
+                            >
+                              <path d="M18 6L6 18M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
 
@@ -1047,7 +1112,13 @@ const KentRepertoryPage: React.FC = () => {
                         chapterId={currentChapter?.id}
                         isSelected={selected}
                         compareMode={compareMode}
-                        onToggleSelection={handleToggleRubricSelection}
+                        onToggleSelection={(rubricId) =>
+                          handleToggleRubricSelection(
+                            rubricId,
+                            rubric.name,
+                            rubric.remedies,
+                          )
+                        }
                         onShowRemedyPanel={handleShowRemedyPanel}
                         selectedRemedy={selectedRemedies[rubric.id]}
                         onSelectRemedy={(rubricId, data) =>
@@ -1167,7 +1238,18 @@ const KentRepertoryPage: React.FC = () => {
             />
             <div className="relative z-10 flex max-h-[90vh] w-[95vw] max-w-6xl flex-col bg-white shadow-2xl rounded-sm">
               <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
-                <h3 className="text-lg text-slate-700">Case repertorisation</h3>
+                <div className="flex items-center">
+                  <div className="px-4 pt-2 -mb-2">
+                    <img
+                      src="/logo.jpg"
+                      alt="Homeosetu Logo"
+                      className="h-12 w-12 object-contain opacity-80"
+                    />
+                  </div>
+                  <h3 className="text-lg text-slate-700">
+                    Homeosetu WebApp Case Repertorisation
+                  </h3>
+                </div>
                 <button
                   type="button"
                   className="text-slate-400 hover:text-slate-600 focus:outline-none text-xl leading-none px-2"
@@ -1212,35 +1294,31 @@ const KentRepertoryPage: React.FC = () => {
                   </thead>
                   <tbody>
                     {selectedRubrics.map((sel, idx) => {
-                      if (!currentBook) return null;
-                      const chapter = currentBook.chapters.find(
-                        (c: Chapter) => c.id === sel.chapterId,
-                      );
-                      const rubric = chapter?.rubrics.find(
-                        (r: Rubric) => r.id === sel.rubricId,
-                      );
-                      if (!chapter || !rubric) return null;
-
                       return (
                         <tr
-                          key={`${sel.chapterId}-${sel.rubricId}-${idx}`}
+                          key={`${sel.bookId}-${sel.chapterId}-${sel.rubricId}-${idx}`}
                           className="hover:bg-slate-50 group"
                         >
                           <td className="border-b border-r border-slate-200 p-2 text-slate-800 bg-white group-hover:bg-slate-50 relative z-10 w-[200px]">
-                            {chapter.name}
-                            {chapter.name !== rubric.name
-                              ? `, ${rubric.name}`
-                              : ""}
+                            <div className="font-medium">
+                              {sel.chapterName !== sel.rubricName
+                                ? sel.rubricName
+                                : sel.chapterName}
+                            </div>
+                            <div className="text-[10px] text-slate-500 mt-0.5">
+                              {sel.bookName} › {sel.chapterName}
+                            </div>
                           </td>
                           {commonRemedies.map((rem) => {
                             const occurrence = rem.occurrences.find(
                               (o) =>
                                 o.rubricId === sel.rubricId &&
-                                o.chapterName === chapter.name,
+                                o.chapterName === sel.chapterName &&
+                                o.bookName === sel.bookName,
                             );
                             return (
                               <td
-                                key={`${sel.chapterId}-${sel.rubricId}-${rem.abbr}`}
+                                key={`${sel.bookId}-${sel.chapterId}-${sel.rubricId}-${rem.abbr}`}
                                 className="border-b border-r border-slate-200 p-2 text-center text-slate-800 min-w-[40px] w-10"
                               >
                                 {occurrence ? occurrence.grade : ""}
