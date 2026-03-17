@@ -31,6 +31,7 @@ const MAIN_LINKS = [
       { title: "Clinical Resource", href: "/support/clinical-resource" },
       { title: "Mentorship", href: "/support/mentorship" },
       { title: "Blog", href: "/support/blog" },
+      { title: "Release Notes", href: "/support/release-notes" },
       // { title: "Forum", href: "/support/forum" },
     ],
   },
