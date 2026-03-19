@@ -90,6 +90,8 @@ export default function ReleaseNotesPage() {
             in our documentation.
           </p>
 
+          <p>Patient‑level saving and synchronization are not available in this initial release. We are actively developing a secure patient‑save feature and native mobile apps to enable seamless saving, syncing, and retrieval of repertorisations. Until these capabilities are released, you may capture screenshots of your repertorisation and store them in your preferred patient record system</p>
+
           <div className="mt-12 p-6 bg-muted rounded-lg">
             <h2 className="text-2xl font-semibold mb-4">Conclusion</h2>
             <p className="mb-4">
