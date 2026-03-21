@@ -478,6 +478,28 @@ const KentRepertoryPage: React.FC = () => {
     });
   }, [currentChapterId]);
 
+  const handleRemedyDeleted = useCallback((rubricId: string, remedyId: string) => {
+    setCurrentBook((prev) => {
+      if (!prev || !currentChapterId) return prev;
+      return {
+        ...prev,
+        chapters: prev.chapters.map((ch) => {
+          if (ch.id !== currentChapterId) return ch;
+          return {
+            ...ch,
+            rubrics: ch.rubrics.map((r) => {
+              if (r.id !== rubricId) return r;
+              return {
+                ...r,
+                remedies: r.remedies.filter((rem) => rem.id !== remedyId)
+              };
+            })
+          };
+        })
+      };
+    });
+  }, [currentChapterId]);
+
   const currentChapter: Chapter | undefined = useMemo(() => {
     if (!currentChapterId || !currentBook) return undefined;
     return currentBook?.chapters.find((c) => c.id === currentChapterId);
@@ -1195,6 +1217,7 @@ const KentRepertoryPage: React.FC = () => {
                         canEdit={canEdit}
                         onRubricUpdated={handleRubricUpdated}
                         onRemedyAdded={handleRemedyAdded}
+                        onRemedyDeleted={handleRemedyDeleted}
                       />
                     </div>
                   );

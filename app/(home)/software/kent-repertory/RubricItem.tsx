@@ -35,6 +35,7 @@ interface RubricItemProps {
   canEdit?: boolean;
   onRubricUpdated?: (id: string, name: string, meaning: string) => void;
   onRemedyAdded?: (rubricId: string, data: SelectedRemedyData) => void;
+  onRemedyDeleted?: (rubricId: string, remedyId: string) => void;
 }
 
 export const RubricItem = React.memo(function RubricItem({
@@ -56,6 +57,7 @@ export const RubricItem = React.memo(function RubricItem({
   canEdit,
   onRubricUpdated,
   onRemedyAdded,
+  onRemedyDeleted,
 }: RubricItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(rubric.name);
@@ -92,6 +94,7 @@ export const RubricItem = React.memo(function RubricItem({
   const [isEditingRemedy, setIsEditingRemedy] = useState(false);
   const [editRemedy, setEditRemedy] = useState<SelectedRemedyData | null>(null);
   const [isSavingRemedy, setIsSavingRemedy] = useState(false);
+  const [isDeletingRemedy, setIsDeletingRemedy] = useState(false);
 
   const handleSaveRemedyEdit = async () => {
     if (!editRemedy?.id) return;
@@ -115,6 +118,29 @@ export const RubricItem = React.memo(function RubricItem({
       alert("Error updating remedy");
     } finally {
       setIsSavingRemedy(false);
+    }
+  };
+
+  const handleDeleteRemedy = async () => {
+    if (!editRemedy?.id) return;
+    if (!confirm("Are you sure you want to delete this remedy?")) return;
+    setIsDeletingRemedy(true);
+    try {
+      const res = await fetch(`/api/kent-repertory/remedies?id=${editRemedy.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setIsEditingRemedy(false);
+        if (onRemedyDeleted) onRemedyDeleted(rubric.id, editRemedy.id);
+        toast.success("Remedy deleted");
+      } else {
+        alert("Failed to delete remedy");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error deleting remedy");
+    } finally {
+      setIsDeletingRemedy(false);
     }
   };
 
@@ -406,22 +432,32 @@ export const RubricItem = React.memo(function RubricItem({
                   className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 outline-none focus:border-emerald-500 min-h-[50px]"
                   placeholder="Description"
                 />
-                <div className="flex justify-end gap-2 mt-1">
+                <div className="flex justify-between gap-2 mt-1">
                   <button
                     type="button"
-                    onClick={() => setIsEditingRemedy(false)}
-                    className="rounded-md border border-slate-600 px-2 py-1 text-[10px] text-slate-300"
+                    onClick={handleDeleteRemedy}
+                    disabled={isDeletingRemedy || isSavingRemedy}
+                    className="rounded-md border border-rose-800 bg-rose-950 px-2 py-1 text-[10px] text-rose-400 hover:bg-rose-900"
                   >
-                    Cancel
+                    {isDeletingRemedy ? "Deleting..." : "Delete"}
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleSaveRemedyEdit}
-                    disabled={isSavingRemedy}
-                    className="rounded-md bg-emerald-500 px-2 py-1 text-[10px] text-emerald-950"
-                  >
-                    {isSavingRemedy ? "Saving..." : "Save"}
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingRemedy(false)}
+                      className="rounded-md border border-slate-600 px-2 py-1 text-[10px] text-slate-300"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSaveRemedyEdit}
+                      disabled={isSavingRemedy || isDeletingRemedy}
+                      className="rounded-md bg-emerald-500 px-2 py-1 text-[10px] text-emerald-950"
+                    >
+                      {isSavingRemedy ? "Saving..." : "Save"}
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (

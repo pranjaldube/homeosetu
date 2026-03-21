@@ -75,3 +75,35 @@ export async function POST(req: Request) {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const { userId } = await auth();
+
+    // Check if the user is authorized to edit
+    const editorId = process.env.NEXT_PUBLIC_KENT_EDITOR_USER_ID || process.env.KENT_EDITOR_USER_ID;
+
+    if (!userId || userId !== editorId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return new NextResponse("Missing required field (id)", { status: 400 });
+    }
+
+    // Delete the remedy
+    const deletedRemedy = await db.remedy.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return NextResponse.json(deletedRemedy);
+  } catch (error) {
+    console.error("[KENT_REPERTORY_REMEDY_DELETE]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}
