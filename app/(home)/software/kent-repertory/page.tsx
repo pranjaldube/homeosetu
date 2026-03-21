@@ -83,6 +83,7 @@ function transformApiBookToKentRepertory(
         name: rubric.name,
         meaning: rubric.meaning || undefined,
         remedies: (rubric.remedies || []).map((remedy) => ({
+          id: remedy.id,
           abbr: remedy.abbr,
           grade: remedy.grade,
           fullForm: remedy.fullForm || undefined,
@@ -183,6 +184,7 @@ async function fetchChapterContents(
         name: rubric.name,
         meaning: rubric.meaning || undefined,
         remedies: (rubric.remedies || []).map((remedy: any) => ({
+          id: remedy.id,
           abbr: remedy.abbr,
           grade: remedy.grade,
           fullForm: remedy.fullForm || undefined,
@@ -238,6 +240,7 @@ type SelectedRubric = {
   bookId: string;
   bookName: string;
   remedies: {
+    id?: string;
     abbr: string;
     fullForm?: string;
     description?: string;
@@ -245,7 +248,7 @@ type SelectedRubric = {
   }[];
 };
 
-type SelectedRemedy = { abbr: string; fullName: string; grade: number };
+type SelectedRemedy = { id?: string; abbr: string; fullName: string; grade: number };
 
 type CommonRemedy = {
   abbr: string;
@@ -403,6 +406,7 @@ const KentRepertoryPage: React.FC = () => {
 
   const [selectedRemedies, setSelectedRemedies] = useState<{
     [rubricId: string]: {
+      id?: string;
       abbr: string;
       grade: number;
       fullForm?: string;
@@ -412,6 +416,7 @@ const KentRepertoryPage: React.FC = () => {
 
   const [remedyPanel, setRemedyPanel] = useState<{
     open: boolean;
+    id?: string;
     abbr?: string;
     fullName?: string;
     grade?: number;
@@ -432,6 +437,47 @@ const KentRepertoryPage: React.FC = () => {
     user?.username ||
     user?.primaryEmailAddress?.emailAddress ||
     undefined;
+
+  const canEdit = isLoaded && !!user && user.id === process.env.NEXT_PUBLIC_KENT_EDITOR_USER_ID;
+
+  const handleRubricUpdated = useCallback((id: string, name: string, meaning: string) => {
+    setCurrentBook((prev) => {
+      if (!prev || !currentChapterId) return prev;
+      return {
+        ...prev,
+        chapters: prev.chapters.map((ch) => {
+          if (ch.id !== currentChapterId) return ch;
+          return {
+            ...ch,
+            rubrics: ch.rubrics.map((r) => r.id === id ? { ...r, name, meaning: meaning || undefined } : r)
+          };
+        })
+      };
+    });
+  }, [currentChapterId]);
+
+  const handleRemedyAdded = useCallback((rubricId: string, remedy: { id?: string; abbr: string; fullForm?: string; description?: string; grade: number; }) => {
+    setCurrentBook((prev) => {
+      if (!prev || !currentChapterId) return prev;
+      return {
+        ...prev,
+        chapters: prev.chapters.map((ch) => {
+          if (ch.id !== currentChapterId) return ch;
+          return {
+            ...ch,
+            rubrics: ch.rubrics.map((r) => {
+              if (r.id !== rubricId) return r;
+              return {
+                ...r,
+                remedies: [...r.remedies, remedy]
+              };
+            })
+          };
+        })
+      };
+    });
+  }, [currentChapterId]);
+
   const currentChapter: Chapter | undefined = useMemo(() => {
     if (!currentChapterId || !currentBook) return undefined;
     return currentBook?.chapters.find((c) => c.id === currentChapterId);
@@ -1146,6 +1192,9 @@ const KentRepertoryPage: React.FC = () => {
                         userId={user?.id}
                         isOpen={!!expandedRubrics[rubric.id]}
                         onToggle={() => handleToggleExpand(rubric.id)}
+                        canEdit={canEdit}
+                        onRubricUpdated={handleRubricUpdated}
+                        onRemedyAdded={handleRemedyAdded}
                       />
                     </div>
                   );

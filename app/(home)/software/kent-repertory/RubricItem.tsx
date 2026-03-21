@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Rubric, Note, getRemedyFullName } from "./data";
+import toast from "react-hot-toast";
 
 interface SelectedRemedyData {
+  id?: string;
   abbr: string;
   grade: number;
   fullForm?: string;
@@ -30,6 +32,9 @@ interface RubricItemProps {
   userId?: string | null;
   isOpen?: boolean;
   onToggle: () => void;
+  canEdit?: boolean;
+  onRubricUpdated?: (id: string, name: string, meaning: string) => void;
+  onRemedyAdded?: (rubricId: string, data: SelectedRemedyData) => void;
 }
 
 export const RubricItem = React.memo(function RubricItem({
@@ -48,7 +53,99 @@ export const RubricItem = React.memo(function RubricItem({
   userId,
   isOpen,
   onToggle,
+  canEdit,
+  onRubricUpdated,
+  onRemedyAdded,
 }: RubricItemProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState(rubric.name);
+  const [editMeaning, setEditMeaning] = useState(rubric.meaning || "");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSaveEdit = async () => {
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/kent-repertory/rubrics", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: rubric.id,
+          name: editName,
+          meaning: editMeaning || null,
+        }),
+      });
+      if (res.ok) {
+        setIsEditing(false);
+        toast.success("Data saved");
+        if (onRubricUpdated) onRubricUpdated(rubric.id, editName, editMeaning);
+      } else {
+        alert("Failed to update rubric");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error updating rubric");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const [isEditingRemedy, setIsEditingRemedy] = useState(false);
+  const [editRemedy, setEditRemedy] = useState<SelectedRemedyData | null>(null);
+  const [isSavingRemedy, setIsSavingRemedy] = useState(false);
+
+  const handleSaveRemedyEdit = async () => {
+    if (!editRemedy?.id) return;
+    setIsSavingRemedy(true);
+    try {
+      const res = await fetch("/api/kent-repertory/remedies", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editRemedy),
+      });
+      if (res.ok) {
+        setIsEditingRemedy(false);
+        // refresh data locally by telling parent
+        onSelectRemedy(rubric.id, editRemedy);
+        toast.success("Data saved");
+      } else {
+        alert("Failed to update remedy");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error updating remedy");
+    } finally {
+      setIsSavingRemedy(false);
+    }
+  };
+
+  const [isAddingRemedy, setIsAddingRemedy] = useState(false);
+  const [newRemedy, setNewRemedy] = useState<SelectedRemedyData>({ abbr: "", grade: 1, fullForm: "", description: "" });
+  const [isSavingNewRemedy, setIsSavingNewRemedy] = useState(false);
+
+  const handleAddRemedy = async () => {
+    setIsSavingNewRemedy(true);
+    try {
+      const res = await fetch("/api/kent-repertory/remedies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...newRemedy, rubricId: rubric.id }),
+      });
+      if (res.ok) {
+        const addedRemedy = await res.json();
+        setIsAddingRemedy(false);
+        if (onRemedyAdded) onRemedyAdded(rubric.id, addedRemedy);
+        toast.success("Remedy added");
+      } else {
+        alert("Failed to add remedy");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error adding remedy");
+    } finally {
+      setIsSavingNewRemedy(false);
+    }
+  };
+
   return (
     <details
       open={isOpen}
@@ -83,12 +180,65 @@ export const RubricItem = React.memo(function RubricItem({
           </button>
         )}
         <div className="flex flex-1 items-baseline gap-2">
-          <span className="font-serif text-sm font-semibold text-slate-50">
-            {rubric.name}
-          </span>
-          <span className="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] text-slate-400">
-            {rubric.remedies.length} remedies
-          </span>
+          {isEditing ? (
+            <div
+              className="flex flex-col gap-2 w-full pr-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <input
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500"
+                placeholder="Rubric Name"
+              />
+              <textarea
+                value={editMeaning}
+                onChange={(e) => setEditMeaning(e.target.value)}
+                className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500 min-h-[50px]"
+                placeholder="Meaning (optional)"
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="rounded-md border border-slate-600 px-2 py-1 text-[10px] text-slate-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveEdit}
+                  disabled={isSaving}
+                  className="rounded-md bg-emerald-500 px-2 py-1 text-[10px] text-emerald-950"
+                >
+                  {isSaving ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <span className="font-serif text-sm font-semibold text-slate-50">
+                {rubric.name}
+              </span>
+              <span className="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] text-slate-400">
+                {rubric.remedies.length} remedies
+              </span>
+              {canEdit && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsEditing(true);
+                  }}
+                  className="ml-2 text-[10px] text-sky-400 hover:text-sky-300"
+                >
+                  ✎ Edit
+                </button>
+              )}
+            </>
+          )}
         </div>
         <svg
           viewBox="0 0 24 24"
@@ -102,22 +252,75 @@ export const RubricItem = React.memo(function RubricItem({
       </summary>
       <div className="border-t border-slate-800 bg-slate-950/70 px-4 pb-4 pt-3 text-[11px] text-slate-200">
         <div>
-          <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-            Remedies
+          <div className="mb-1 flex items-center gap-2">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              Remedies
+            </div>
+            {canEdit && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsAddingRemedy(true);
+                  setNewRemedy({ abbr: "", grade: 1, fullForm: "", description: "" });
+                }}
+                className="text-[10px] text-emerald-400 hover:text-emerald-300"
+              >
+                + Add
+              </button>
+            )}
           </div>
+          {isAddingRemedy && (
+            <div className="flex flex-col gap-2 w-full mb-3 p-2 bg-slate-950 rounded border border-slate-700">
+              <input
+                type="text"
+                value={newRemedy.abbr}
+                onChange={(e) => setNewRemedy({...newRemedy, abbr: e.target.value})}
+                className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500"
+                placeholder="Abbreviation"
+              />
+              <input
+                type="number"
+                value={newRemedy.grade}
+                onChange={(e) => setNewRemedy({...newRemedy, grade: parseInt(e.target.value) || 1})}
+                className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500"
+                placeholder="Grade" min="1" max="4"
+              />
+              <input
+                type="text"
+                value={newRemedy.fullForm || ""}
+                onChange={(e) => setNewRemedy({...newRemedy, fullForm: e.target.value})}
+                className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500"
+                placeholder="Full Form"
+              />
+              <textarea
+                value={newRemedy.description || ""}
+                onChange={(e) => setNewRemedy({...newRemedy, description: e.target.value})}
+                className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500 min-h-[50px]"
+                placeholder="Description"
+              />
+              <div className="flex justify-end gap-2 mt-1">
+                <button type="button" onClick={() => setIsAddingRemedy(false)} className="rounded-md border border-slate-600 px-2 py-1 text-[10px] text-slate-300">Cancel</button>
+                <button type="button" onClick={handleAddRemedy} disabled={isSavingNewRemedy} className="rounded-md bg-emerald-500 px-2 py-1 text-[10px] text-emerald-950">{isSavingNewRemedy ? "Saving..." : "Add"}</button>
+              </div>
+            </div>
+          )}
           <div className="flex flex-wrap gap-1.5">
             {rubric.remedies.map((rem) => (
               <button
                 key={`${rubric.id}-${rem.abbr}-${rem.grade}`}
                 type="button"
-                onClick={() =>
+                onClick={() => {
                   onSelectRemedy(rubric.id, {
+                    id: rem.id,
                     abbr: rem.abbr,
                     grade: rem.grade,
                     fullForm: rem.fullForm,
                     description: rem.description,
-                  })
-                }
+                  });
+                  setIsEditingRemedy(false);
+                }}
                 className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] ${
                   rem.grade === 3
                     ? "border-rose-400/60 bg-rose-500/15 text-rose-200 font-semibold"
@@ -154,20 +357,104 @@ export const RubricItem = React.memo(function RubricItem({
 
         {selectedRemedy && (
           <div className="mt-3 rounded-md border text-[14px] border-sky-400/40 bg-slate-900 px-3 py-2">
-            <div className="mt-1 gap-2 text-slate-200">
-              <p className="inline-block mt-1 mb-2 py-1 px-2 rounded bg-slate-800">
-                {selectedRemedy.abbr}
-              </p>
-              <p className="px-1.5 py-0.5 text-sm font-medium">
-                {selectedRemedy.fullForm ||
-                  getRemedyFullName(selectedRemedy.abbr, rubric.id)}
-              </p>
-              {selectedRemedy.description && (
-                <p className="mt-1 text-xs text-slate-400 italic px-1.5">
-                  {selectedRemedy.description}
+            {isEditingRemedy ? (
+              <div className="flex flex-col gap-2 w-full mt-1 pr-2 text-slate-100 text-xs">
+                <input
+                  type="text"
+                  value={editRemedy?.abbr || ""}
+                  onChange={(e) =>
+                    setEditRemedy((prev) =>
+                      prev ? { ...prev, abbr: e.target.value } : null,
+                    )
+                  }
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 outline-none focus:border-emerald-500"
+                  placeholder="Abbreviation"
+                />
+                <input
+                  type="number"
+                  value={editRemedy?.grade || 1}
+                  onChange={(e) =>
+                    setEditRemedy((prev) =>
+                      prev
+                        ? { ...prev, grade: parseInt(e.target.value) || 1 }
+                        : null,
+                    )
+                  }
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 outline-none focus:border-emerald-500"
+                  placeholder="Grade"
+                  min="1"
+                  max="4"
+                />
+                <input
+                  type="text"
+                  value={editRemedy?.fullForm || ""}
+                  onChange={(e) =>
+                    setEditRemedy((prev) =>
+                      prev ? { ...prev, fullForm: e.target.value } : null,
+                    )
+                  }
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 outline-none focus:border-emerald-500"
+                  placeholder="Full Form"
+                />
+                <textarea
+                  value={editRemedy?.description || ""}
+                  onChange={(e) =>
+                    setEditRemedy((prev) =>
+                      prev ? { ...prev, description: e.target.value } : null,
+                    )
+                  }
+                  className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 outline-none focus:border-emerald-500 min-h-[50px]"
+                  placeholder="Description"
+                />
+                <div className="flex justify-end gap-2 mt-1">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingRemedy(false)}
+                    className="rounded-md border border-slate-600 px-2 py-1 text-[10px] text-slate-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSaveRemedyEdit}
+                    disabled={isSavingRemedy}
+                    className="rounded-md bg-emerald-500 px-2 py-1 text-[10px] text-emerald-950"
+                  >
+                    {isSavingRemedy ? "Saving..." : "Save"}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-1 gap-2 text-slate-200 relative">
+                <p className="inline-block mt-1 mb-2 py-1 px-2 rounded bg-slate-800">
+                  {selectedRemedy.abbr}{" "}
+                  <span className="opacity-50 text-xs ml-1">
+                    (Grade {selectedRemedy.grade})
+                  </span>
                 </p>
-              )}
-            </div>
+                {canEdit && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditRemedy(selectedRemedy);
+                      setIsEditingRemedy(true);
+                    }}
+                    className="absolute top-1 right-1 text-[10px] text-sky-400 hover:text-sky-300"
+                  >
+                    ✎ Edit
+                  </button>
+                )}
+                <p className="px-1.5 py-0.5 text-sm font-medium">
+                  {selectedRemedy.fullForm ||
+                    getRemedyFullName(selectedRemedy.abbr, rubric.id)}
+                </p>
+                {selectedRemedy.description && (
+                  <p className="mt-1 text-xs text-slate-400 italic px-1.5">
+                    {selectedRemedy.description}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
 

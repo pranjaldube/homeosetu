@@ -1,4 +1,5 @@
 export type Remedy = {
+  id?: string
   abbr: string
   grade: number
   fullForm?: string
