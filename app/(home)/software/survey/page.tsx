@@ -26,6 +26,8 @@ interface SurveyForm {
   city: string;
   currentStatus: string;
   currentStatusOther: string;
+  collegeIdCardNumber: string;
+  collegeName: string;
 
   practiceTypes: string[];
   practiceOther: string;
@@ -86,6 +88,8 @@ export default function SoftwarePage() {
     city: "",
     currentStatus: "",
     currentStatusOther: "",
+    collegeIdCardNumber: "",
+    collegeName: "",
 
     practiceTypes: [],
     practiceOther: "",
@@ -135,7 +139,7 @@ export default function SoftwarePage() {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -287,6 +291,8 @@ export default function SoftwarePage() {
           city: "",
           currentStatus: "",
           currentStatusOther: "",
+          collegeIdCardNumber: "",
+          collegeName: "",
 
           practiceTypes: [],
           practiceOther: "",
@@ -388,7 +394,8 @@ export default function SoftwarePage() {
         <div className="max-w-3xl mx-auto text-center">
           {/* <Rocket className="h-12 w-12 text-purple-600 animate-bounce" /> */}
           <div className="font-bold mb-16 text-4xl bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
-            Phase 1 (beta) Launched for Surveyors. Sale begins soon for all homeopaths.
+            Phase 1 (beta) Launched for Surveyors. Sale begins soon for all
+            homeopaths.
           </div>
 
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
@@ -552,6 +559,10 @@ export default function SoftwarePage() {
                       <option>Intern</option>
                       <option>Postgraduate</option>
                       <option>Practitioner</option>
+                      <option>
+                        Teacher/Reader/Professor/Asst Professor/HOD/Principal
+                      </option>
+                      <option>Hobby Homeopath</option>
                       <option>Other</option>
                     </select>
 
@@ -570,6 +581,26 @@ export default function SoftwarePage() {
                         {errors.currentStatus}
                       </p>
                     )}
+                  </div>
+                  <div className="py-1">
+                    <Label>
+                      Any College Id Card Number/University Roll Number
+                      (applicable for BHMS student/Interns/Postgraduate):{" "}
+                    </Label>
+                    <Input
+                      name="collegeIdCardNumber"
+                      value={form.collegeIdCardNumber}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="py-1">
+                    <Label>College Name :</Label>
+                    <Input
+                      name="collegeName"
+                      value={form.collegeName}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
 

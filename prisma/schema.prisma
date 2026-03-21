@@ -233,6 +233,8 @@ model Survey {
   city                String?
   currentStatus       String?
   currentStatusOther  String?
+  collegeIdCardNumber String?
+  collegeName         String?
 
   practiceTypes       String[]
   practiceOther       String?
