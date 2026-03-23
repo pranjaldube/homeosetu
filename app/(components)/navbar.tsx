@@ -22,7 +22,7 @@ const MAIN_LINKS = [
   { title: "Study Courses", href: "/explore" },
   {
     title: "Software",
-    href: "/software/kent-repertory",
+    href: "/software/access",
   },
   {
     title: "Support",
