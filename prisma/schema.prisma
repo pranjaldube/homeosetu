@@ -306,7 +306,7 @@ model Content {
   bookId      String   @db.Uuid
   rubrics     Rubric[]
   createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([bookId])
 }
@@ -315,13 +315,19 @@ model Rubric {
   id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name            String
   meaning         String?
+  patientVersion  String?
+  patientVersion2 String?
+  whenToUse       String?
+  whenToUseAsMetaphor String?
+  crossReferenceByDrKent String?
+  crossReferenceByHomeosetu String?
   chapter         Content          @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId       String           @db.Uuid
   remedies        Remedy[]
   notes           Note[]
   crossReferences CrossReference[]
   createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Essential for fast sorting and pagination by name
   @@index([chapterId, name]) 
