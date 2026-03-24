@@ -83,8 +83,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ chapter: content });
     }
 
-    // Case 2: Fetch book with chapters list (NO rubrics)
-    // Build where condition - can search by bookId or bookName
     const whereCondition: any = {};
 
     if (bookId) {
