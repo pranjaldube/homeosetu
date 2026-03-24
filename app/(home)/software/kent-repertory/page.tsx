@@ -41,6 +41,12 @@ type ApiBookResponse = {
       id: string;
       name: string;
       meaning?: string;
+      patientVersion?: string;
+      patientVersion2?: string;
+      whenToUse?: string;
+      whenToUseAsMetaphor?: string;
+      crossReferenceByDrKent?: string;
+      crossReferenceByHomeosetu?: string;
       chapterId: string;
       remedies: Array<{
         id: string;
@@ -82,6 +88,13 @@ function transformApiBookToKentRepertory(
         id: rubric.id,
         name: rubric.name,
         meaning: rubric.meaning || undefined,
+        patientVersion: rubric.patientVersion || undefined,
+        patientVersion2: rubric.patientVersion2 || undefined,
+        whenToUse: rubric.whenToUse || undefined,
+        whenToUseAsMetaphor: rubric.whenToUseAsMetaphor || undefined,
+        crossReferenceByDrKent: rubric.crossReferenceByDrKent || undefined,
+        crossReferenceByHomeosetu:
+          rubric.crossReferenceByHomeosetu || undefined,
         remedies: (rubric.remedies || []).map((remedy) => ({
           id: remedy.id,
           abbr: remedy.abbr,
@@ -183,6 +196,13 @@ async function fetchChapterContents(
         id: rubric.id,
         name: rubric.name,
         meaning: rubric.meaning || undefined,
+        patientVersion: rubric.patientVersion || undefined,
+        patientVersion2: rubric.patientVersion2 || undefined,
+        whenToUse: rubric.whenToUse || undefined,
+        whenToUseAsMetaphor: rubric.whenToUseAsMetaphor || undefined,
+        crossReferenceByDrKent: rubric.crossReferenceByDrKent || undefined,
+        crossReferenceByHomeosetu:
+          rubric.crossReferenceByHomeosetu || undefined,
         remedies: (rubric.remedies || []).map((remedy: any) => ({
           id: remedy.id,
           abbr: remedy.abbr,
@@ -248,7 +268,12 @@ type SelectedRubric = {
   }[];
 };
 
-type SelectedRemedy = { id?: string; abbr: string; fullName: string; grade: number };
+type SelectedRemedy = {
+  id?: string;
+  abbr: string;
+  fullName: string;
+  grade: number;
+};
 
 type CommonRemedy = {
   abbr: string;
@@ -438,67 +463,90 @@ const KentRepertoryPage: React.FC = () => {
     user?.primaryEmailAddress?.emailAddress ||
     undefined;
 
-  const canEdit = isLoaded && !!user && user.id === process.env.NEXT_PUBLIC_KENT_EDITOR_USER_ID;
+  const canEdit =
+    isLoaded &&
+    !!user &&
+    user.id === process.env.NEXT_PUBLIC_KENT_EDITOR_USER_ID;
 
-  const handleRubricUpdated = useCallback((id: string, name: string, meaning: string) => {
-    setCurrentBook((prev) => {
-      if (!prev || !currentChapterId) return prev;
-      return {
-        ...prev,
-        chapters: prev.chapters.map((ch) => {
-          if (ch.id !== currentChapterId) return ch;
-          return {
-            ...ch,
-            rubrics: ch.rubrics.map((r) => r.id === id ? { ...r, name, meaning: meaning || undefined } : r)
-          };
-        })
-      };
-    });
-  }, [currentChapterId]);
+  const handleRubricUpdated = useCallback(
+    (id: string, name: string, meaning: string) => {
+      setCurrentBook((prev) => {
+        if (!prev || !currentChapterId) return prev;
+        return {
+          ...prev,
+          chapters: prev.chapters.map((ch) => {
+            if (ch.id !== currentChapterId) return ch;
+            return {
+              ...ch,
+              rubrics: ch.rubrics.map((r) =>
+                r.id === id ? { ...r, name, meaning: meaning || undefined } : r,
+              ),
+            };
+          }),
+        };
+      });
+    },
+    [currentChapterId],
+  );
 
-  const handleRemedyAdded = useCallback((rubricId: string, remedy: { id?: string; abbr: string; fullForm?: string; description?: string; grade: number; }) => {
-    setCurrentBook((prev) => {
-      if (!prev || !currentChapterId) return prev;
-      return {
-        ...prev,
-        chapters: prev.chapters.map((ch) => {
-          if (ch.id !== currentChapterId) return ch;
-          return {
-            ...ch,
-            rubrics: ch.rubrics.map((r) => {
-              if (r.id !== rubricId) return r;
-              return {
-                ...r,
-                remedies: [...r.remedies, remedy]
-              };
-            })
-          };
-        })
-      };
-    });
-  }, [currentChapterId]);
+  const handleRemedyAdded = useCallback(
+    (
+      rubricId: string,
+      remedy: {
+        id?: string;
+        abbr: string;
+        fullForm?: string;
+        description?: string;
+        grade: number;
+      },
+    ) => {
+      setCurrentBook((prev) => {
+        if (!prev || !currentChapterId) return prev;
+        return {
+          ...prev,
+          chapters: prev.chapters.map((ch) => {
+            if (ch.id !== currentChapterId) return ch;
+            return {
+              ...ch,
+              rubrics: ch.rubrics.map((r) => {
+                if (r.id !== rubricId) return r;
+                return {
+                  ...r,
+                  remedies: [...r.remedies, remedy],
+                };
+              }),
+            };
+          }),
+        };
+      });
+    },
+    [currentChapterId],
+  );
 
-  const handleRemedyDeleted = useCallback((rubricId: string, remedyId: string) => {
-    setCurrentBook((prev) => {
-      if (!prev || !currentChapterId) return prev;
-      return {
-        ...prev,
-        chapters: prev.chapters.map((ch) => {
-          if (ch.id !== currentChapterId) return ch;
-          return {
-            ...ch,
-            rubrics: ch.rubrics.map((r) => {
-              if (r.id !== rubricId) return r;
-              return {
-                ...r,
-                remedies: r.remedies.filter((rem) => rem.id !== remedyId)
-              };
-            })
-          };
-        })
-      };
-    });
-  }, [currentChapterId]);
+  const handleRemedyDeleted = useCallback(
+    (rubricId: string, remedyId: string) => {
+      setCurrentBook((prev) => {
+        if (!prev || !currentChapterId) return prev;
+        return {
+          ...prev,
+          chapters: prev.chapters.map((ch) => {
+            if (ch.id !== currentChapterId) return ch;
+            return {
+              ...ch,
+              rubrics: ch.rubrics.map((r) => {
+                if (r.id !== rubricId) return r;
+                return {
+                  ...r,
+                  remedies: r.remedies.filter((rem) => rem.id !== remedyId),
+                };
+              }),
+            };
+          }),
+        };
+      });
+    },
+    [currentChapterId],
+  );
 
   const currentChapter: Chapter | undefined = useMemo(() => {
     if (!currentChapterId || !currentBook) return undefined;
@@ -1101,7 +1149,11 @@ const KentRepertoryPage: React.FC = () => {
                           </span>
                           <button
                             onClick={() =>
-                              handleRemoveRubric(sel.rubricId, sel.chapterId, sel.bookId)
+                              handleRemoveRubric(
+                                sel.rubricId,
+                                sel.chapterId,
+                                sel.bookId,
+                              )
                             }
                             className="ml-0.5 rounded-full p-0.5 hover:bg-sky-500/40 text-sky-200 hover:text-white transition-colors"
                             title="Remove from comparison"

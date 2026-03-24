@@ -126,9 +126,12 @@ export const RubricItem = React.memo(function RubricItem({
     if (!confirm("Are you sure you want to delete this remedy?")) return;
     setIsDeletingRemedy(true);
     try {
-      const res = await fetch(`/api/kent-repertory/remedies?id=${editRemedy.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/kent-repertory/remedies?id=${editRemedy.id}`,
+        {
+          method: "DELETE",
+        },
+      );
       if (res.ok) {
         setIsEditingRemedy(false);
         if (onRemedyDeleted) onRemedyDeleted(rubric.id, editRemedy.id);
@@ -145,7 +148,12 @@ export const RubricItem = React.memo(function RubricItem({
   };
 
   const [isAddingRemedy, setIsAddingRemedy] = useState(false);
-  const [newRemedy, setNewRemedy] = useState<SelectedRemedyData>({ abbr: "", grade: 1, fullForm: "", description: "" });
+  const [newRemedy, setNewRemedy] = useState<SelectedRemedyData>({
+    abbr: "",
+    grade: 1,
+    fullForm: "",
+    description: "",
+  });
   const [isSavingNewRemedy, setIsSavingNewRemedy] = useState(false);
 
   const handleAddRemedy = async () => {
@@ -289,7 +297,12 @@ export const RubricItem = React.memo(function RubricItem({
                   e.preventDefault();
                   e.stopPropagation();
                   setIsAddingRemedy(true);
-                  setNewRemedy({ abbr: "", grade: 1, fullForm: "", description: "" });
+                  setNewRemedy({
+                    abbr: "",
+                    grade: 1,
+                    fullForm: "",
+                    description: "",
+                  });
                 }}
                 className="text-[10px] text-emerald-400 hover:text-emerald-300"
               >
@@ -302,33 +315,59 @@ export const RubricItem = React.memo(function RubricItem({
               <input
                 type="text"
                 value={newRemedy.abbr}
-                onChange={(e) => setNewRemedy({...newRemedy, abbr: e.target.value})}
+                onChange={(e) =>
+                  setNewRemedy({ ...newRemedy, abbr: e.target.value })
+                }
                 className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500"
                 placeholder="Abbreviation"
               />
               <input
                 type="number"
                 value={newRemedy.grade}
-                onChange={(e) => setNewRemedy({...newRemedy, grade: parseInt(e.target.value) || 1})}
+                onChange={(e) =>
+                  setNewRemedy({
+                    ...newRemedy,
+                    grade: parseInt(e.target.value) || 1,
+                  })
+                }
                 className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500"
-                placeholder="Grade" min="1" max="4"
+                placeholder="Grade"
+                min="1"
+                max="4"
               />
               <input
                 type="text"
                 value={newRemedy.fullForm || ""}
-                onChange={(e) => setNewRemedy({...newRemedy, fullForm: e.target.value})}
+                onChange={(e) =>
+                  setNewRemedy({ ...newRemedy, fullForm: e.target.value })
+                }
                 className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500"
                 placeholder="Full Form"
               />
               <textarea
                 value={newRemedy.description || ""}
-                onChange={(e) => setNewRemedy({...newRemedy, description: e.target.value})}
+                onChange={(e) =>
+                  setNewRemedy({ ...newRemedy, description: e.target.value })
+                }
                 className="w-full rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-100 outline-none focus:border-emerald-500 min-h-[50px]"
                 placeholder="Description"
               />
               <div className="flex justify-end gap-2 mt-1">
-                <button type="button" onClick={() => setIsAddingRemedy(false)} className="rounded-md border border-slate-600 px-2 py-1 text-[10px] text-slate-300">Cancel</button>
-                <button type="button" onClick={handleAddRemedy} disabled={isSavingNewRemedy} className="rounded-md bg-emerald-500 px-2 py-1 text-[10px] text-emerald-950">{isSavingNewRemedy ? "Saving..." : "Add"}</button>
+                <button
+                  type="button"
+                  onClick={() => setIsAddingRemedy(false)}
+                  className="rounded-md border border-slate-600 px-2 py-1 text-[10px] text-slate-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleAddRemedy}
+                  disabled={isSavingNewRemedy}
+                  className="rounded-md bg-emerald-500 px-2 py-1 text-[10px] text-emerald-950"
+                >
+                  {isSavingNewRemedy ? "Saving..." : "Add"}
+                </button>
               </div>
             </div>
           )}
@@ -369,17 +408,6 @@ export const RubricItem = React.memo(function RubricItem({
             ))}
           </div>
         </div>
-
-        {rubric.meaning && (
-          <div className="mt-3 rounded-lg border-l-4 border-emerald-500/80 bg-slate-900/90 px-3 py-2">
-            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-              Meaning
-            </div>
-            <p className="text-[11px] leading-relaxed text-slate-200">
-              {rubric.meaning}
-            </p>
-          </div>
-        )}
 
         {selectedRemedy && (
           <div className="mt-3 rounded-md border text-[14px] border-sky-400/40 bg-slate-900 px-3 py-2">
@@ -491,6 +519,83 @@ export const RubricItem = React.memo(function RubricItem({
                 )}
               </div>
             )}
+          </div>
+        )}
+
+        {rubric.meaning && (
+          <div className="mt-3 rounded-lg border-l-4 border-emerald-500/80 bg-slate-900/90 px-3 py-2">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Meaning
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-200">
+              {rubric.meaning}
+            </p>
+          </div>
+        )}
+
+        {rubric.patientVersion && (
+          <div className="mt-3 rounded-lg border-l-4 border-sky-500/80 bg-slate-900/90 px-3 py-2">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Patient Version
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-200">
+              {rubric.patientVersion}
+            </p>
+          </div>
+        )}
+
+        {rubric.patientVersion2 && (
+          <div className="mt-3 rounded-lg border-l-4 border-sky-500/80 bg-slate-900/90 px-3 py-2">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Patient Version 2
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-200">
+              {rubric.patientVersion2}
+            </p>
+          </div>
+        )}
+
+        {rubric.whenToUse && (
+          <div className="mt-3 rounded-lg border-l-4 border-indigo-500/80 bg-slate-900/90 px-3 py-2">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              When to Use
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-200">
+              {rubric.whenToUse}
+            </p>
+          </div>
+        )}
+
+        {rubric.whenToUseAsMetaphor && (
+          <div className="mt-3 rounded-lg border-l-4 border-indigo-500/80 bg-slate-900/90 px-3 py-2">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              When to Use as Metaphor
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-200">
+              {rubric.whenToUseAsMetaphor}
+            </p>
+          </div>
+        )}
+
+        {rubric.crossReferenceByDrKent && (
+          <div className="mt-3 rounded-lg border-l-4 border-fuchsia-500/80 bg-slate-900/90 px-3 py-2">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Cross Reference by Dr. Kent
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-200">
+              {rubric.crossReferenceByDrKent}
+            </p>
+          </div>
+        )}
+
+        {rubric.crossReferenceByHomeosetu && (
+          <div className="mt-3 rounded-lg border-l-4 border-fuchsia-500/80 bg-slate-900/90 px-3 py-2">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Cross Reference by Homeosetu
+            </div>
+            <p className="text-[11px] leading-relaxed text-slate-200">
+              {rubric.crossReferenceByHomeosetu}
+            </p>
           </div>
         )}
 
