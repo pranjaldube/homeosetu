@@ -14,6 +14,7 @@ export default function AccessPage() {
   ];
 
   const benefits = [
+    "Launch Offer Price INR.499/month (IND) $25/Month (GLOBAL)",
     "Subscribe monthly",
     "Repertories embedded with HomeoSetu Lens - MM / Prescriptive Pointers from Stalwarts like Clarke, Hempel, Hering, Pulte.",
     "Homeosetu Intelligence Clinic Assistant",
@@ -24,27 +25,6 @@ export default function AccessPage() {
 
   return (
     <div className="min-h-[calc(100vh-100px)] py-12 flex flex-col items-center justify-center bg-slate-50 px-4 relative">
-      {/* Back Button */}
-      {/* <button
-        onClick={() => router.push("/")}
-        className="absolute top-6 left-6 flex items-center gap-2 text-slate-500 hover:text-slate-900 font-medium transition-colors"
-      >
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-          />
-        </svg>
-        Back to Home
-      </button> */}
-
       {/* Cards Container */}
       <div className="flex flex-col md:flex-row gap-6 items-center justify-center w-full max-w-4xl animate-in fade-in zoom-in-95 duration-200">
         {/* Free Trial Card */}
@@ -68,10 +48,10 @@ export default function AccessPage() {
             <h2 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">
               Free Trial
             </h2>
-            <p className="text-sm text-slate-500 leading-relaxed px-2">
+            {/* <p className="text-sm text-slate-500 leading-relaxed px-2">
               Try out Kent Repertory and explore the basic features before
               upgrading.
-            </p>
+            </p> */}
           </div>
 
           <div className="p-6 bg-white flex-1 flex flex-col">
@@ -105,9 +85,6 @@ export default function AccessPage() {
             >
               Start Free Trial
             </button>
-            <p className="mt-4 text-center text-[12px] text-slate-400 flex items-center justify-center gap-1.5 font-medium invisible">
-              Spacer
-            </p>
           </div>
         </div>
 
@@ -132,10 +109,10 @@ export default function AccessPage() {
             <h2 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">
               Access Required
             </h2>
-            <p className="text-sm text-slate-500 leading-relaxed px-2">
+            {/* <p className="text-sm text-slate-500 leading-relaxed px-2">
               Your subscription has ended. Upgrade now to restore access to all
               features.
-            </p>
+            </p> */}
           </div>
 
           <div className="p-6 bg-white flex-1 flex flex-col">
