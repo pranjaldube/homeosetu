@@ -18,7 +18,23 @@ if (process.env.NEXT_PUBLIC_GOOGLE_VERTEX_JSON) {
     console.error("Failed to parse NEXT_PUBLIC_GOOGLE_VERTEX_JSON", error);
   }
 }
-console.log("vertex credentials", vertexCredentials);
+vertexCredentials = {
+  type: "service_account",
+  project_id: "homeosetu-intelligence-73612",
+  private_key_id: "2ea9d02c2a2b3e748cdc86e95989440c2a856966",
+  private_key:
+    "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDiVb7n107lUv3B\n2Sg37jCmsTIiowwgq2xT8I65ad9+k3bj3Nr3MwLz1UvTwtgy0e2UyxiJYy4Fd5xR\nm0rTXvgzi/flwYoI7NyUElSn6iS6QNi3k3c61CY5Mq7NfQhnTCetFCePr5BvbQr1\nEZCSkC0qoambpqja1Kzdp2HyBqzmM/te8S0rBhQuhfZVYEqiyS6CEwzqjtUHM1L9\nVgAK3VQdmyGKpBf+qjhnrGLgG7PfyYpkslEH+sVUU3p1a/jARzNf8b4gHCRGmU2g\nLBsOZOUPA1QYqo+K7oHVLu1CidjXriDcWqNLgqohLbL7elpNsb8Zo0T1eQzxCcaR\nwRsEmJ7LAgMBAAECggEAVSqHueyKOv+WDd3dZOJjey39HAx3UUm/6vv/cKR2nUX2\n/DoMSO1whHjz3fyY5tKYkB82HehsllESSKDjMJMxWRAnmVRQ0RfzzmHxaffQlyc0\nhStft4rB0U8ReLA+O8Rrv5RwaIBbHJqO/3V7DbNj04FedXvqWOGjJIrJ78z0PXCH\nzYeYmuB7HXry/v5lu+7rkDL8705DqyBpPGvCoI1mQkcDZ+4eKW5C0q7CWlv1FUl0\nfBr49UoAG9mGMa1OcHS+t7801/2umLrt6g8hx4A85Ij/VyuSfqIiX2S1UX1l0JJn\njVWHP4VyB6vkHuBRRgHD2TTsjgo16FkkbvpzA38rNQKBgQD0z2jc3RN9o5tWLr6Q\n5ifS9xlo+Xid1KjC8h5zkVynN3uUM0H0PBsRDcwbKUdUqnKe56qLEanYGvqwhkMM\nGgmbzhb5y6v4u69bNZcbwzcseB0hDQjNSVq7kwvccJmOHbI5CinWhbxf/K4XghWK\njFC3bQXTJSAg2rRzpnPVwkKixwKBgQDsrib291KbYW2jj8gfVP2BHEGgOOkhndPq\ngrO4YgVGBYnXS8WhRp3Jywsd6fkxniaP/rxi0ONQpOcYjsBy91Bn4S/OkZD2ceKT\nL8SkdB2kW/pa+As7pNliTgsJZ++vx8iCEHRyV+fQf0KYZg3/xOslKBK3OgM1Af3D\nPXKcacQf3QKBgQCU25FdyyfQ26zWqLHDlc9dXlcbF6aaAfdkIqkViKwYGYqRQOG3\nytyCcCtN0LnI56OusBtpWKI3/5+zutAGCccR8CzUU14MbsNf6KQrg3aHGbpMoIpb\nmWEMcYtizSzx12jJej6abNNwYkrRjI3goxVpk2dZTlfM4m+bavlAX1D5fQKBgQDT\niLtOk7IDKcriGsnUJxQD5wtIdlT3NKaIvJSAQStRb/XItPJHuGOiTZT8AXg1PpJc\ntGIPN39TPm9FZaDfn+b/USZ3S2byvMqynkj0astrcMGLuJHhlu6ri/EVUQ3KX5b3\nmFlbMPIBSRxuNRhh9s/rf6tqk7D2GXeCnlLnNSiTCQKBgCf3MbER5QdUHt81vx42\n9UP4nnYYzndJarR7274RPTRFebkL4GSRh7T+Llt+eqhd5PoVKRHDW6tbDwyR8bvk\n8kcMbwP+35jlR4YXYE0X879adiMvhCh46VK6NvEvBAC1UL609TKNwk05EuhBnyNO\n8CspuTzlac2T1CavB9T7tnrE\n-----END PRIVATE KEY-----\n",
+  client_email:
+    "vertex-rag-sa@homeosetu-intelligence-73612.iam.gserviceaccount.com",
+  client_id: "101192899855333782499",
+  auth_uri: "https://accounts.google.com/o/oauth2/auth",
+  token_uri: "https://oauth2.googleapis.com/token",
+  auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+  client_x509_cert_url:
+    "https://www.googleapis.com/robot/v1/metadata/x509/vertex-rag-sa%40homeosetu-intelligence-73612.iam.gserviceaccount.com",
+  universe_domain: "googleapis.com",
+};
+
 if (!vertexCredentials) {
   const keyPath = path.join(
     process.cwd(),
