@@ -3,11 +3,9 @@ import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase"
 import { VertexAIEmbeddings } from "@langchain/google-vertexai";
 import { Document } from "@langchain/core/documents";
 import * as path from "path";
-import * as dotenv from "dotenv";
 import * as fs from "fs";
 
 // Load environment variables
-dotenv.config();
 
 // Assuming user will place the JSON key at config/service-account-vertex.json
 const keyPath = path.join(
