@@ -19,7 +19,6 @@ if (process.env.NEXT_PUBLIC_GOOGLE_VERTEX_JSON) {
   }
 }
 
-// Fallback to file-based credentials if no string provided
 if (!vertexCredentials) {
   const keyPath = path.join(
     process.cwd(),
