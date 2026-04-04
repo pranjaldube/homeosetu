@@ -18,7 +18,7 @@ if (process.env.NEXT_PUBLIC_GOOGLE_VERTEX_JSON) {
     console.error("Failed to parse NEXT_PUBLIC_GOOGLE_VERTEX_JSON", error);
   }
 }
-
+console.log("vertex credentials", vertexCredentials);
 if (!vertexCredentials) {
   const keyPath = path.join(
     process.cwd(),
