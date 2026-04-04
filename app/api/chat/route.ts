@@ -9,15 +9,16 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import * as path from "path";
 import * as fs from "fs";
 
-// First try to load from NEXT_PUBLIC_GOOGLE_VERTEX_JSON
+// First try to load from GOOGLE_VERTEX_CREDENTIALS
 let vertexCredentials: any = null;
 if (process.env.NEXT_PUBLIC_GOOGLE_VERTEX_JSON) {
   try {
     vertexCredentials = JSON.parse(process.env.NEXT_PUBLIC_GOOGLE_VERTEX_JSON);
   } catch (error) {
-    console.error("Failed to parse NEXT_PUBLIC_GOOGLE_VERTEX_JSON", error);
+    console.error("Failed to parse GOOGLE_VERTEX_CREDENTIALS", error);
   }
 }
+
 vertexCredentials = {
   type: "service_account",
   project_id: "homeosetu-intelligence-73612",
@@ -35,6 +36,7 @@ vertexCredentials = {
   universe_domain: "googleapis.com",
 };
 
+// Fallback to file-based credentials if no string provided
 if (!vertexCredentials) {
   const keyPath = path.join(
     process.cwd(),
@@ -78,6 +80,12 @@ export async function POST(req: NextRequest) {
     // 1. Initialize Vector Store and Model
     const embeddings = new VertexAIEmbeddings({
       model: "text-embedding-004",
+      ...(vertexCredentials && {
+        authOptions: {
+          credentials: vertexCredentials,
+          projectId: vertexCredentials.project_id,
+        },
+      }),
     });
 
     const vectorStore = new SupabaseVectorStore(embeddings, {
@@ -90,6 +98,12 @@ export async function POST(req: NextRequest) {
       model: "gemini-2.5-flash",
       temperature: 0.3,
       location: "us-central1",
+      ...(vertexCredentials && {
+        authOptions: {
+          credentials: vertexCredentials,
+          projectId: vertexCredentials.project_id,
+        },
+      }),
     });
 
     // 2. Retrieve context based on the user's message
