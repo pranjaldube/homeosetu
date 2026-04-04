@@ -9,14 +9,26 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import * as path from "path";
 import * as fs from "fs";
 
-// Ensure Vertex AI JSON credentials are loaded if sitting in config/vertex-key.json
-const keyPath = path.join(
-  process.cwd(),
-  "config",
-  "service-account-vertex.json",
-);
-if (fs.existsSync(keyPath)) {
-  process.env.GOOGLE_APPLICATION_CREDENTIALS = keyPath;
+// First try to load from NEXT_PUBLIC_GOOGLE_VERTEX_JSON
+let vertexCredentials: any = null;
+if (process.env.NEXT_PUBLIC_GOOGLE_VERTEX_JSON) {
+  try {
+    vertexCredentials = JSON.parse(process.env.NEXT_PUBLIC_GOOGLE_VERTEX_JSON);
+  } catch (error) {
+    console.error("Failed to parse NEXT_PUBLIC_GOOGLE_VERTEX_JSON", error);
+  }
+}
+
+// Fallback to file-based credentials if no string provided
+if (!vertexCredentials) {
+  const keyPath = path.join(
+    process.cwd(),
+    "config",
+    "service-account-vertex.json",
+  );
+  if (fs.existsSync(keyPath)) {
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = keyPath;
+  }
 }
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
