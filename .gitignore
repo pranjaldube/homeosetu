@@ -35,6 +35,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+/config
+
 # clerk configuration (can include secrets)
 /.clerk/
 ./app/(home)/software/kent-repertory/kent-data.csv

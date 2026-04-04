@@ -1,19 +1,21 @@
-import "./globals.css"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { ClerkProvider } from "@clerk/nextjs"
-import { ToastProvider } from "@/components/providers/toaster-provider"
-import { ConfettiProvider } from "@/components/providers/confetti-provider"
-import { CSPostHogProvider } from "@/components/providers/posthog-provider"
-import GeoCurrencyInitializer from "@/components/GeoCurrencyInitializer"
-import { generateMetadata, generateStructuredData } from "@/lib/seo"
-import UserLoyalty from "@/components/userLoyalty"
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ToastProvider } from "@/components/providers/toaster-provider";
+import { ConfettiProvider } from "@/components/providers/confetti-provider";
+import { CSPostHogProvider } from "@/components/providers/posthog-provider";
+import GeoCurrencyInitializer from "@/components/GeoCurrencyInitializer";
+import { generateMetadata, generateStructuredData } from "@/lib/seo";
+import UserLoyalty from "@/components/userLoyalty";
+import { ChatInterface } from "@/components/chat-interface";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = generateMetadata({
   title: "Homeosetu — Homeopathy Courses & Clinical Resources",
-  description: "Structured homeopathy education for students and clinicians: modular courses, interactive repertory tools, materia medica lessons, notes, live webinars.",
+  description:
+    "Structured homeopathy education for students and clinicians: modular courses, interactive repertory tools, materia medica lessons, notes, live webinars.",
   manifest: "/manifest.json",
   themeColor: "#0f172a",
   icons: {
@@ -36,19 +38,19 @@ export const metadata: Metadata = generateMetadata({
     "homeopathic certification",
     "homeopathy workshops",
     "homeopathic mentorship",
-    "homeopathy clinical practice"
+    "homeopathy clinical practice",
   ],
   url: "/",
-})
+});
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   const organizationStructuredData = generateStructuredData({
     type: "Organization",
-    data: {}
+    data: {},
   });
 
   return (
@@ -68,10 +70,11 @@ export default function RootLayout({
             <ConfettiProvider />
             <ToastProvider />
             <UserLoyalty />
+            <ChatInterface />
             {children}
           </body>
         </html>
       </CSPostHogProvider>
     </ClerkProvider>
-  )
+  );
 }
