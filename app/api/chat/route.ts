@@ -36,6 +36,8 @@ vertexCredentials = {
   universe_domain: "googleapis.com",
 };
 
+console.log(vertexCredentials);
+
 // Fallback to file-based credentials if no string provided
 if (!vertexCredentials) {
   const keyPath = path.join(
