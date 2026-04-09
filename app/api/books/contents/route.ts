@@ -49,6 +49,12 @@ export async function GET(req: NextRequest) {
           id: rubric.id,
           name: rubric.name,
           meaning: rubric.meaning || null,
+          patientVersion: rubric.patientVersion || null,
+          patientVersion2: rubric.patientVersion2 || null,
+          whenToUse: rubric.whenToUse || null,
+          whenToUseAsMetaphor: rubric.whenToUseAsMetaphor || null,
+          crossReferenceByDrKent: rubric.crossReferenceByDrKent || null,
+          crossReferenceByHomeosetu: rubric.crossReferenceByHomeosetu || null,
           chapterId: rubric.chapterId,
           remedies: rubric.remedies.map((remedy) => ({
             id: remedy.id,
@@ -77,8 +83,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ chapter: content });
     }
 
-    // Case 2: Fetch book with chapters list (NO rubrics)
-    // Build where condition - can search by bookId or bookName
     const whereCondition: any = {};
 
     if (bookId) {
