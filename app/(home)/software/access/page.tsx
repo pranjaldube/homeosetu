@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useKentAccessStore } from "@/hooks/use-kent-access";
 
 export default function AccessPage() {
   const router = useRouter();
@@ -15,9 +16,11 @@ export default function AccessPage() {
     setIsPopupOpen(true);
   };
 
-  const handleProceed = () => {
+  const { fetchAccess } = useKentAccessStore();
+  const handleProceed = async () => {
     if (hasConsented && nextPageUrl) {
       router.push(nextPageUrl);
+      await fetchAccess();
     }
   };
 
