@@ -6,6 +6,7 @@ import { ToastProvider } from "@/components/providers/toaster-provider"
 import { ConfettiProvider } from "@/components/providers/confetti-provider"
 import { CSPostHogProvider } from "@/components/providers/posthog-provider"
 import GeoCurrencyInitializer from "@/components/GeoCurrencyInitializer"
+import { KentAccessInitializer } from "@/components/providers/kent-access-initializer"
 import { generateMetadata, generateStructuredData } from "@/lib/seo"
 import UserLoyalty from "@/components/userLoyalty"
 
@@ -65,6 +66,7 @@ export default function RootLayout({
           </head>
           <body className={inter.className}>
             <GeoCurrencyInitializer />
+            <KentAccessInitializer />
             <ConfettiProvider />
             <ToastProvider />
             <UserLoyalty />

@@ -913,20 +913,6 @@ const KentRepertoryPage: React.FC = () => {
   const selectedCount = selectedRubrics.length;
 
   useEffect(() => {
-    const checkTrial = async () => {
-      try {
-        const res = await fetch("/api/kent-free-trial");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.isExpired) {
-            router.push("/software/access");
-          }
-        }
-      } catch (error) {
-        console.error("Failed to check trial status", error);
-      }
-    };
-
     if (!isLoaded) return;
 
     if (!user) {
@@ -934,10 +920,8 @@ const KentRepertoryPage: React.FC = () => {
       toast.error("Please login");
       window.location.href = "/sign-in";
       return;
-    } else {
-      checkTrial();
     }
-  }, [isLoaded, user, router]);
+  }, [isLoaded, user]);
 
   return (
     <>

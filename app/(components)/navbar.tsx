@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { Menu, X } from "lucide-react"; // icons
+import { useKentAccessStore } from "@/hooks/use-kent-access";
 
 const MAIN_LINKS = [
   { title: "Home", href: "/" },
@@ -42,6 +43,7 @@ const MAIN_LINKS = [
 export const Navbar: React.FC = () => {
   const router = useRouter();
   const { user } = useUser();
+  const { isExpired } = useKentAccessStore();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -124,7 +126,13 @@ export const Navbar: React.FC = () => {
                   </div>
                 ) : (
                   <Link
-                    href={link.href!}
+                    href={
+                      link.title === "Software"
+                        ? !user || isExpired
+                          ? "/software/access"
+                          : "/software/kent-repertory"
+                        : link.href!
+                    }
                     className="px-3 py-2 text-sm font-medium text-gray-950 hover:bg-accent rounded-md"
                   >
                     {link.title}
@@ -179,7 +187,13 @@ export const Navbar: React.FC = () => {
             ) : (
               <Link
                 key={link.title}
-                href={link.href!}
+                href={
+                  link.title === "Software"
+                    ? !user || isExpired
+                      ? "/software/access"
+                      : "/software/kent-repertory"
+                    : link.href!
+                }
                 className="block text-gray-700 font-medium"
                 onClick={() => setMobileOpen(false)}
               >
