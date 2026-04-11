@@ -125,34 +125,55 @@ export async function POST(req: Request) {
       console.error("Failed to generate swipe invoice:", invoiceError);
     }
 
-    let trialRecord = await db.kentAccess.findFirst({
+    const kentAccessTime =
+      Number(process.env.NEXT_PUBLIC_KENT_ACCESS_TIME) || 30;
+
+    // convert to ms (keep your 12hr unit if intentional)
+    const planMs = kentAccessTime * 24 * 60 * 60 * 1000;
+
+    // 1️⃣ Get existing record
+    const existing = await db.kentAccess.findUnique({
       where: {
         userId: user.id,
-        isPaid: false,
       },
     });
 
-    if (trialRecord) {
-      await db.kentAccess.update({
-        where: {
-          id: trialRecord.id,
-        },
-        data: {
-          isPaid: true,
-          swipeHashId: swipeHashId || trialRecord.swipeHashId,
-          accessStartTime: new Date(),
-        },
-      });
-    } else {
-      await db.kentAccess.create({
-        data: {
-          userId: user.id,
-          isPaid: true,
-          swipeHashId: swipeHashId,
-          userEmail: user.emailAddresses?.[0]?.emailAddress,
-        },
-      });
+    // 2️⃣ Decide base time
+    let baseTime = Date.now();
+
+    if (existing?.accessEndTime) {
+      const currentEnd = new Date(existing.accessEndTime).getTime();
+
+      // 🔥 KEY LOGIC
+      // If still active → extend from current end
+      // If expired → start from now
+      baseTime = currentEnd > Date.now() ? currentEnd : Date.now();
     }
+
+    // 3️⃣ Final new expiry
+    const newEndTime = new Date(baseTime + planMs);
+
+    // 4️⃣ Upsert
+    await db.kentAccess.upsert({
+      where: {
+        userId: user.id,
+      },
+      update: {
+        isPaid: true,
+        swipeHashId: swipeHashId || undefined,
+        accessStartTime: new Date(), // optional (tracking)
+        accessEndTime: newEndTime, // ✅ FIXED
+        userEmail: user.emailAddresses?.[0]?.emailAddress,
+      },
+      create: {
+        userId: user.id,
+        isPaid: true,
+        swipeHashId: swipeHashId,
+        userEmail: user.emailAddresses?.[0]?.emailAddress,
+        accessStartTime: new Date(),
+        accessEndTime: newEndTime,
+      },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

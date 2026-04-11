@@ -102,20 +102,6 @@ model UserProgress {
   @@index([chapterId])
 }
 
-model KentNote {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId    String
-  chapterId String
-  rubricId  String
-  text      String
-  userName  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId, chapterId])
-  @@index([userId, rubricId])
-}
-
 model Purchase {
   id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId String
@@ -370,12 +356,28 @@ model CrossReference {
 
 model KentAccess {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId         String  
+  userId         String  @unique
   accessStartTime DateTime @default(now())
+  accessEndTime  DateTime?
   isPaid         Boolean  @default(false)
   userEmail String?
   swipeHashId String?
   
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model documents {
+  id Int @id
+
+  @@ignore
+}
+
+model Feedback {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String?
+  email     String?
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

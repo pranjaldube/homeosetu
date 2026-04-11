@@ -116,7 +116,6 @@ function transformApiBookToKentRepertory(
     })),
   };
 }
-
 // Fetch book from API (Metadata + Chapters list only)
 async function fetchBookFromAPI(
   bookId?: string,
@@ -378,6 +377,14 @@ const KentRepertoryPage: React.FC = () => {
   const router = useRouter();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [isExpired, setIsExpired] = useState(true);
+
+  // Feedback states
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [feedbackEmail, setFeedbackEmail] = useState(
+    user?.primaryEmailAddress?.emailAddress || "",
+  );
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
 
   // Book list from database (metadata only)
   const [availableBooks, setAvailableBooks] = useState<BookMetadata[]>([
@@ -707,6 +714,7 @@ const KentRepertoryPage: React.FC = () => {
       }
     }
   };
+  console.log("userid from kent repeertort", user?.id);
 
   /* New function to remove specific rubric from selection */
   const handleRemoveRubric = (
@@ -1048,6 +1056,18 @@ const KentRepertoryPage: React.FC = () => {
                 </span>
               </div>
               <div className="flex items-center gap-3">
+                <p
+                  className="cursor-pointer text-[12px] pr-4 hover:text-emerald-400"
+                  onClick={() => {
+                    if (!user) {
+                      toast.error("Please login");
+                      return;
+                    }
+                    setIsFeedbackOpen(true);
+                  }}
+                >
+                  Share your FeedBack
+                </p>
                 <button
                   type="button"
                   className={`inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-[11px] font-medium transition-colors ${
@@ -1461,7 +1481,7 @@ const KentRepertoryPage: React.FC = () => {
 
         <button
           type="button"
-          className="fixed bottom-16 right-6 z-50 grid h-14 w-14 place-items-center rounded-full border-0 bg-gradient-to-tr from-indigo-600 to-violet-600 text-2xl shadow-xl shadow-indigo-900/60 transition hover:translate-y-[-1px] hover:shadow-2xl"
+          className="fixed bottom-14 right-6 z-50 grid h-14 w-14 place-items-center rounded-full border-0 bg-gradient-to-tr from-indigo-600 to-violet-600 text-2xl shadow-xl shadow-indigo-900/60 transition hover:translate-y-[-1px] hover:shadow-2xl"
           onClick={() => setIsChatbotOpen(!isChatbotOpen)}
           aria-label="Open chatbot"
         >
@@ -1504,6 +1524,70 @@ const KentRepertoryPage: React.FC = () => {
               </div>
             </div>
           </>
+        )}
+
+        {isFeedbackOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              onClick={() => setIsFeedbackOpen(false)}
+            />
+            <div className="relative z-[110] w-full max-w-md overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl">
+              <div className="border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-white">
+                  Share Your Feedback
+                </h3>
+                <button
+                  onClick={() => setIsFeedbackOpen(false)}
+                  className="text-slate-400 hover:text-white transition"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                    Message
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={feedbackMessage}
+                    onChange={(e) => setFeedbackMessage(e.target.value)}
+                    placeholder="Tell us what you think..."
+                    className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-orange-500 focus:outline-none transition resize-none"
+                  />
+                </div>
+                <button
+                  disabled={!feedbackMessage.trim() || isSubmittingFeedback}
+                  onClick={async () => {
+                    try {
+                      setIsSubmittingFeedback(true);
+                      const res = await fetch("/api/feedback", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          message: feedbackMessage,
+                          email: feedbackEmail,
+                        }),
+                      });
+
+                      if (!res.ok) throw new Error("Failed to submit feedback");
+
+                      toast.success("Feedback submitted! Thank you.");
+                      setFeedbackMessage("");
+                      setIsFeedbackOpen(false);
+                    } catch (err) {
+                      toast.error("Something went wrong. Please try again.");
+                    } finally {
+                      setIsSubmittingFeedback(false);
+                    }
+                  }}
+                  className="w-full rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-900/20 hover:from-amber-400 hover:to-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                  {isSubmittingFeedback ? "Submitting..." : "Send Feedback"}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </>
