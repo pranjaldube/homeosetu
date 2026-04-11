@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import Head from "next/head";
 import { useUser } from "@clerk/nextjs";
 import Chatbot from "@/components/chatbot";
+import { useKentAccessStore } from "@/hooks/use-kent-access";
 
 import {
   getRemedyFullName,
@@ -376,7 +377,6 @@ const KentRepertoryPage: React.FC = () => {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  const [isExpired, setIsExpired] = useState(true);
 
   // Feedback states
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
@@ -621,6 +621,7 @@ const KentRepertoryPage: React.FC = () => {
     if (!selectedBookId) return;
 
     const loadBookContents = async () => {
+      if (isExpired) return;
       setLoadingBook(true);
       setBookError(null);
 
@@ -684,6 +685,7 @@ const KentRepertoryPage: React.FC = () => {
   // }, [isLoaded, user?.id, currentChapterId])
 
   const handleSelectChapter = async (chapterId: string) => {
+    if (isExpired) return;
     setCurrentChapterId(chapterId);
     setSearchQuery("");
 
@@ -794,6 +796,7 @@ const KentRepertoryPage: React.FC = () => {
   };
 
   const handleSaveNote = async (rubricId: string) => {
+    if (isExpired) return;
     if (!currentChapter) return;
     const key = `${currentChapter.id}_${rubricId}`;
     const text = (noteDrafts[key] || "").trim();
@@ -910,10 +913,11 @@ const KentRepertoryPage: React.FC = () => {
     sessionStorage.removeItem(KENT_CHAT_QUERY_KEY);
   }, []);
 
+  const { isExpired, isLoading } = useKentAccessStore();
   const selectedCount = selectedRubrics.length;
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || isLoading) return;
 
     if (!user) {
       console.log("user not logged in");
@@ -921,7 +925,12 @@ const KentRepertoryPage: React.FC = () => {
       window.location.href = "/sign-in";
       return;
     }
-  }, [isLoaded, user]);
+
+    if (isExpired) {
+      toast.error("Your subscription is ended");
+      router.push("/software/access");
+    }
+  }, [isLoaded, user, isExpired, isLoading, router]);
 
   return (
     <>
@@ -1544,6 +1553,7 @@ const KentRepertoryPage: React.FC = () => {
                 <button
                   disabled={!feedbackMessage.trim() || isSubmittingFeedback}
                   onClick={async () => {
+                    if (isExpired) return;
                     try {
                       setIsSubmittingFeedback(true);
                       const res = await fetch("/api/feedback", {
