@@ -140,8 +140,8 @@ Relationships: ${item.relationships.join(", ")}`;
   try {
     await SupabaseVectorStore.fromDocuments(docs, embeddings, {
       client,
-      tableName: "documents", // Default table for LangChain's supabase integration
-      queryName: "match_documents", // Default function name
+      tableName: "medical_documents", // Corrected table name
+      queryName: "match_medical_documents", // Corrected function name
     });
     console.log("Successfully ingested documents into Supabase!");
   } catch (err: any) {

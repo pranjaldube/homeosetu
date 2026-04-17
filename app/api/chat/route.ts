@@ -73,8 +73,8 @@ export async function POST(req: NextRequest) {
 
     const vectorStore = new SupabaseVectorStore(embeddings, {
       client: supabaseClient,
-      tableName: "documents",
-      queryName: "match_documents",
+      tableName: "medical_documents",
+      queryName: "match_medical_documents",
     });
 
     const chatModel = new ChatVertexAI({
