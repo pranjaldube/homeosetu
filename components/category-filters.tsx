@@ -8,7 +8,7 @@ import {
   GraduationCap, 
   BookOpen, 
   Globe, 
-  Binoculars,
+  Search,
   ChevronDown,
   Filter
 } from "lucide-react";
@@ -38,7 +38,7 @@ const iconMap: Record<string, IconType> = {
   "Academic": GraduationCap,
   "Literature": BookOpen,
   "International": Globe,
-  "Observation": Binoculars,
+  "Observation": Search,
   "All": LayoutGrid,
 };
 

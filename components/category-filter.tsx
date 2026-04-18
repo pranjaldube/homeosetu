@@ -1,14 +1,13 @@
 "use client";
 
 import qs from "query-string";
-import { IconType } from "react-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface CategoryFilterProps {
   categoryId?: string;
   name: string;
-  icon?: IconType;
+  icon?: React.ComponentType<any>;
   className?: string;
   variant?: "pill" | "ghost";
 }
