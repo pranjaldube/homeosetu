@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const chapterId = "d41dab05-4534-433c-8c49-825e574edb2e";
+  const chapterId = "224bfbec-220a-4556-a916-b79308188301";
 
   console.log(`Attempting to delete chapter with ID: ${chapterId}`);
 

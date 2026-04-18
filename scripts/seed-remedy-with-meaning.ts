@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import * as fs from "fs";
 import * as path from "path";
+import { REMEDY_DICTIONARY } from "../app/(home)/software/kent-repertory/REMEDY_DICTIONARY";
 
 const prisma = new PrismaClient();
 
@@ -35,9 +36,37 @@ function splitCsv(str: string): string[] {
   return result;
 }
 
+// Dictionary lookup
+function getRemedyDetails(abbr: string) {
+  const cleanAbbr = abbr.toLowerCase().trim();
+
+  let remedies = REMEDY_DICTIONARY[cleanAbbr];
+
+  if (!remedies && !cleanAbbr.endsWith(".")) {
+    remedies = REMEDY_DICTIONARY[cleanAbbr + "."];
+  }
+
+  if (!remedies || remedies.length === 0) {
+    return {
+      fullForm: null,
+      description: null,
+    };
+  }
+
+  return {
+    fullForm: remedies[0].name,
+    description: remedies[0].description,
+  };
+}
+
 // Normalize
 function normalize(r: string) {
   return r.replace(".", "").trim().toLowerCase();
+}
+
+// Remove numeric grades like "2tarent."
+function cleanForLookup(abbr: string) {
+  return abbr.replace(/^\d+/, "");
 }
 
 async function main() {
@@ -56,6 +85,7 @@ async function main() {
     update: {},
     create: { bookName: BookName },
   });
+
   console.log(`Book ID: ${book.id}`);
 
   const chapter = await prisma.content.create({
@@ -82,7 +112,7 @@ async function main() {
 
     if (!rawRubric || !rawRemedyList) continue;
 
-    let rubricName = rawRubric.replace(/:$/, "").trim();
+    const rubricName = rawRubric.replace(/:$/, "").trim();
 
     const rubric = await prisma.rubric.create({
       data: {
@@ -121,23 +151,43 @@ async function main() {
       }
     }
 
-    // ✅ STEP 2: Loop over main remedy list (IMPORTANT)
+    // ✅ STEP 2: Process remedies
     const mainRemedies = rawRemedyList
       .split(",")
-      .map((r) => r.replace(".", "").trim())
+      .map((r) => r.trim())
       .filter(Boolean);
 
     for (const abbr of mainRemedies) {
       const clean = normalize(abbr);
 
-      const description = descriptionMap.get(clean) || abbr; // 👈 KEY LOGIC
+      let description = descriptionMap.get(clean) || null;
+      let fullForm = abbr;
+
+      // 🔁 STEP 3: fallback to dictionary
+      if (!description) {
+        const lookupAbbr = cleanForLookup(abbr);
+        const remedyDetails = getRemedyDetails(lookupAbbr);
+
+        if (remedyDetails.description) {
+          description = remedyDetails.description;
+        }
+
+        if (remedyDetails.fullForm) {
+          fullForm = remedyDetails.fullForm;
+        }
+      }
+
+      // 🔚 Final fallback
+      if (!description) {
+        description = abbr;
+      }
 
       await prisma.remedy.create({
         data: {
           rubricId: rubric.id,
           abbr: abbr,
           grade: 1,
-          fullForm: abbr,
+          fullForm: fullForm,
           description: description,
         },
       });

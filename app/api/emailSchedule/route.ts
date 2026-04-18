@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     if (!name || !email) {
       return NextResponse.json(
         { error: "name, email, phone and sendAt are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -28,7 +28,9 @@ export async function POST(req: Request) {
       subject:
         filePath === "Get freedom from Prejudices - Toolkit for homeopaths.pdf"
           ? "Clinical Resources PDF : Freedom from Prejudices-Compiled by Homeosetu"
-          : "Clinical Resources PDF - 108 Observations tips from Dr Alpesh Oza",
+          : filePath === "108 Observation Tips from Dr Alpesh Oza.pdf"
+            ? "Clinical Resources PDF - 108 Observations tips from Dr Alpesh Oza"
+            : "Clinical Resources PDF - 6 Summer Remedies from Dr Alpesh Oza",
       text:
         filePath === "Get freedom from Prejudices - Toolkit for homeopaths.pdf"
           ? `Dear Dr ${name} ,
@@ -85,7 +87,8 @@ Team Homeosetu`,
 
     <p>Regards,<br/>Team Homeosetu</p>
   `
-          : `
+          : filePath === "108 Observation Tips from Dr Alpesh Oza.pdf"
+            ? `
     <p>Dear Dr ${name},</p>
 
     <p>
@@ -105,6 +108,19 @@ Team Homeosetu`,
     <p>
       You can use <strong>PDF300</strong> for an instant discount valid for the
       next <strong>48 hours</strong> on all our video courses.
+    </p>
+
+    <p>
+      In case of difficulty in redeeming the codes, kindly whatsapp +91 99 75 461 833
+    </p>
+
+    <p>Regards,<br/>Team Homeosetu</p>
+  `
+            : `
+    <p>Dear Dr ${name},</p>
+
+    <p>
+      In This PDF Dr Alpesh Oza shares 6 interesting not to be missed summer remedies from his experience blending Origin/ chemistry /background of each remedy / pathogenesis/ Key clinical picture/ Peculiar Repertory rubrics/ Differential remedies/ prescribing tips/ Clinical Vignette and Golden Tips from Stalwarts.
     </p>
 
     <p>

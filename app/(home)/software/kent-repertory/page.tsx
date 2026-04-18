@@ -957,6 +957,9 @@ const KentRepertoryPage: React.FC = () => {
                 <div className="font-serif text-xl font-semibold tracking-[0.12em] uppercase">
                   Homeosetu WebApp
                 </div>
+                <div className="font-serif text-xs font-medium tracking-[0.12em]">
+                  Online Homeopathy Software
+                </div>
               </div>
             </div>
           </div>
@@ -1383,9 +1386,14 @@ const KentRepertoryPage: React.FC = () => {
                       className="h-12 w-12 object-contain opacity-80"
                     />
                   </div>
-                  <h3 className="text-lg text-slate-700">
-                    Homeosetu WebApp Case Repertorisation
-                  </h3>
+                  <div>
+                    <h3 className="text-lg text-slate-700">
+                      Homeosetu WebApp Case Repertorisation
+                    </h3>
+                    <div className="text-sm text-slate-700">
+                      Online Homeopathy Software
+                    </div>
+                  </div>
                 </div>
                 <button
                   type="button"

@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
-import React from "react"
-import Image from "next/image"
-import Link from "next/link"
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   BookOpen,
   Award,
@@ -16,34 +17,105 @@ import {
   Video,
   Smile,
   ChevronDown,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Carousel } from "@/components/ui/carousel"
-import { FeatureCard } from "@/components/feature-card"
-import { TestimonialCard } from "@/components/testimonial-card"
-import { StatsSection } from "@/components/stats-section"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Carousel } from "@/components/ui/carousel";
+import { FeatureCard } from "@/components/feature-card";
+import { TestimonialCard } from "@/components/testimonial-card";
+import { StatsSection } from "@/components/stats-section";
+import { TestimonialCarousel } from "@/components/ui/testimonial-carousel";
 
 // Fake testimonials data
 const TESTIMONIALS = [
   {
     content:
-      "I have understood the importance of a physical copy of repertory, i was very used to software but never used physical copies, this has made me more curious and i come across many new rubrics and try to understand them with meaning",
-    author: "Dr. Asmath Naheeda",
+      "Best wishes for all your future endeavours, but your. Incredible support and timely help that we had during your stint with synergy is unmatched, I would like to personally thank you for all your efforts for us and the brand building that u did during your tenure . Cheers to your attitude it will go long way to achieve your next goals ... best wishes",
+    author: "Dr Gajanan Dhanipkar",
+    role: "on Facebook",
+  },
+  {
+    content:
+      "Great to work with you since it's inception as Mac in india. Best wishes for further journey",
+    author: "Dr Ravi Bhandare",
+    role: "on Facebook",
+  },
+  {
+    content:
+      "I have understood the importance of a physical copy of repertory, i was very used to software but never used physical copies, this has made me more curious and i come across many new rubrics and try to understand them with meaning..",
+    author: "Dr Asmath Naheeda",
     role: "The Rubric Workshop Attendee",
   },
   {
     content:
-      "Dr Alpesh and Dr Anshu are Mentors with punctuality and kindness in sharing their knowledge is remarkable .Explained doubts beautifully and in very understandable language",
-    author: "Dr. Amita Saini",
+      "The patient version exercise which i did has made me think broader and also i was used to few set of rubrics and meds, now my thought process has changed.",
+    author: "Dr Asmath Naheeda",
+    role: "The Rubric Workshop Attendee",
+  },
+  {
+    content:
+      "Thank you for changing my perceptions and teaching me importance of repertory, especially of a physical copy",
+    author: "Dr Asmath Naheeda",
+    role: "The Rubric Workshop Attendee",
+  },
+  {
+    content:
+      "Dr Alpesh and Dr Anshu are Mentors with punctuality and kindness in sharing their knowledge is remarkable . Explained doubts beautifully and in very understandable language",
+    author: "Dr Amita Saini",
     role: "The Kingdom Workshop Attendee",
   },
   {
     content:
-      "8. For the first I have watched your video giving information about capsicum.4 of my cases have solved after that..I have verified them.Thank you Sir",
-    author: "Dr. Radheshyam",
+      "Dr Anshu is Energetic and Enthusiastic mentor with beautiful smile.Explanation of doubts precisely and with examples helps in understanding",
+    author: "Dr Amita Saini",
+    role: "The Kingdom Workshop Attendee",
+  },
+  {
+    content:
+      "It is always wonderful learning from you sir and worth listening repeatedly.",
+    author: "Dr Minakshi Gawli",
+    role: "The Kingdom Workshop Attendee",
+  },
+  {
+    content:
+      "I am studying nash study streak from your lectures. It is really helpful. Thank you sir ",
+    author: "Dr Dimply Bhattachrjee",
+    role: "",
+  },
+  {
+    content:
+      "For the first I have watched your video giving information about capsicum 4 of my cases have solved after that..I have verified them.Thank you Sir",
+    author: "Dr Radheshyam",
     role: "Hyderabad, Youtube Subscriber and Senior Homeopath",
   },
-]
+  {
+    content: "Lectures are very informative",
+    author: "Dr Priyanka Madan",
+    role: " The Rubric Workshop Attendee",
+  },
+  {
+    content: "Thanks Dr alpesh slowly, I am getting some new cases",
+    author: "Dr Atul",
+    role: "Shishya Mardarshan Beneficiary ( Check Support section of Homeosetu Shishya Mardarshan section)",
+  },
+  {
+    content:
+      " I have heard about your fever management series, all are very informative and useful for practice . very best of you.",
+    author: "Dr Karthiyaini sekar",
+    role: "Tamil nadu",
+  },
+  {
+    content:
+      "Last week, I have treated a covid positive case with ***, started with leg pain before fever as an entry. She is covid negative then. Your Videos helped to select that similimum – Thank you.",
+    author: "Dr Karthiyaini sekar, Tamil nadu",
+    role: "Tamil nadu",
+  },
+  {
+    content:
+      "It was very excellent lecture. cases were shown with results, sounds of coughing, potency selection and repetition specific nosodes",
+    author: "Dr Purva",
+    role: "Coughs Decoded Attendee",
+  },
+];
 
 // Features data
 const FEATURES = [
@@ -70,7 +142,7 @@ const FEATURES = [
     description: "Connect with peers and instructors in our growing community.",
     icon: Users,
   },
-]
+];
 
 // Stats data
 const STATS = [
@@ -94,7 +166,7 @@ const STATS = [
     label: "Student Satisfaction",
     icon: <Smile className="h-8 w-8 text-purple-500 mx-auto" />,
   },
-]
+];
 
 // Carousel slides
 const carouselSlides = [
@@ -109,7 +181,8 @@ const carouselSlides = [
             The Bridge between Academic and Clinical Homeopathic Knowledge
           </h1>
           <p className="text-white/90 text-lg mb-8">
-            Get to learn from experienced and rising homeopaths by enrolling for courses from the comfort of your home.
+            Get to learn from experienced and rising homeopaths by enrolling for
+            courses from the comfort of your home.
           </p>
           <div className="flex gap-4">
             <Link href="/explore">
@@ -128,7 +201,7 @@ const carouselSlides = [
               src="/images/slide2.png"
               alt="Homeopathy education platform showing clinical training and course materials"
               fill
-              style={{borderRadius:"50% 0px 0px 50%", padding:"30px"}}
+              style={{ borderRadius: "50% 0px 0px 50%", padding: "30px" }}
               className="object-cover"
             />
           </div>
@@ -251,9 +324,10 @@ const carouselSlides = [
       </div>
     </div>
   </div>,
-]
+];
 
 export default function HomePageClient() {
+  const router = useRouter();
   return (
     <div className="bg-white">
       {/* Hero Carousel */}
@@ -262,15 +336,18 @@ export default function HomePageClient() {
       </section>
 
       {/* Discount Badge - Floating */}
-      <div className="container mx-auto px-4 -mt-16 relative z-20">
+      <div
+        className="container mx-auto px-4 -mt-16 relative z-20 cursor-pointer"
+        onClick={() => router.push("/software/access")}
+      >
         <div className="bg-white rounded-xl shadow-xl p-6 max-w-md mx-auto flex items-center gap-4 hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
-          <span className="text-2xl animate-pulse">💡</span>
+          <span className="text-4xl animate-pulse">💡</span>
           <div>
             <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-              ATTENTION!
+              Browse now
             </span>
             <p className="text-gray-700 mt-2 font-medium">
-              NEW courses coming soon
+              Homeosetu WebApp launched (Online Homeopathy Software)
             </p>
           </div>
         </div>
@@ -344,15 +421,23 @@ export default function HomePageClient() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-          {TESTIMONIALS.map((testimonial, index) => (
-            <TestimonialCard
-              key={index}
-              content={testimonial.content}
-              author={testimonial.author}
-              role={testimonial.role}
-            />
-          ))}
+        <div className="relative z-10 -mx-4">
+          <TestimonialCarousel
+            variant="light"
+            autoSlide={true}
+            autoSlideInterval={2000}
+            className="pb-12"
+            items={TESTIMONIALS.map((testimonial, index) => (
+              <div key={index} className="h-full">
+                <TestimonialCard
+                  content={testimonial.content}
+                  author={testimonial.author}
+                  role={testimonial.role}
+                  className="h-full"
+                />
+              </div>
+            ))}
+          />
         </div>
       </section>
 
@@ -412,5 +497,5 @@ export default function HomePageClient() {
         </div>
       </section>
     </div>
-  )
+  );
 }
