@@ -56,17 +56,17 @@ export const CategoryFilters = ({
   if (layout === "dropdown") {
     return (
       <div className="flex items-center gap-x-3">
-        <div className="p-2 bg-purple-50 rounded-lg text-purple-600">
+        <div className="p-2 bg-brand-primary-surface rounded-lg text-brand-primary">
           <Filter size={20} />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
               variant="outline" 
-              className="w-full md:w-[250px] justify-between bg-white/50 backdrop-blur-sm border-slate-200 hover:border-purple-400 hover:bg-white transition-all duration-300 shadow-sm"
+              className="w-full md:w-[250px] justify-between bg-white/50 backdrop-blur-sm border-slate-200 hover:border-brand-primary hover:bg-white transition-all duration-300 shadow-sm"
             >
               <div className="flex items-center gap-x-2">
-                <CurrentIcon size={18} className="text-purple-600" />
+                <CurrentIcon size={18} className="text-brand-primary" />
                 <span className="font-medium text-slate-700">{currentCategoryName}</span>
               </div>
               <ChevronDown size={16} className="text-slate-400 ml-2" />

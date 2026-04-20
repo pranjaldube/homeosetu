@@ -35,7 +35,7 @@ export const SidebarItem = ({
       className={cn(
         "flex items-center w-full px-4 py-3 my-1 text-sm font-medium transition-all rounded-md hover:bg-slate-100",
         isActive 
-          ? "bg-purple-50 text-purple-700" 
+          ? "bg-brand-primary-surface text-brand-primary" 
           : "text-slate-600"
       )}
     >
@@ -44,7 +44,7 @@ export const SidebarItem = ({
           size={20}
           className={cn(
             isActive 
-              ? "text-purple-700" 
+              ? "text-brand-primary" 
               : "text-slate-500"
           )}
         />

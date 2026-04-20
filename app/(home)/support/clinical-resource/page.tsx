@@ -80,7 +80,7 @@ export default function ThreeSectionPage() {
             <li>
               <button
                 onClick={() => scrollToSection(prejudiceRef)}
-                className="hover:text-blue-600 transition-colors"
+                className="hover:text-brand-primary transition-colors"
               >
                 Freedom from Prejudice
               </button>
@@ -88,7 +88,7 @@ export default function ThreeSectionPage() {
             <li>
               <button
                 onClick={() => scrollToSection(observationRef)}
-                className="hover:text-blue-600 transition-colors"
+                className="hover:text-brand-primary transition-colors"
               >
                 108 Observation tips
               </button>
@@ -96,7 +96,7 @@ export default function ThreeSectionPage() {
             <li>
               <button
                 onClick={() => scrollToSection(summerRemediesRef)}
-                className="hover:text-blue-600 transition-colors"
+                className="hover:text-brand-primary transition-colors"
               >
                 6 Summer Remedies
               </button>
@@ -200,7 +200,7 @@ export default function ThreeSectionPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
-                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
+                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary w-44 sm:w-56 text-sm sm:text-base"
                 required
               />
               <input
@@ -208,7 +208,7 @@ export default function ThreeSectionPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
+                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary w-44 sm:w-56 text-sm sm:text-base"
                 required
               />
               <input
@@ -216,7 +216,7 @@ export default function ThreeSectionPage() {
                 value={countryCode}
                 onChange={(e) => setCountryCode(e.target.value)}
                 placeholder="+91"
-                className="w-16 px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="w-16 px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm sm:text-base"
                 required
               />
               <input
@@ -224,13 +224,13 @@ export default function ThreeSectionPage() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Enter your Phone Number"
-                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
+                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary w-44 sm:w-56 text-sm sm:text-base"
                 required
               />
               <select
                 value={filePath}
                 onChange={(e) => setFilePath(e.target.value)}
-                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-56 text-sm sm:text-base"
+                className="px-3 sm:px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary w-44 sm:w-56 text-sm sm:text-base"
                 required
               >
                 <option value="">Choose your PDF</option>
@@ -262,12 +262,12 @@ export default function ThreeSectionPage() {
                   to contact you by mail, phone, email, or text even if the
                   phone number is present on a state or national Do Not Call
                   list. By submitting this information you agree to our
-                  <a href="/privacy-policy" className="text-blue-600 underline">
+                  <a href="/privacy-policy" className="text-brand-primary underline">
                     {" "}
                     Privacy Policy{" "}
                   </a>
                   and
-                  <a href="/tnc" className="text-blue-600 underline">
+                  <a href="/tnc" className="text-brand-primary underline">
                     {" "}
                     Terms of Service
                   </a>
@@ -278,7 +278,7 @@ export default function ThreeSectionPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`px-5 sm:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm sm:text-base`}
+                className={`px-5 sm:px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-primary-hover transition text-sm sm:text-base`}
               >
                 {isLoading ? "Sending..." : "GET FREE PDF"}
               </button>

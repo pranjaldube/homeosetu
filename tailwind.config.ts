@@ -11,8 +11,12 @@ export default {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1200px",
       },
+    },
+    fontFamily: {
+      heading: ["var(--font-heading)", "Georgia", "serif"],
+      body: ["var(--font-body)", "system-ui", "sans-serif"],
     },
     extend: {
       colors: {
@@ -48,6 +52,19 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        brand: {
+          primary: "hsl(var(--brand-primary))",
+          "primary-hover": "hsl(var(--brand-primary-hover))",
+          "primary-light": "hsl(var(--brand-primary-light))",
+          "primary-surface": "hsl(var(--brand-primary-surface))",
+          secondary: "hsl(var(--brand-secondary))",
+          "secondary-light": "hsl(var(--brand-secondary-light))",
+          "secondary-surface": "hsl(var(--brand-secondary-surface))",
+        },
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          muted: "hsl(var(--surface-muted))",
         },
       },
       borderRadius: {

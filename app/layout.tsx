@@ -1,6 +1,6 @@
 import "./globals.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Lora, DM_Sans } from "next/font/google"
 import { ClerkProvider } from "@clerk/nextjs"
 import { ToastProvider } from "@/components/providers/toaster-provider"
 import { ConfettiProvider } from "@/components/providers/confetti-provider"
@@ -10,13 +10,25 @@ import { KentAccessInitializer } from "@/components/providers/kent-access-initia
 import { generateMetadata, generateStructuredData } from "@/lib/seo"
 import UserLoyalty from "@/components/userLoyalty"
 
-const inter = Inter({ subsets: ["latin"] })
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-heading",
+  display: "swap",
+})
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-body",
+  display: "swap",
+})
 
 export const metadata: Metadata = generateMetadata({
   title: "Homeosetu — Homeopathy Courses & Clinical Resources",
   description: "Structured homeopathy education for students and clinicians: modular courses, interactive repertory tools, materia medica lessons, notes, live webinars.",
   manifest: "/manifest.json",
-  themeColor: "#0f172a",
+  themeColor: "#1B4332",
   icons: {
     icon: [
       { url: "/images/icon-192x192.png", sizes: "192x192", type: "image/png" },
@@ -64,7 +76,7 @@ export default function RootLayout({
               }}
             />
           </head>
-          <body className={inter.className}>
+          <body className={`${dmSans.variable} ${lora.variable} font-body`}>
             <GeoCurrencyInitializer />
             <KentAccessInitializer />
             <ConfettiProvider />

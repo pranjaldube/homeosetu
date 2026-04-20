@@ -26,14 +26,14 @@ export default function ReleaseNotesPage() {
             <Link
               href="https://www.homeosetu.com/courses/bfe073ca-221a-473d-b77d-e205adfe9a21"
               target="_blank"
-              className="text-blue-600 hover:underline w-fit"
+              className="text-brand-primary hover:underline w-fit"
             >
               Video 1 - How to use Homeosetu Clinical repertory
             </Link>
             <Link
               href="https://www.homeosetu.com/courses/85f7526c-c37d-49f9-8e99-6c85d37e3e8b"
               target="_blank"
-              className="text-blue-600 hover:underline w-fit"
+              className="text-brand-primary hover:underline w-fit"
             >
               Video 2 - How to use Kent repertory
             </Link>

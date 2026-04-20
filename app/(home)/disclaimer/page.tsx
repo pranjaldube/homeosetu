@@ -8,7 +8,7 @@ export default function Disclaimer() {
         <div className="space-y-6 text-lg">
           <h2 className="flex justify-center text-4xl font-semibold mt-8 mb-4">Disclaimer</h2>
           <p>
-           All content shared on our website <a href="https://www.homeosetu.com" target="_blank" className="text-blue-500 underline">www.homeosetu.com</a> —including clinical insights, case discussions, and educational perspectives—is offered for informational and learning purposes only. It is not a substitute for personalized medical advice or consultation with a qualified Homeopath, especially when dealing with specific health concerns
+           All content shared on our website <a href="https://www.homeosetu.com" target="_blank" className="text-brand-primary underline">www.homeosetu.com</a> —including clinical insights, case discussions, and educational perspectives—is offered for informational and learning purposes only. It is not a substitute for personalized medical advice or consultation with a qualified Homeopath, especially when dealing with specific health concerns
           </p>
 
           <p>

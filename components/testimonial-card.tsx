@@ -21,68 +21,54 @@ export const TestimonialCard = ({
   return (
     <Card
       className={cn(
-        "border-none relative overflow-hidden group flex flex-col h-full",
-        "transition-all duration-300 hover:shadow-lg",
-        "bg-gradient-to-br from-white to-purple-50/50",
+        "border border-border overflow-hidden flex flex-col h-full",
+        "transition-shadow duration-200 hover:shadow-sm",
         className,
       )}
     >
-      {/* Decorative quotation mark */}
-      <div className="absolute top-6 right-6 text-8xl font-serif text-purple-200 opacity-60 group-hover:opacity-80 transition-opacity duration-300">
-        &quot;
-      </div>
-
-      <CardContent className="p-8 relative z-10 flex flex-col h-full">
-        {/* Top section wrapper to push author to bottom */}
+      <CardContent className="p-6 flex flex-col h-full">
         <div className="flex-1">
-          {/* Rating Stars */}
-          <div className="mb-6 flex">
+          <div className="mb-4 flex">
             {[1, 2, 3, 4, 5].map((star) => (
               <svg
                 key={star}
-                className="h-5 w-5 text-yellow-500 transform transition-transform duration-300 group-hover:scale-110"
+                className="h-4 w-4 text-brand-secondary"
                 fill="currentColor"
                 viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             ))}
           </div>
 
-          {/* Content */}
-          <p className="mb-8 text-gray-600 italic text-lg leading-relaxed relative line-clamp-4">
+          <p className="mb-6 text-muted-foreground italic leading-relaxed line-clamp-4">
             &quot;{content}&quot;
           </p>
-
-          {/* Divider */}
-          <div className="w-16 h-0.5 bg-purple-200 mb-6 group-hover:bg-purple-400 transition-colors duration-300" />
         </div>
 
-        {/* Author Info - Pushed to bottom */}
-        <div className="flex items-center mt-auto">
+        <div className="flex items-center mt-auto pt-4 border-t border-border">
           {avatarSrc ? (
-            <div className="mr-4 h-12 w-12 overflow-hidden rounded-full border-2 border-purple-200 group-hover:border-purple-400 transition-colors duration-300">
+            <div className="mr-3 h-10 w-10 overflow-hidden rounded-full">
               <Image
                 src={avatarSrc}
                 alt={author}
-                width={48}
-                height={48}
+                width={40}
+                height={40}
                 className="h-full w-full object-cover"
               />
             </div>
           ) : (
-            <div className="mr-4 h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center border-2 border-purple-200 group-hover:bg-purple-200 group-hover:border-purple-400 transition-colors duration-300">
-              <span className="text-purple-800 font-bold text-lg">
+            <div className="mr-3 h-10 w-10 rounded-full bg-brand-primary-surface flex items-center justify-center">
+              <span className="text-brand-primary font-bold text-sm">
                 {author.charAt(0)}
               </span>
             </div>
           )}
           <div className="flex flex-col">
-            <p className="font-bold text-gray-800 group-hover:text-purple-900 transition-colors duration-300 leading-tight">
+            <p className="font-medium text-foreground text-sm leading-tight">
               {author}
             </p>
-            <p className="text-xs text-slate-500 mt-1">{role}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{role}</p>
           </div>
         </div>
       </CardContent>

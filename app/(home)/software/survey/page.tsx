@@ -377,7 +377,7 @@ export default function SoftwarePage() {
   }, [form]);
 
   return (
-    <div className="min-h-[80vh] relative overflow-hidden bg-gradient-to-b from-purple-50 to-white">
+    <div className="min-h-[80vh] relative overflow-hidden bg-gradient-to-b from-brand-primary-surface to-white">
       {/* <Chatbot
         onKentRequested={(payload) => {
           if (typeof window !== "undefined" && payload) {
@@ -386,19 +386,16 @@ export default function SoftwarePage() {
           router.push("/kent-repertory");
         }}
       /> */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply opacity-10 animate-blob"></div>
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-4000"></div>
 
       <div className="container mx-auto px-4 py-10 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           {/* <Rocket className="h-12 w-12 text-purple-600 animate-bounce" /> */}
-          <div className="font-bold mb-16 text-4xl bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
+          <div className="font-bold mb-16 text-4xl bg-gradient-to-r from-brand-primary to-brand-primary-light text-transparent bg-clip-text">
             Phase 1 (beta) Launched for Surveyors. Sale begins soon for all
             homeopaths.
           </div>
 
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">
+          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-brand-primary to-brand-primary-light text-transparent bg-clip-text">
             Homeosetu Homeopathic Software/Mobile App/AI Survey
           </h1>
           <div className="space-y-4 mb-12">

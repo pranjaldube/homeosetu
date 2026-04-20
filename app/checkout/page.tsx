@@ -730,7 +730,7 @@ function CheckoutContent() {
               {/* Total Section */}
               <div className="flex items-center justify-between pt-2">
                 <p className="font-semibold text-lg text-gray-900">Total</p>
-                <p className="text-lg font-bold text-purple-700">
+                <p className="text-lg font-bold text-brand-primary">
                   {userCountry === "India"
                     ? `₹${couponApplied ? discountedPrice : totalPrice} + GST`
                     : `$${totalPrice}`}
@@ -740,7 +740,7 @@ function CheckoutContent() {
 
             <div className="mt-6">
               <Button
-                className="w-full bg-purple-700 hover:bg-purple-800 text-white"
+                className="w-full bg-brand-primary hover:bg-brand-primary-hover text-white"
                 disabled={
                   paymentButtonDisable ||
                   isLoading ||

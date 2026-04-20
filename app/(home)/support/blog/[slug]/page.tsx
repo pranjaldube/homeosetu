@@ -24,11 +24,11 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     .slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-brand-primary-surface to-white">
       <div className="container mx-auto px-4 py-12">
         {/* Article Header */}
         <div className="max-w-4xl mx-auto mb-12">
-          <Link href="/blog" className="text-purple-600 hover:text-purple-700 mb-6 inline-block">
+          <Link href="/blog" className="text-brand-primary hover:text-brand-primary-hover mb-6 inline-block">
             ← Back to Blog
           </Link>
           <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
@@ -71,7 +71,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             {post.tags?.map((tag) => (
               <span
                 key={tag}
-                className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm"
+                className="bg-brand-primary-surface text-brand-primary px-3 py-1 rounded-full text-sm"
               >
                 {tag}
               </span>

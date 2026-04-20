@@ -97,7 +97,7 @@ export function TestimonialCarousel({
               "h-12 w-12 rounded-full backdrop-blur-sm shadow-lg transform transition-transform duration-300 hover:scale-110 pointer-events-auto",
               variant === "dark"
                 ? "bg-white/30 hover:bg-white/50 border-white/40 text-white"
-                : "bg-purple-900/10 hover:bg-purple-900/20 border-purple-900/20 text-purple-900",
+                : "bg-brand-primary/10 hover:bg-brand-primary/20 border-brand-primary/20 text-brand-primary",
             )}
             disabled={isAnimating}
           >
@@ -112,7 +112,7 @@ export function TestimonialCarousel({
               "h-12 w-12 rounded-full backdrop-blur-sm shadow-lg transform transition-transform duration-300 hover:scale-110 pointer-events-auto",
               variant === "dark"
                 ? "bg-white/30 hover:bg-white/50 border-white/40 text-white"
-                : "bg-purple-900/10 hover:bg-purple-900/20 border-purple-900/20 text-purple-900",
+                : "bg-brand-primary/10 hover:bg-brand-primary/20 border-brand-primary/20 text-brand-primary",
             )}
             disabled={isAnimating}
           >
@@ -132,10 +132,10 @@ export function TestimonialCarousel({
                 curr === i
                   ? variant === "dark"
                     ? "bg-white w-6"
-                    : "bg-purple-600 w-6"
+                    : "bg-brand-primary w-6"
                   : variant === "dark"
                     ? "bg-white/50 hover:bg-white/80"
-                    : "bg-purple-200 hover:bg-purple-300",
+                    : "bg-brand-primary/20 hover:bg-brand-primary/30",
               )}
               onClick={() => {
                 if (isAnimating) return;

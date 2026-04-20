@@ -49,16 +49,16 @@ export const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="bg-white border-b">
+    <nav className="bg-white border-b" aria-label="Main navigation">
       <div className="mx-4 lg:mx-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div
             onClick={() => router.push("/")}
-            className="cursor-pointer relative after:absolute after:inset-0 after:bg-[#8C44FF] after:mix-blend-soft-light after:rounded-lg"
+            className="cursor-pointer"
           >
             <Image
-              className="grayscale"
+              className=""
               src="/logo.png"
               height={100}
               width={100}
@@ -143,7 +143,7 @@ export const Navbar: React.FC = () => {
 
             {/* Login / Dashboard Button */}
             <button
-              className="bg-blue-500 text-white px-6 py-2 rounded-full text-sm hover:bg-blue-600 transition-colors"
+              className="bg-brand-primary text-white px-6 py-2 rounded-full text-sm hover:bg-brand-primary-hover transition-colors"
               onClick={() =>
                 user ? router.push("/dashboard") : router.push("/sign-in")
               }
@@ -203,7 +203,7 @@ export const Navbar: React.FC = () => {
           )}
 
           <button
-            className="w-full bg-blue-500 text-white px-6 py-2 rounded-full text-sm hover:bg-blue-600 transition-colors"
+            className="w-full bg-brand-primary text-white px-6 py-2 rounded-full text-sm hover:bg-brand-primary-hover transition-colors"
             onClick={() => {
               setMobileOpen(false);
               user ? router.push("/dashboard") : router.push("/sign-in");

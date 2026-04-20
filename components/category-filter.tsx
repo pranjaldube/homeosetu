@@ -46,12 +46,12 @@ export const CategoryFilter = ({
         className={cn(
           "flex items-center w-full gap-x-2 px-3 py-2 text-sm rounded-md transition-all duration-200",
           "hover:bg-slate-100 text-slate-600",
-          isSelected && "bg-purple-50 text-purple-700 font-semibold shadow-sm",
+          isSelected && "bg-brand-primary-surface text-brand-primary font-semibold shadow-sm",
           className
         )}
         type="button"
       >
-        {Icon && <Icon size={18} className={cn(isSelected ? "text-purple-600" : "text-slate-500")} />}
+        {Icon && <Icon size={18} className={cn(isSelected ? "text-brand-primary" : "text-slate-500")} />}
         <span className="truncate">{name}</span>
       </button>
     );
@@ -62,8 +62,8 @@ export const CategoryFilter = ({
       onClick={onClick}
       className={cn(
         "flex items-center gap-x-2 px-4 py-2.5 rounded-full border border-slate-200 bg-white text-slate-600 transition-all duration-300",
-        "hover:border-purple-500 hover:text-purple-600 hover:shadow-md active:scale-95",
-        isSelected && "border-purple-600 bg-purple-600 text-white font-medium shadow-purple-200 shadow-lg hover:text-white hover:border-purple-600",
+        "hover:border-brand-primary hover:text-brand-primary hover:shadow-md active:scale-95",
+        isSelected && "border-brand-primary bg-brand-primary text-white font-medium shadow-sm hover:text-white hover:border-brand-primary",
         className
       )}
       type="button"

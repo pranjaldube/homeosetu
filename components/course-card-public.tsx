@@ -115,15 +115,15 @@ export const CourseCardPublic = ({
             alt={title}
             src={imageUrl || "/placeholder-course.jpg"}
           />
-          <div className="absolute top-2 right-2 bg-purple-900/90 text-white px-2 py-1 rounded text-xs font-semibold">
+          <div className="absolute top-2 right-2 bg-brand-primary/90 text-white px-2 py-1 rounded text-xs font-semibold">
             {(!price && !dollar) ? "Free" : currency === "INR" ? `${formatPrice(actualPrice, currency)} + GST` : formatPrice(actualPrice, currency)}
           </div>
         </div>
         <div className="flex flex-col pt-3">
-          <div className="text-lg font-medium group-hover:text-purple-700 transition line-clamp-2 min-h-[56px]">
+          <div className="text-lg font-medium group-hover:text-brand-primary transition line-clamp-2 min-h-[56px]">
             {title}
           </div>
-          <p className="text-xs text-purple-600 bg-purple-100 inline-block px-2 py-1 rounded-full w-fit mt-2">
+          <p className="text-xs text-brand-primary bg-brand-primary-surface inline-block px-2 py-1 rounded-full w-fit mt-2">
             {category}
           </p>
           <div className="text-sm text-gray-500 mt-2 px-2 py-1">

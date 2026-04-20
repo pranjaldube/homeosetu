@@ -10,7 +10,7 @@ export default function BlogPage() {
   const recentPosts = BLOG_POSTS.filter(post => !post.isFeatured).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-brand-primary-surface to-white">
       <div className="container mx-auto px-4 py-12">
         {/* Featured Post */}
         <div className="mb-16">
@@ -29,7 +29,7 @@ export default function BlogPage() {
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 rounded-full text-sm">
+                    <div className="absolute top-4 left-4 bg-brand-primary text-white px-3 py-1 rounded-full text-sm">
                       Featured
                     </div>
                   </div>
@@ -99,14 +99,14 @@ export default function BlogPage() {
         </div>
 
         {/* Newsletter Subscription */}
-        <div className="mt-16 bg-purple-100 rounded-2xl p-8 text-center">
+        <div className="mt-16 bg-brand-primary-surface rounded-2xl p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Subscribe to Our Newsletter</h2>
           <p className="text-gray-600 mb-6">Stay updated with the latest in homeopathy</p>
           <div className="max-w-md mx-auto flex gap-2">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="flex-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-brand-primary"
             />
             <Button>Subscribe</Button>
           </div>
