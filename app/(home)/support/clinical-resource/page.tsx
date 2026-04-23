@@ -14,7 +14,7 @@ export default function ThreeSectionPage() {
   const clinicalRef = useRef<HTMLDivElement>(null);
   const observationRef = useRef<HTMLDivElement>(null);
   const prejudiceRef = useRef<HTMLDivElement>(null);
-  const casetakingRef = useRef<HTMLDivElement>(null);
+  const summerRemediesRef = useRef<HTMLDivElement>(null);
   const [filePath, setFilePath] = useState("");
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
@@ -93,30 +93,19 @@ export default function ThreeSectionPage() {
                 108 Observation tips
               </button>
             </li>
-            {/* <li>
-              <button
-                onClick={() => scrollToSection(analogyRef)}
-                className="hover:text-blue-600 transition-colors"
-              >
-                Analogy
-              </button>
-            </li>
             <li>
               <button
-                onClick={() => scrollToSection(casetakingRef)}
+                onClick={() => scrollToSection(summerRemediesRef)}
                 className="hover:text-blue-600 transition-colors"
               >
-                Casetaking
+                6 Summer Remedies
               </button>
-            </li> */}
+            </li>
           </ul>
         </nav>
 
         {/* Sections inside same container so navbar sticks in place */}
         <div>
-          {/* <div className="text-4xl my-8 font-bold mb-8">
-            <p className="flex items-center justify-center">Coming Soon</p>
-          </div> */}
           <section
             ref={prejudiceRef}
             className="py-12 sm:py-20 px-4 sm:px-6 text-center"
@@ -143,6 +132,22 @@ export default function ThreeSectionPage() {
               revealing as spoken words. Here&apos;s a structured overview with
               108 Observation tips prepared by Dr Alpesh Oza, Founder and CEO of
               Homeosetu from his 17 years of Homeopathic Practice.
+            </p>
+          </section>
+
+          <section
+            ref={summerRemediesRef}
+            className="py-12 sm:py-20 px-4 sm:px-6 text-center"
+          >
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+              6 Summer Remedies
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600">
+              In This PDF Dr Alpesh Oza shares 6 interesting not to be missed
+              summer remedies from his experience blending Origin/ chemistry
+              /background of each remedy / pathogenesis/ Key clinical picture/
+              Peculiar Repertory rubrics/ Differential remedies/ prescribing
+              tips/ Clinical Vignette and Golden Tips from Stalwarts.
             </p>
           </section>
 
@@ -234,6 +239,9 @@ export default function ThreeSectionPage() {
                 </option>
                 <option value="108 Observation Tips from Dr Alpesh Oza.pdf">
                   108 Observation tips
+                </option>
+                <option value="6 Summer Remedies from Dr Alpesh Oza.pdf">
+                  6 Summer Remedies
                 </option>
                 {/* <option value="pitch.pdf">Pitch</option> */}
               </select>

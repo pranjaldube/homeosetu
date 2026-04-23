@@ -65,8 +65,11 @@ const ExplorePage = async ({
         <SearchInputPublic />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-4 mb-8 overflow-x-auto">
-        <CategoryFilters categories={categories} />
+      <div className="mb-8">
+        <CategoryFilters 
+          categories={categories} 
+          layout="dropdown"
+        />
       </div>
 
       <div className="mt-8">

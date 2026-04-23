@@ -1,47 +1,111 @@
 "use client";
 
 import { Category } from "@prisma/client";
+import { 
+  LayoutGrid, 
+  Microscope, 
+  Stethoscope, 
+  GraduationCap, 
+  BookOpen, 
+  Globe, 
+  Search,
+  ChevronDown,
+  Filter
+} from "lucide-react";
+import { IconType as ReactIconType } from "react-icons";
+import { LucideIcon } from "lucide-react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { CategoryFilter } from "@/components/category-filter";
-import { FcBinoculars } from "react-icons/fc";
-import { FcGlobe } from "react-icons/fc";
-import { FcGraduationCap } from "react-icons/fc";
-import { FcMindMap } from "react-icons/fc";
-import { FcReading } from "react-icons/fc";
-import { FcBiotech } from "react-icons/fc";
-import { FcList } from "react-icons/fc";
-import { IconType } from "react-icons";
+import { useSearchParams } from "next/navigation";
 
 interface CategoryFiltersProps {
   categories: Category[];
+  layout?: "horizontal" | "dropdown";
 }
 
-// You'll need to map actual category names to icons
+type IconType = LucideIcon | ReactIconType;
+
 const iconMap: Record<string, IconType> = {
-  "Homeopathy": FcBiotech,
-  "Clinical": FcMindMap,
-  "Academic": FcGraduationCap,
-  "Literature": FcReading,
-  "International": FcGlobe,
-  "Observation": FcBinoculars,
-  "All": FcList,
-  // Add more mappings as needed 
+  "Homeopathy": Microscope,
+  "Clinical": Stethoscope,
+  "Academic": GraduationCap,
+  "Literature": BookOpen,
+  "International": Globe,
+  "Observation": Search,
+  "All": LayoutGrid,
 };
 
 export const CategoryFilters = ({
-  categories
+  categories,
+  layout = "horizontal"
 }: CategoryFiltersProps) => {
+  const searchParams = useSearchParams();
+  const currentCategoryId = searchParams.get("categoryId");
+  
+  const selectedCategory = categories.find(c => c.id === currentCategoryId);
+  const currentCategoryName = selectedCategory ? selectedCategory.name : "All Categories";
+  const CurrentIcon = selectedCategory ? (iconMap[selectedCategory.name] || LayoutGrid) : LayoutGrid;
+
+  if (layout === "dropdown") {
+    return (
+      <div className="flex items-center gap-x-3">
+        <div className="p-2 bg-purple-50 rounded-lg text-purple-600">
+          <Filter size={20} />
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="outline" 
+              className="w-full md:w-[250px] justify-between bg-white/50 backdrop-blur-sm border-slate-200 hover:border-purple-400 hover:bg-white transition-all duration-300 shadow-sm"
+            >
+              <div className="flex items-center gap-x-2">
+                <CurrentIcon size={18} className="text-purple-600" />
+                <span className="font-medium text-slate-700">{currentCategoryName}</span>
+              </div>
+              <ChevronDown size={16} className="text-slate-400 ml-2" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-[250px] p-2 bg-white/90 backdrop-blur-md border-slate-200/60 shadow-2xl rounded-xl animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2">
+            <CategoryFilter
+              name="All Categories"
+              icon={LayoutGrid}
+              variant="ghost"
+              className="mb-1"
+            />
+            {categories.map((category) => (
+              <CategoryFilter
+                key={category.id}
+                categoryId={category.id}
+                name={category.name}
+                icon={iconMap[category.name] || LayoutGrid}
+                variant="ghost"
+              />
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-2">
+    <div className="flex items-center gap-3 overflow-x-auto pb-4 pt-2 no-scrollbar">
       <CategoryFilter
         name="All Courses"
-        icon={iconMap["All"]}
+        icon={LayoutGrid}
       />
       {categories.map((category) => (
         <CategoryFilter
           key={category.id}
           categoryId={category.id}
           name={category.name}
-          icon={iconMap[category.name] || FcList}
+          icon={iconMap[category.name] || LayoutGrid}
         />
       ))}
     </div>

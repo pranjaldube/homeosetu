@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import Head from "next/head";
 import { useUser } from "@clerk/nextjs";
 import Chatbot from "@/components/chatbot";
+import { useKentAccessStore } from "@/hooks/use-kent-access";
 
 import {
   getRemedyFullName,
@@ -116,7 +117,6 @@ function transformApiBookToKentRepertory(
     })),
   };
 }
-
 // Fetch book from API (Metadata + Chapters list only)
 async function fetchBookFromAPI(
   bookId?: string,
@@ -377,7 +377,14 @@ const KentRepertoryPage: React.FC = () => {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  const [isExpired, setIsExpired] = useState(true);
+
+  // Feedback states
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [feedbackEmail, setFeedbackEmail] = useState(
+    user?.primaryEmailAddress?.emailAddress || "",
+  );
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
 
   // Book list from database (metadata only)
   const [availableBooks, setAvailableBooks] = useState<BookMetadata[]>([
@@ -614,6 +621,7 @@ const KentRepertoryPage: React.FC = () => {
     if (!selectedBookId) return;
 
     const loadBookContents = async () => {
+      if (isExpired) return;
       setLoadingBook(true);
       setBookError(null);
 
@@ -677,6 +685,7 @@ const KentRepertoryPage: React.FC = () => {
   // }, [isLoaded, user?.id, currentChapterId])
 
   const handleSelectChapter = async (chapterId: string) => {
+    if (isExpired) return;
     setCurrentChapterId(chapterId);
     setSearchQuery("");
 
@@ -707,6 +716,7 @@ const KentRepertoryPage: React.FC = () => {
       }
     }
   };
+  console.log("userid from kent repeertort", user?.id);
 
   /* New function to remove specific rubric from selection */
   const handleRemoveRubric = (
@@ -786,6 +796,7 @@ const KentRepertoryPage: React.FC = () => {
   };
 
   const handleSaveNote = async (rubricId: string) => {
+    if (isExpired) return;
     if (!currentChapter) return;
     const key = `${currentChapter.id}_${rubricId}`;
     const text = (noteDrafts[key] || "").trim();
@@ -902,34 +913,24 @@ const KentRepertoryPage: React.FC = () => {
     sessionStorage.removeItem(KENT_CHAT_QUERY_KEY);
   }, []);
 
+  const { isExpired, isLoading } = useKentAccessStore();
   const selectedCount = selectedRubrics.length;
 
   useEffect(() => {
-    const checkTrial = async () => {
-      try {
-        const res = await fetch("/api/kent-free-trial");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.isExpired) {
-            router.push("/software/access");
-          }
-        }
-      } catch (error) {
-        console.error("Failed to check trial status", error);
-      }
-    };
-
-    if (!isLoaded) return;
+    if (!isLoaded || isLoading) return;
 
     if (!user) {
       console.log("user not logged in");
       toast.error("Please login");
       window.location.href = "/sign-in";
       return;
-    } else {
-      checkTrial();
     }
-  }, [isLoaded, user, router]);
+
+    if (isExpired) {
+      toast.error("Your subscription is ended");
+      router.push("/software/access");
+    }
+  }, [isLoaded, user, isExpired, isLoading, router]);
 
   return (
     <>
@@ -955,6 +956,9 @@ const KentRepertoryPage: React.FC = () => {
               <div className="space-y-0.5">
                 <div className="font-serif text-xl font-semibold tracking-[0.12em] uppercase">
                   Homeosetu WebApp
+                </div>
+                <div className="font-serif text-xs font-medium tracking-[0.12em]">
+                  Online Homeopathy Software
                 </div>
               </div>
             </div>
@@ -1048,6 +1052,18 @@ const KentRepertoryPage: React.FC = () => {
                 </span>
               </div>
               <div className="flex items-center gap-3">
+                <p
+                  className="cursor-pointer text-[12px] pr-4 hover:text-emerald-400"
+                  onClick={() => {
+                    if (!user) {
+                      toast.error("Please login");
+                      return;
+                    }
+                    setIsFeedbackOpen(true);
+                  }}
+                >
+                  Share your FeedBack
+                </p>
                 <button
                   type="button"
                   className={`inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-[11px] font-medium transition-colors ${
@@ -1370,9 +1386,14 @@ const KentRepertoryPage: React.FC = () => {
                       className="h-12 w-12 object-contain opacity-80"
                     />
                   </div>
-                  <h3 className="text-lg text-slate-700">
-                    Homeosetu WebApp Case Repertorisation
-                  </h3>
+                  <div>
+                    <h3 className="text-lg text-slate-700">
+                      Homeosetu WebApp Case Repertorisation
+                    </h3>
+                    <div className="text-sm text-slate-700">
+                      Online Homeopathy Software
+                    </div>
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -1461,7 +1482,7 @@ const KentRepertoryPage: React.FC = () => {
 
         <button
           type="button"
-          className="fixed bottom-16 right-6 z-50 grid h-14 w-14 place-items-center rounded-full border-0 bg-gradient-to-tr from-indigo-600 to-violet-600 text-2xl shadow-xl shadow-indigo-900/60 transition hover:translate-y-[-1px] hover:shadow-2xl"
+          className="fixed bottom-14 right-6 z-50 grid h-14 w-14 place-items-center rounded-full border-0 bg-gradient-to-tr from-indigo-600 to-violet-600 text-2xl shadow-xl shadow-indigo-900/60 transition hover:translate-y-[-1px] hover:shadow-2xl"
           onClick={() => setIsChatbotOpen(!isChatbotOpen)}
           aria-label="Open chatbot"
         >
@@ -1504,6 +1525,71 @@ const KentRepertoryPage: React.FC = () => {
               </div>
             </div>
           </>
+        )}
+
+        {isFeedbackOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              onClick={() => setIsFeedbackOpen(false)}
+            />
+            <div className="relative z-[110] w-full max-w-md overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl">
+              <div className="border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-white">
+                  Share Your Feedback
+                </h3>
+                <button
+                  onClick={() => setIsFeedbackOpen(false)}
+                  className="text-slate-400 hover:text-white transition"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                    Message
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={feedbackMessage}
+                    onChange={(e) => setFeedbackMessage(e.target.value)}
+                    placeholder="Tell us what you think..."
+                    className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-orange-500 focus:outline-none transition resize-none"
+                  />
+                </div>
+                <button
+                  disabled={!feedbackMessage.trim() || isSubmittingFeedback}
+                  onClick={async () => {
+                    if (isExpired) return;
+                    try {
+                      setIsSubmittingFeedback(true);
+                      const res = await fetch("/api/feedback", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          message: feedbackMessage,
+                          email: feedbackEmail,
+                        }),
+                      });
+
+                      if (!res.ok) throw new Error("Failed to submit feedback");
+
+                      toast.success("Feedback submitted! Thank you.");
+                      setFeedbackMessage("");
+                      setIsFeedbackOpen(false);
+                    } catch (err) {
+                      toast.error("Something went wrong. Please try again.");
+                    } finally {
+                      setIsSubmittingFeedback(false);
+                    }
+                  }}
+                  className="w-full rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-900/20 hover:from-amber-400 hover:to-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                  {isSubmittingFeedback ? "Submitting..." : "Send Feedback"}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </>

@@ -1,19 +1,43 @@
+import Link from "next/link";
+
 export default function ReleaseNotesPage() {
   return (
     <div className="container mx-auto py-12 px-4">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">HomeoSetu WebApp Release Notes</h1>
+        <h1 className="text-4xl font-bold mb-8">
+          HomeoSetu WebApp Release Notes
+        </h1>
 
         <div className="space-y-6 text-lg">
           <div>
             <p className="font-semibold">WebApp Version 1.0.0</p>
-            <p className="text-muted-foreground">Release Date – 19 March 2026</p>
+            <p className="text-muted-foreground">
+              Release Date – 19 March 2026
+            </p>
           </div>
 
           <p className="italic">
             Homeosetu WebApp <br />
             An Application By the Everyday Homeopath for the Everyday Homeopath…
           </p>
+
+          <div className="flex flex-col space-y-1">
+            <h2 className="text-2xl font-semibold mt-8 mb-4">How to use</h2>
+            <Link
+              href="https://www.homeosetu.com/courses/bfe073ca-221a-473d-b77d-e205adfe9a21"
+              target="_blank"
+              className="text-blue-600 hover:underline w-fit"
+            >
+              Video 1 - How to use Homeosetu Clinical repertory
+            </Link>
+            <Link
+              href="https://www.homeosetu.com/courses/85f7526c-c37d-49f9-8e99-6c85d37e3e8b"
+              target="_blank"
+              className="text-blue-600 hover:underline w-fit"
+            >
+              Video 2 - How to use Kent repertory
+            </Link>
+          </div>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">Overview</h2>
           <p>
@@ -35,8 +59,8 @@ export default function ReleaseNotesPage() {
                 <li>Allen’s Fever Repertory</li>
                 <li>Homeosetu Bowel Nosode Repertory</li>
                 <li>
-                  Homeosetu Repertory to Keynotes and Characteristics of MM by Dr
-                  Allen
+                  Homeosetu Repertory to Keynotes and Characteristics of MM by
+                  Dr Allen
                 </li>
                 <li>Homeosetu Clinical Repertory</li>
               </ul>
@@ -90,7 +114,14 @@ export default function ReleaseNotesPage() {
             in our documentation.
           </p>
 
-          <p>Patient‑level saving and synchronization are not available in this initial release. We are actively developing a secure patient‑save feature and native mobile apps to enable seamless saving, syncing, and retrieval of repertorisations. Until these capabilities are released, you may capture screenshots of your repertorisation and store them in your preferred patient record system</p>
+          <p>
+            Patient‑level saving and synchronization are not available in this
+            initial release. We are actively developing a secure patient‑save
+            feature and native mobile apps to enable seamless saving, syncing,
+            and retrieval of repertorisations. Until these capabilities are
+            released, you may capture screenshots of your repertorisation and
+            store them in your preferred patient record system
+          </p>
 
           <div className="mt-12 p-6 bg-muted rounded-lg">
             <h2 className="text-2xl font-semibold mb-4">Conclusion</h2>

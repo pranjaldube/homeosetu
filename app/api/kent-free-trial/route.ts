@@ -1,11 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const { userId } = await auth();
 
@@ -13,39 +12,38 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Check if a free trial record exists for the user
-    let trialRecord = await db.kentAccess.findFirst({
-      where: {
-        userId: userId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+    const trialDays = Number(process.env.NEXT_PUBLIC_KENT_TRIAL_PERIOD) || 9;
+
+    const trialMs = trialDays * 24 * 60 * 60 * 1000;
+
+    const existing = await db.kentAccess.findUnique({
+      where: { userId },
     });
 
-    // If not, create one
-    if (!trialRecord) {
-      trialRecord = await db.kentAccess.create({
+    let record;
+
+    if (!existing) {
+      // ✅ Create trial only once
+      record = await db.kentAccess.create({
         data: {
-          userId: userId,
+          userId,
+          isPaid: false,
+          accessStartTime: new Date(),
+          accessEndTime: new Date(Date.now() + trialMs),
         },
       });
+    } else {
+      record = existing;
     }
 
     const now = Date.now();
-    const startTimeStamp = new Date(trialRecord.accessStartTime).getTime();
-    const diffInDays = (now - startTimeStamp) / (1000 * 3600 * 12);
-    const kentTrialPeriod =
-      Number(process.env.NEXT_PUBLIC_KENT_TRIAL_PERIOD) || 9;
-    const kentAccessTime =
-      Number(process.env.NEXT_PUBLIC_KENT_ACCESS_TIME) || 30;
+    const endTime = new Date(record.accessEndTime!).getTime();
 
-    const isExpired =
-      (!trialRecord.isPaid && diffInDays > kentTrialPeriod) ||
-      (trialRecord.isPaid && diffInDays > kentAccessTime);
+    const isExpired = now > endTime;
 
     return NextResponse.json({
       isExpired,
+      accessEndTime: record.accessEndTime,
     });
   } catch (error) {
     console.log("[KENT_FREE_TRIAL]", error);

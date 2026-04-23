@@ -663,7 +663,7 @@ function CheckoutContent() {
                   <div className="flex items-center justify-between flex-1 ml-3">
                     <div>
                       <p className="font-medium text-gray-800">
-                        Kent Repertory Access
+                        Homeosetu WebApp Access
                       </p>
                       <p className="text-xs text-gray-500">
                         Access:{" "}

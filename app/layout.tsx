@@ -7,8 +7,9 @@ import { ConfettiProvider } from "@/components/providers/confetti-provider";
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
 import GeoCurrencyInitializer from "@/components/GeoCurrencyInitializer";
 import { generateMetadata, generateStructuredData } from "@/lib/seo";
-import UserLoyalty from "@/components/userLoyalty";
+import { KentAccessInitializer } from "@/components/providers/kent-access-initializer";
 import { ChatInterface } from "@/components/chat-interface";
+import UserLoyalty from "@/components/userLoyalty";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,6 +68,7 @@ export default function RootLayout({
           </head>
           <body className={inter.className}>
             <GeoCurrencyInitializer />
+            <KentAccessInitializer />
             <ConfettiProvider />
             <ToastProvider />
             <UserLoyalty />
