@@ -51,7 +51,7 @@ export const TestimonialCard = ({
           </div>
 
           {/* Content */}
-          <p className="mb-8 text-gray-600 italic text-lg leading-relaxed relative line-clamp-4">
+          <p className="mb-8 text-gray-600 italic text-lg leading-relaxed relative">
             &quot;{content}&quot;
           </p>
 

@@ -88,14 +88,22 @@ async function main() {
 
   console.log(`Book ID: ${book.id}`);
 
-  const chapter = await prisma.content.create({
-    data: {
+  let chapter = await prisma.content.findFirst({
+    where: {
       bookId: book.id,
       name: chapterName,
-      description: `${chapterName} Chapter`,
     },
   });
 
+  if (!chapter) {
+    chapter = await prisma.content.create({
+      data: {
+        bookId: book.id,
+        name: chapterName,
+        description: `${chapterName} Chapter`,
+      },
+    });
+  }
   console.log(`Chapter '${chapterName}' ID: ${chapter.id}`);
 
   let rubricCount = 0;

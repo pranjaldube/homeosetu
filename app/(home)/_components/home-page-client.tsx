@@ -413,11 +413,11 @@ export default function HomePageClient() {
             TESTIMONIALS
           </span>
           <h2 className="text-4xl font-bold text-purple-900 mb-4">
-            What Our Students Say
+            What Real Practitioners Say
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Hear from practitioners who have enhanced their clinical skills
-            through our courses.
+            Read What Real Practitioners say about our work, courses, software
+            and enhancement of their clinical skills
           </p>
         </div>
 
