@@ -59,9 +59,12 @@ const CartPage = () => {
       <Navbar />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
-        <h6 className="text-xl font-medium mb-6 ml-10">
+        <h6 className="text-md font-normal mb-6 ml-10">
           "HSETU500" & "KANIKA500" are only available on new courses and on
-          single item purchase
+          single item purchase. The discount codes released for the PCOS Session
+          are restricted to that course alone. Applying them to other courses
+          will not grant access to the any other session or any additional
+          content on Homeosetu.
         </h6>
         <h1 className="text-2xl font-semibold mb-6">Your Cart</h1>
 
