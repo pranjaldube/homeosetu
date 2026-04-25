@@ -59,6 +59,10 @@ const CartPage = () => {
       <Navbar />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+        <h6 className="text-xl font-medium mb-6 ml-10">
+          "HSETU500" & "KANIKA500" are only available on new courses and on
+          single item purchase
+        </h6>
         <h1 className="text-2xl font-semibold mb-6">Your Cart</h1>
 
         {!items.length ? (
@@ -74,7 +78,8 @@ const CartPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-4">
               {items.map((item) => {
-                const priceToShow = currency === "INR" ? item.price : item.usdPrice;
+                const priceToShow =
+                  currency === "INR" ? item.price : item.usdPrice;
                 return (
                   <Card key={item.id}>
                     <CardContent className="p-4 sm:p-6">
@@ -93,17 +98,21 @@ const CartPage = () => {
                             )}
                           </div>
                           <div>
-                          <h2 className="text-base sm:text-lg font-medium">{item.title}</h2>
-                          <div className="text-sm text-gray-500 mt-1">
-                            {item.courseTimeLimit
-                              ? `Course Timelimit: ${item.courseTimeLimit} days`
-                              : "Lifetime access"}
-                          </div>
+                            <h2 className="text-base sm:text-lg font-medium">
+                              {item.title}
+                            </h2>
+                            <div className="text-sm text-gray-500 mt-1">
+                              {item.courseTimeLimit
+                                ? `Course Timelimit: ${item.courseTimeLimit} days`
+                                : "Lifetime access"}
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="text-right">
-                            <div className="text-sm text-gray-500">{currency}</div>
+                            <div className="text-sm text-gray-500">
+                              {currency}
+                            </div>
                             <div className="text-base font-semibold">
                               {currency === "INR"
                                 ? `${formatPrice(priceToShow, currency)} + GST`
@@ -140,14 +149,20 @@ const CartPage = () => {
                       </span>
                     </div>
                     <Separator />
-                    <div className="text-xs text-gray-500">GST calculated at checkout for INR purchases.</div>
+                    <div className="text-xs text-gray-500">
+                      GST calculated at checkout for INR purchases.
+                    </div>
                   </div>
 
                   <div className="mt-6 flex gap-2">
                     <Button asChild className="w-full">
                       <Link href="/checkout">Proceed to Checkout</Link>
                     </Button>
-                    <Button variant="outline" onClick={() => clearCart()} className="whitespace-nowrap">
+                    <Button
+                      variant="outline"
+                      onClick={() => clearCart()}
+                      className="whitespace-nowrap"
+                    >
                       Clear
                     </Button>
                   </div>
@@ -172,5 +187,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
-
